@@ -1,0 +1,5 @@
+[flake8]
+max-complexity = 12
+max-line-length=88
+exclude = tabml/base/protos/*_pb2.py
+ignore = E203, W503
