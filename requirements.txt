@@ -10,7 +10,7 @@ mypy==0.761
 # pandas==1.1.4
 # pandas-profiling==2.9.0
 pre-commit==2.2.0
-# protobuf==3.13.0
+protobuf==3.13.0
 pytest==5.3.5
 qcore==0.5.1
 # scikit-learn==0.24.1
