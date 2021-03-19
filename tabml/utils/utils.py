@@ -1,4 +1,3 @@
-import datetime
 import random
 import string
 
@@ -15,8 +14,3 @@ def random_string(length: int = 10) -> str:
     return "".join(
         [random.choice(string.ascii_letters + string.digits) for n in range(length)]
     )
-
-
-def current_time_str() -> str:
-    now = datetime.now()
-    return now.strftime("%y%m%d_%H%M%S")
