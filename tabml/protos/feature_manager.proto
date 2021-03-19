@@ -1,0 +1,58 @@
+syntax = "proto2";
+
+package tabml.protos;
+
+enum DType {
+  BOOL = 1;
+  INT32 = 2;
+  INT64 = 3;
+  STRING = 4;
+  FLOAT = 5;
+  DOUBLE = 6;
+  // data and time types https://docs.python.org/3/library/datetime.html
+  DATE = 7;
+  TIME = 8;
+  DATETIME = 9;
+}
+
+message BaseFeature {
+  required string name = 1;
+  required DType dtype = 2;
+}
+
+message TransformingFeature {
+  // index of the feature in the dataset. Indexes should be unique, positive and
+  // monotonically increasing. Indexes are used to determine the feature order in the
+  // whole dataset. Base features are added to the dataset first, then
+  // transforming_features in the ascending order of indexes.
+  required int64 index = 1;
+
+  // feature name, need to be unique in the FeatureManager.
+  required string name = 2;
+
+  // dependencies is a list of features that are required to compute this feature.
+  // This field will be used when users want to re-compute one feature. All features
+  // depending on this re-computed feature are also required to be updated.
+  // NOTE on terminology: If feature "a" depends on feature "b" then we call "b" is one
+  // of dependencies of "a", and "a" is a dependent of "b".
+  repeated string dependencies = 3;
+  optional DType dtype = 4 [default = STRING];
+}
+
+message FeatureManager {
+  //  directory of raw data files
+  optional string raw_data_dir = 1;
+
+  // name of the dataframe to store features, also the name of the csv dataframe file
+  optional string dataset_name = 2;
+
+  // base_features are features that are not dependent on any features.
+  // These features are usually created right after the data cleaning step.
+  repeated BaseFeature base_features = 3;
+
+  // transforming_features are those dependent on base features and/or other
+  // transforming features. Note that the term "feature" here only apply to columns in
+  // the final dataframe saved in dataset_name. Data taken from additional dataframes
+  // is not considered as features.
+  repeated TransformingFeature transforming_features = 4;
+}
