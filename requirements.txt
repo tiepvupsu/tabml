@@ -1,21 +1,21 @@
-catboost==0.24.1
+# catboost==0.24.1
 flake8==3.7.9
-gputil==1.4.0
+# gputil==1.4.0
 isort==4.3.21
-kaggle==1.5.6
-lightgbm==2.3.1
-loguru==0.5.1
+# kaggle==1.5.6
+# lightgbm==2.3.1
+# loguru==0.5.1
 mypy==0.761
-numpy==1.18.5
-pandas==1.1.4
-pandas-profiling==2.9.0
+# numpy==1.18.5
+# pandas==1.1.4
+# pandas-profiling==2.9.0
 pre-commit==2.2.0
-protobuf==3.13.0
+# protobuf==3.13.0
 pytest==5.3.5
 qcore==0.5.1
-scikit-learn==0.24.1
-scikit-optimize==0.7.4
-scipy==1.4.1
-pytorch-tabnet==3.1.1
-termgraph==0.4.2
-xgboost==1.1.1
+# scikit-learn==0.24.1
+# scikit-optimize==0.7.4
+# scipy==1.4.1
+# pytorch-tabnet==3.1.1
+# termgraph==0.4.2
+# xgboost==1.1.1
