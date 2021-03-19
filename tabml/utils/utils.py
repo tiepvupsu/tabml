@@ -14,3 +14,9 @@ def random_string(length: int = 10) -> str:
     return "".join(
         [random.choice(string.ascii_letters + string.digits) for n in range(length)]
     )
+
+
+def write_str_to_file(a_str: str, filename: str) -> None:
+    """Writes a string to a file."""
+    with open(filename, "w") as str_file:
+        str_file.write(a_str)
