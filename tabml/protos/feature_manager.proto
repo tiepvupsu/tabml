@@ -27,7 +27,7 @@ message TransformingFeature {
   // transforming_features in the ascending order of indexes.
   required int64 index = 1;
 
-  // feature name, need to be unique in the FeatureManager.
+  // feature name, need to be unique in the FeatureConfig.
   required string name = 2;
 
   // dependencies is a list of features that are required to compute this feature.
@@ -39,11 +39,12 @@ message TransformingFeature {
   optional DType dtype = 4 [default = STRING];
 }
 
-message FeatureManager {
+message FeatureConfig {
   //  directory of raw data files
   optional string raw_data_dir = 1;
 
-  // name of the dataframe to store features, also the name of the csv dataframe file
+  // name of the dataframe to store features, also the name of the csv dataframe file.
+  // The csv file path will be raw_data_dir / features / dataset_name + ".csv".
   optional string dataset_name = 2;
 
   // base_features are features that are not dependent on any features.
