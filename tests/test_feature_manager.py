@@ -27,6 +27,34 @@ class _DummyBaseTransformingFeature(BaseTransformingFeature):
     pass
 
 
+class FeatureB(_DummyBaseTransformingFeature):
+    name = "b"
+
+    def transform(self, df):
+        return df["a"]
+
+
+class FeatureC(_DummyBaseTransformingFeature):
+    name = "c"
+
+    def transform(self, df):
+        return df["b"] * 2
+
+
+class FeatureD(_DummyBaseTransformingFeature):
+    name = "d"
+
+    def transform(self, df):
+        return df["a"] + 1
+
+
+class FeatureE(_DummyBaseTransformingFeature):
+    name = "e"
+
+    def transform(self, df):
+        return df["c"] - 1
+
+
 class TestBaseFeatureEngineering:
     @pytest.fixture(autouse=True)
     def setup_class(cls, tmp_path):
