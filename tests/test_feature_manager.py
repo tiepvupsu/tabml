@@ -62,3 +62,7 @@ class TestBaseFeatureEngineering:
         write_str_to_file(pb_str, pb_config_path)
         cls.fm = _DummyFeatureManager(pb_config_path)
         cls.fm.initialize_dataframe()
+
+    def test_init(self):
+        # TODO(drop):
+        pass
