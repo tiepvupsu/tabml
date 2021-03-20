@@ -164,30 +164,31 @@ class FeatureConfigHelper:
 
         return self.sort_features(list(set(all_features)))
 
-    def extract_config(self, transforming_features: List[str]):
-        """Creates a minimum valid config that contains all transforming_features.
+    def extract_config(self, selected_features: List[str]):
+        """Creates a minimum valid config that contains all selected_features.
 
         Returns a protobuf with only a subset of transforming features and all of their
         dependencies.
 
+        NOTE: all base features will be in the extracted config; they were created in
+        the raw data loading step.
+
         Args:
-            transforming_features: a list of selected transforming features.
+            selected_features: a list of selected features.
 
         Raises:
-            ValueError if transforming_features contains an unknown features (not in the
+            ValueError if selected_features contains an unknown features (not in the
             original config).
         """
         invalid_features = [
-            feature
-            for feature in transforming_features
-            if feature not in self.transforming_features
+            feature for feature in selected_features if feature not in self.all_features
         ]
         if invalid_features:
             raise ValueError(
                 f"Features {invalid_features} are not in the original config."
             )
         all_relevant_features = self.get_dependencies_recursively(
-            features=transforming_features
+            features=selected_features
         )
         new_pb = copy.deepcopy(self._config)
         # we can't deriectly assign a list to a protobuf repeated field
