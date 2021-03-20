@@ -9,7 +9,7 @@ from tabml.utils.logger import logger
 from tabml.utils.utils import check_uniqueness
 
 
-class BaseFeatureManager:
+class BaseFeatureManager(ABC):
     """A Base class for feature manager.
 
     Attributes:
@@ -49,13 +49,12 @@ class BaseFeatureManager:
         self.base_transforming_feature_class = self._get_base_transforming_class()
         self.transforming_class_by_feature_name = self._get_transforming_class_by_name()
 
+    @abstractmethod
     def _get_base_transforming_class(self):
         # should be implemented in subclasses.
         raise NotImplementedError
 
     def _get_transforming_class_by_name(self) -> Dict[str, Any]:
-        if self.base_transforming_feature_class is None:
-            raise NotImplementedError
         transforming_classes = self.base_transforming_feature_class.__subclasses__()
         check_uniqueness(
             [transforming_class.name for transforming_class in transforming_classes]
