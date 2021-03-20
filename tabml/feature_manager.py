@@ -1,9 +1,11 @@
+from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Dict, List
 
 import pandas as pd
 
 from tabml.feature_config_helper import FeatureConfigHelper
+from tabml.utils.logger import logger
 from tabml.utils.utils import check_uniqueness
 
 
@@ -62,3 +64,31 @@ class BaseFeatureManager:
             transforming_class.name: transforming_class
             for transforming_class in transforming_classes
         }
+
+
+class BaseTransformingFeature(ABC):
+    """Base class for transforming features.
+    In each project, users need to create a subclass of BaseTransformingFeature. All
+    transforming features in one project must be subclasses of that subclass.
+    Attributes:
+        name:
+            (class attribute) This is the feature name that the class computes. Must be
+            unique within a project.
+    """
+
+    name = ""
+
+    def __init__(self, dependencies: List[str], raw_data: Dict):
+        self.dependencies = dependencies
+        self.raw_data = raw_data
+
+    def _transform(self, dataframe):
+        logger.info(f"Computing feature {self.name} in pandas ...")
+        # This is to make sure that _transform_ methods do not use any columns other
+        # than dependencies.
+        df = dataframe[self.dependencies]
+        return self._transform_pandas(df)
+
+    @abstractmethod
+    def transform(self, df):
+        raise NotImplementedError("Must be implemented in subclasses.")
