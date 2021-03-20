@@ -1,5 +1,3 @@
-from typing import Union
-
 from google.protobuf import text_format
 
 from tabml.protos import feature_manager_pb2
