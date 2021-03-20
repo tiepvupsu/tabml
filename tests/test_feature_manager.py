@@ -91,6 +91,9 @@ class TestBaseFeatureEngineering:
         cls.fm = _DummyFeatureManager(pb_config_path)
         cls.fm.initialize_dataframe()
 
+    def test_compute_all_transforming_features(self):
+        self.fm.compute_all_transforming_features()
+
     def test_update_feature(self, capsys):
         self.fm.update_feature("b")
         # check that "b", "c", "e" are computed.

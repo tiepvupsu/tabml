@@ -109,6 +109,15 @@ class BaseFeatureManager(ABC):
                 series, dtype=PANDAS_DTYPE_MAPPING[dtype]
             )
 
+    def compute_all_transforming_features(self):
+        """Computes all transforming feature.
+
+        Should be done occasionally. After the first time this method is called, it's
+        expected that features are updated one by one or in a set of few features.
+        """
+        for feature_name in self.config_helper.transforming_features:
+            self.compute_feature(feature_name)
+
     def update_feature(self, feature_name: str):
         """Updates one feature in the dataframe.
 
