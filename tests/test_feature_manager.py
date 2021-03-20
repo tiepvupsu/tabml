@@ -1,4 +1,3 @@
-import pytest
 from qcore.asserts import AssertRaises, assert_eq
 
 from tabml import feature_manager
