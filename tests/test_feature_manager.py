@@ -1,3 +1,4 @@
+import pandas as pd
 import pytest
 from qcore.asserts import AssertRaises, assert_eq
 
@@ -212,3 +213,101 @@ class TestFeatureConfigHelper:
         assert_eq(
             error_message.args[0], "Features ['y', 'z'] are not in the original config."
         )
+
+
+class _DummyFeatureManager(feature_manager.BaseFeatureManager):
+    """A dummy FeatureManager class to check to update and clean logics."""
+
+    def _compute_feature(self, feature_name: str):
+        print(feature_name)
+
+    def initialize_dataframe(self):
+        dummy_data = {"a": [1]}
+        self.dataframe = pd.DataFrame(data=dummy_data)
+
+    def load_dataframe(self):
+        dummy_data = {"a": [1], "b": [1], "c": [1], "d": [1], "e": [1]}
+        self.dataframe = pd.DataFrame(data=dummy_data)
+
+    def _get_base_transforming_class(self):
+        return _DummyBaseTransformingFeature
+
+
+class _DummyBaseTransformingFeature(feature_manager.BaseTransformingFeature):
+    pass
+
+
+class TestBaseFeatureManager:
+    @pytest.fixture(autouse=True)
+    def setup_class(cls, tmp_path):
+        pb_str = """
+            raw_data_dir: "dummy"
+            dataset_name: "test_airtime"
+            base_features {
+              name: "a"
+              dtype: STRING
+            }
+            transforming_features {
+              index: 1
+              name: "b"
+              dependencies: "a"
+            }
+            transforming_features {
+              index: 2
+              name: "c"
+              dependencies: "b"
+            }
+            transforming_features {
+              index: 3
+              name: "d"
+              dependencies: "a"
+            }
+            transforming_features {
+              index: 4
+              name: "e"
+              dependencies: "c"
+            }
+        """
+        pb_config_path = tmp_path / "tmp.pb"
+        write_str_to_file(pb_str, pb_config_path)
+        cls.fm = _DummyFeatureManager(pb_config_path)
+        cls.fm.initialize_dataframe()
+
+    def test_update_feature(self, capsys):
+        self.fm.update_feature("b")
+        # check that "b", "c", "e" are computed.
+        captured = capsys.readouterr()
+        assert captured.out == "b\nc\ne\n"
+
+    def test_update_features(self, capsys):
+        self.fm.update_features(["b", "c"])
+        # check that "b", "c", "e" are computed, and "c" is computed only one.
+        captured = capsys.readouterr()
+        assert captured.out == "b\nc\ne\n"
+
+    def test_cleanup(self, tmp_path):
+        # new config with "c" and "e" deleted.
+        new_pb_str = """
+            raw_data_dir: "dummy"
+            dataset_name: "test_airtime"
+            base_features {
+              name: "a"
+              dtype: STRING
+            }
+            transforming_features {
+              index: 1
+              name: "b"
+              dependencies: "a"
+            }
+            transforming_features {
+              index: 3
+              name: "d"
+              dependencies: "a"
+            }
+        """
+        pb_config_path = tmp_path / "tmp.pb"
+        write_str_to_file(new_pb_str, pb_config_path)
+        fm = _DummyFeatureManager(pb_config_path)
+        fm.cleanup()
+        expected_remaining_columns = ["a", "b", "d"]
+        assert_eq(set(expected_remaining_columns), set(fm.dataframe.columns))
