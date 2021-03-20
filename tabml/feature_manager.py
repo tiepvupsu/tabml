@@ -86,7 +86,7 @@ class BaseTransformingFeature(ABC):
         # This is to make sure that _transform_ methods do not use any columns other
         # than dependencies.
         df = dataframe[self.dependencies]
-        return self._transform_pandas(df)
+        return self.transform(df)
 
     @abstractmethod
     def transform(self, df):
