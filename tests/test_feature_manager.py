@@ -202,3 +202,13 @@ class TestFeatureConfigHelper:
         write_str_to_file(expected_pb_str, new_pb_config_path)
         new_config = self.fm_helper.extract_config(selected_features=subset_features)
         assert_eq(parse_feature_config_pb(new_pb_config_path), new_config)
+
+    def test_raise_value_error_with_invalid_feature_to_extract(self, tmp_path):
+        subset_features = ["a", "y", "z"]
+        with AssertRaises(ValueError) as assert_raises:
+            self.fm_helper.extract_config(selected_features=subset_features)
+
+        error_message = assert_raises.expected_exception_found
+        assert_eq(
+            error_message.args[0], "Features ['y', 'z'] are not in the original config."
+        )
