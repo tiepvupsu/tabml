@@ -1,7 +1,8 @@
 import copy
-from typing import Any, Collection, Dict, List, Set, Union
+from typing import Dict, List, Union
 
 from tabml.utils.pb_helpers import parse_feature_config_pb
+from tabml.utils.utils import check_uniqueness
 
 
 class _Feature:
@@ -52,8 +53,8 @@ class FeatureConfigHelper:
 
     def _validate(self):
         self._validate_indexes()
-        self._validate_uniqueness()
         self._validate_dependency()
+        check_uniqueness(self.all_features)
 
     def _validate_indexes(self):
         """Checks if indexes are positive and monotonically increasing."""
@@ -74,9 +75,6 @@ class FeatureConfigHelper:
                 "Feature indexes must be a list of increasing positive integers. "
                 f"Got indexes = {indexes}"
             )
-
-    def _validate_uniqueness(self):
-        _check_uniqueness(self.all_features)
 
     def _validate_dependency(self):
         """Checks if all dependencies of a transforming feature exists."""
@@ -203,25 +201,3 @@ class FeatureConfigHelper:
         )
 
         return new_pb
-
-
-def _check_uniqueness(items: Collection) -> None:
-    """Checks if an array containing unique elements.
-
-    Args:
-        items: A list of objects.
-
-    Returns:
-        Does not return anything. If this function passes, it means that all objects
-        are unique.
-
-    Raises:
-        Assertion error with list of duplicate objects.
-    """
-    seen_items: Set[Any] = set()
-    duplicates = set()
-    for item in items:
-        if item in seen_items:
-            duplicates.add(item)
-        seen_items.add(item)
-    assert not duplicates, f"There are duplicate objects in the list: {duplicates}."
