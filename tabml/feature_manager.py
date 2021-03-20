@@ -5,8 +5,20 @@ from typing import Any, Dict, List
 import pandas as pd
 
 from tabml.feature_config_helper import FeatureConfigHelper
+from tabml.protos import feature_manager_pb2
 from tabml.utils.logger import logger
 from tabml.utils.utils import check_uniqueness
+
+PANDAS_DTYPE_MAPPING = {
+    feature_manager_pb2.BOOL: "bool",
+    feature_manager_pb2.INT32: "int32",
+    feature_manager_pb2.INT64: "int64",
+    feature_manager_pb2.STRING: "str",
+    feature_manager_pb2.FLOAT: "float32",
+    feature_manager_pb2.DOUBLE: "float64",
+    # DATETIME will be converted to datetime parse_date https://tinyurl.com/y4waw6np
+    feature_manager_pb2.DATETIME: "datetime64[ns]",
+}
 
 
 class BaseFeatureManager(ABC):
@@ -61,6 +73,51 @@ class BaseFeatureManager(ABC):
             transforming_class.name: transforming_class
             for transforming_class in transforming_classes
         }
+
+    def compute_feature(self, feature_name: str) -> None:
+        """Computes one feature column.
+
+        This method should be used only when a new feature is added to the dataframe.
+        If the feature exists, method update_feature should be called to make sure that
+        all dependents of feature_name are also udpated.
+        """
+        if self.dataframe is None:
+            raise NotImplementedError(
+                "self.dataframe must be initialized in self.initialize_dataframe()"
+            )
+        assert feature_name not in self.dataframe.columns, (
+            f"Feature {feature_name} already exists in the dataframe. Do you want to "
+            "update it (using update_feature() method) instead?"
+        )
+        self._compute_feature(feature_name)
+
+    def _compute_feature(self, feature_name: str) -> None:
+        if self.dataframe is None:
+            raise NotImplementedError(
+                "self.dataframe must be initialized in self.initialize_dataframe()"
+            )
+        transforming_class = self.transforming_class_by_feature_name[feature_name]
+        series = transforming_class(
+            dependencies=self.config_helper.find_dependencies(feature_name),
+            raw_data=self.raw_data,
+        ).transform(self.dataframe)
+        dtype = self.feature_metadata[feature_name].dtype
+        if dtype == feature_manager_pb2.DATETIME:
+            self.dataframe[feature_name] = pd.to_datetime(series)
+        else:
+            self.dataframe[feature_name] = pd.Series(
+                series, dtype=PANDAS_DTYPE_MAPPING[dtype]
+            )
+
+    def update_feature(self, feature_name: str):
+        """Updates one feature in the dataframe.
+
+        If this is an existing feature, all of its dependents should be computed.
+        """
+        features_to_compute = [feature_name]
+        features_to_compute.extend(self.config_helper.find_dependents(feature_name))
+        for feature_name in features_to_compute:
+            self._compute_feature(feature_name)
 
 
 class BaseTransformingFeature(ABC):
