@@ -1,7 +1,7 @@
 import pytest
 from qcore.asserts import AssertRaises, assert_eq
 
-from tabml import feature_manager
+from tabml import feature_config_helper
 from tabml.utils.pb_helpers import parse_feature_config_pb
 from tabml.utils.utils import write_str_to_file
 
@@ -40,7 +40,7 @@ class TestFeatureConfigHelper:
         """
         pb_config_path = tmp_path / "feature_config_str.pbtxt"
         write_str_to_file(feature_config_str, pb_config_path)
-        cls.fm_helper = feature_manager.FeatureConfigHelper(pb_config_path)
+        cls.fm_helper = feature_config_helper.FeatureConfigHelper(pb_config_path)
 
     def test_raise_value_error_with_invalid_indexes(self, tmp_path):
         invalid_index_pb_str = """
@@ -65,7 +65,7 @@ class TestFeatureConfigHelper:
         pb_config_path = tmp_path / "tmp.pb"
         write_str_to_file(invalid_index_pb_str, pb_config_path)
         with AssertRaises(ValueError) as assert_raises:
-            feature_manager.FeatureConfigHelper(pb_config_path)
+            feature_config_helper.FeatureConfigHelper(pb_config_path)
 
         error_message = assert_raises.expected_exception_found
         assert_eq(
@@ -97,7 +97,7 @@ class TestFeatureConfigHelper:
         pb_config_path = tmp_path / "tmp.pb"
         write_str_to_file(pb_str, pb_config_path)
         with AssertRaises(AssertionError) as assert_raises:
-            feature_manager.FeatureConfigHelper(pb_config_path)
+            feature_config_helper.FeatureConfigHelper(pb_config_path)
 
         error_message = assert_raises.expected_exception_found
         assert_eq(
@@ -124,7 +124,7 @@ class TestFeatureConfigHelper:
         pb_config_path = tmp_path / "tmp.pb"
         write_str_to_file(invalid_dependency_pb_str, pb_config_path)
         with AssertRaises(AssertionError) as assert_raises:
-            feature_manager.FeatureConfigHelper(pb_config_path)
+            feature_config_helper.FeatureConfigHelper(pb_config_path)
 
         error_message = assert_raises.expected_exception_found
         assert_eq(
