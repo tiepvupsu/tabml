@@ -63,6 +63,8 @@ class TestBaseFeatureEngineering:
         cls.fm = _DummyFeatureManager(pb_config_path)
         cls.fm.initialize_dataframe()
 
-    def test_init(self):
-        # TODO(drop):
-        pass
+    def test_update_feature(self, capsys):
+        self.fm.update_feature("b")
+        # check that "b", "c", "e" are computed.
+        captured = capsys.readouterr()
+        assert captured.out == "b\nc\ne\n"
