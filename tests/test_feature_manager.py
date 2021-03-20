@@ -6,17 +6,10 @@ from tabml.utils.utils import write_str_to_file
 
 
 class _DummyFeatureManager(BaseFeatureManager):
-    """A dummy FeatureManager class to check to update and clean logics."""
-
-    # def _compute_feature(self, feature_name: str):
-    #     print(feature_name)
+    """A dummy FeatureManager class to check compute_all_transforming_features."""
 
     def initialize_dataframe(self):
-        dummy_data = {"a": [1]}
-        self.dataframe = pd.DataFrame(data=dummy_data)
-
-    def load_dataframe(self):
-        dummy_data = {"a": [1], "b": [1], "c": [1], "d": [1], "e": [1]}
+        dummy_data = {"a": [1], "d1": ["2021-03-20"]}
         self.dataframe = pd.DataFrame(data=dummy_data)
 
     def _get_base_transforming_class(self):
@@ -31,10 +24,6 @@ class _DummyFeatureManager2(BaseFeatureManager):
 
     def initialize_dataframe(self):
         dummy_data = {"a": [1]}
-        self.dataframe = pd.DataFrame(data=dummy_data)
-
-    def load_dataframe(self):
-        dummy_data = {"a": [1], "b": [1], "c": [1], "d": [1], "e": [1]}
         self.dataframe = pd.DataFrame(data=dummy_data)
 
     def _get_base_transforming_class(self):
@@ -73,6 +62,13 @@ class FeatureE(_DummyBaseTransformingFeature):
         return df["c"] - 1
 
 
+class FeatureD2(_DummyBaseTransformingFeature):
+    name = "d2"
+
+    def transform(self, df):
+        return pd.DatetimeIndex(df["d1"]) + pd.DateOffset(1)
+
+
 class TestBaseFeatureEngineering:
     @pytest.fixture(autouse=True)
     def setup_class(cls, tmp_path):
@@ -82,6 +78,10 @@ class TestBaseFeatureEngineering:
             base_features {
               name: "a"
               dtype: INT32
+            }
+            base_features {
+              name: "d1"
+              dtype: DATETIME
             }
             transforming_features {
               index: 1
@@ -106,6 +106,12 @@ class TestBaseFeatureEngineering:
               name: "e"
               dependencies: "c"
               dtype: INT32
+            }
+            transforming_features {
+              index: 5
+              name: "d2"
+              dependencies: "d1"
+              dtype: DATETIME
             }
         """
         pb_config_path = tmp_path / "tmp.pb"
