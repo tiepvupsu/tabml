@@ -13,21 +13,11 @@ class _DummyFeatureManager(BaseFeatureManager):
 
     def initialize_dataframe(self):
         dummy_data = {"a": [1]}
-        if self.is_pandas:
-            self.dataframe = pd.DataFrame(data=dummy_data)
-        else:
-            self.dataframe = self._get_spark_session().createDataFrame(
-                list(zip(*list(dummy_data.values()))), list(dummy_data.keys())
-            )
+        self.dataframe = pd.DataFrame(data=dummy_data)
 
     def load_dataframe(self):
         dummy_data = {"a": [1], "b": [1], "c": [1], "d": [1], "e": [1]}
-        if self.is_pandas:
-            self.dataframe = pd.DataFrame(data=dummy_data)
-        else:
-            self.dataframe = self._get_spark_session().createDataFrame(
-                list(zip(*list(dummy_data.values()))), list(dummy_data.keys())
-            )
+        self.dataframe = pd.DataFrame(data=dummy_data)
 
     def _get_base_transforming_class(self):
         return _DummyBaseTransformingFeature
@@ -38,8 +28,6 @@ class _DummyBaseTransformingFeature(BaseTransformingFeature):
 
 
 class TestBaseFeatureEngineering:
-    is_pandas = True
-
     @pytest.fixture(autouse=True)
     def setup_class(cls, tmp_path):
         pb_str = """
@@ -72,5 +60,5 @@ class TestBaseFeatureEngineering:
         """
         pb_config_path = tmp_path / "tmp.pb"
         write_str_to_file(pb_str, pb_config_path)
-        cls.fm = _DummyFeatureManager(pb_config_path, is_pandas=cls.is_pandas)
+        cls.fm = _DummyFeatureManager(pb_config_path)
         cls.fm.initialize_dataframe()

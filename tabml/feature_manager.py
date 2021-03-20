@@ -17,7 +17,6 @@ class BaseFeatureManager(ABC):
         raw_data_dir: A directory of raw data (set in feature manager config).
         dataset_name: Name of the final dataset (set in feature manager config).
         dataset_path: A string of the full path to where the dataframe is saved.
-        is_pandas: A boolen value indicating the dataframe is pandas or not (spark).
         features_in_config: List of features specified in feature manager config.
         raw_data:
             A dictionary with values being supporting dataframes for each dataset.
@@ -34,7 +33,7 @@ class BaseFeatureManager(ABC):
             self.base_transforming_feature_class.
     """
 
-    def __init__(self, pb_config_path: str, is_pandas: bool = True):
+    def __init__(self, pb_config_path: str):
         self.config_helper = FeatureConfigHelper(pb_config_path)
         self.raw_data_dir = self.config_helper.raw_data_dir
         self.dataset_name = self.config_helper.dataset_name
@@ -42,7 +41,6 @@ class BaseFeatureManager(ABC):
         self.dataset_path = (
             Path(self.raw_data_dir) / "features" / f"{self.dataset_name}.csv"
         )
-        self.is_pandas = is_pandas
         self.features_in_config: List[str] = self.config_helper.all_features
         self.raw_data: Dict[str, Any] = {}
         self.dataframe: pd.DataFrame = pd.DataFrame()
