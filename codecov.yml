@@ -2,7 +2,7 @@ ignore:
   - "setup.py"
 
 codecov:
-  disable_default_path_fixes: true
+  disable_default_path_fixes: false
 
 coverage:
   status:
