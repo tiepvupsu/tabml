@@ -23,6 +23,24 @@ class _DummyFeatureManager(BaseFeatureManager):
         return _DummyBaseTransformingFeature
 
 
+class _DummyFeatureManager2(BaseFeatureManager):
+    """A dummy FeatureManager class to check to update and clean logics."""
+
+    def _compute_feature(self, feature_name: str):
+        print(feature_name)
+
+    def initialize_dataframe(self):
+        dummy_data = {"a": [1]}
+        self.dataframe = pd.DataFrame(data=dummy_data)
+
+    def load_dataframe(self):
+        dummy_data = {"a": [1], "b": [1], "c": [1], "d": [1], "e": [1]}
+        self.dataframe = pd.DataFrame(data=dummy_data)
+
+    def _get_base_transforming_class(self):
+        return _DummyBaseTransformingFeature
+
+
 class _DummyBaseTransformingFeature(BaseTransformingFeature):
     pass
 
@@ -93,13 +111,15 @@ class TestBaseFeatureEngineering:
         pb_config_path = tmp_path / "tmp.pb"
         write_str_to_file(pb_str, pb_config_path)
         cls.fm = _DummyFeatureManager(pb_config_path)
+        cls.fm2 = _DummyFeatureManager2(pb_config_path)
         cls.fm.initialize_dataframe()
+        cls.fm2.initialize_dataframe()
 
     def test_compute_all_transforming_features(self):
         self.fm.compute_all_transforming_features()
 
-    # def test_update_feature(self, capsys):
-    #     self.fm.update_feature("b")
-    #     # check that "b", "c", "e" are computed.
-    #     captured = capsys.readouterr()
-    #     assert captured.out == "b\nc\ne\n"
+    def test_update_feature(self, capsys):
+        self.fm2.update_feature("b")
+        # check that "b", "c", "e" are computed.
+        captured = capsys.readouterr()
+        assert captured.out == "b\nc\ne\n"
