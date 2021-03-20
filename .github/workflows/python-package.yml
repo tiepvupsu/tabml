@@ -58,7 +58,7 @@ jobs:
         fail_ci_if_error: true
         files: ./coverage.xml
         directory: ./coverage/reports/
-        flags: unittests
+        flags: pytest
         env_vars: OS,PYTHON
         name: codecov-umbrella
         path_to_write_report: ./coverage/codecov_report.txt
