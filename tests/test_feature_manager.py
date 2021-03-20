@@ -1,3 +1,4 @@
+import pytest
 from qcore.asserts import AssertRaises, assert_eq
 
 from tabml import feature_manager
@@ -6,6 +7,41 @@ from tabml.utils.utils import write_str_to_file
 
 
 class TestFeatureConfigHelper:
+    @pytest.fixture(autouse=True)
+    def setup_class(cls, tmp_path):
+        feature_config_str = """
+            raw_data_dir: "dummy"
+            dataset_name: "dummy"
+            base_features {
+              name: "a"
+              dtype: STRING
+            }
+            transforming_features {
+              index: 1
+              name: "b"
+              dependencies: "a"
+            }
+            transforming_features {
+              index: 2
+              name: "c"
+              dependencies: "a"
+              dependencies: "b"
+            }
+            transforming_features {
+              index: 3
+              name: "d"
+              dependencies: "a"
+            }
+            transforming_features {
+              index: 4
+              name: "e"
+              dependencies: "c"
+            }
+        """
+        pb_config_path = tmp_path / "feature_config_str.pbtxt"
+        write_str_to_file(feature_config_str, pb_config_path)
+        cls.fm_helper = feature_manager.FeatureConfigHelper(pb_config_path)
+
     def test_raise_value_error_with_invalid_indexes(self, tmp_path):
         invalid_index_pb_str = """
             # invalid config with indexes are not continuous
@@ -99,117 +135,24 @@ class TestFeatureConfigHelper:
         )
 
     def test_find_dependents(self, tmp_path):
-        pb_str = """
-            raw_data_dir: "dummy"
-            dataset_name: "dummy"
-            base_features {
-              name: "a"
-              dtype: STRING
-            }
-            transforming_features {
-              index: 1
-              name: "b"
-              dependencies: "a"
-            }
-            transforming_features {
-              index: 2
-              name: "c"
-              dependencies: "a"
-              dependencies: "b"
-            }
-            transforming_features {
-              index: 3
-              name: "d"
-              dependencies: "a"
-            }
-            transforming_features {
-              index: 4
-              name: "e"
-              dependencies: "c"
-            }
-        """
-        pb_config_path = tmp_path / "tmp.pb"
-        write_str_to_file(pb_str, pb_config_path)
-        feature_manager_helper = feature_manager.FeatureConfigHelper(pb_config_path)
-        got_1 = feature_manager_helper.find_dependents("a")
+        got_1 = self.fm_helper.find_dependents("a")
         expected_1 = ["b", "c", "d", "e"]
         assert_eq(expected_1, got_1)
 
-        got_2 = feature_manager_helper.find_dependents("b")
+        got_2 = self.fm_helper.find_dependents("b")
         expected_2 = ["c", "e"]
         assert_eq(expected_2, got_2)
 
-        got_3 = feature_manager_helper.find_dependents("d")
+        got_3 = self.fm_helper.find_dependents("d")
         expected_3 = []
         assert_eq(expected_3, got_3)
 
     def test_append_dependents(self, tmp_path):
-        pb_str = """
-            raw_data_dir: "dummy"
-            dataset_name: "dummy"
-            base_features {
-              name: "a"
-              dtype: STRING
-            }
-            transforming_features {
-              index: 1
-              name: "b"
-              dependencies: "a"
-            }
-            transforming_features {
-              index: 2
-              name: "c"
-              dependencies: "a"
-              dependencies: "b"
-            }
-            transforming_features {
-              index: 3
-              name: "d"
-              dependencies: "a"
-            }
-            transforming_features {
-              index: 4
-              name: "e"
-              dependencies: "c"
-            }
-        """
-        pb_config_path = tmp_path / "tmp.pb"
-        write_str_to_file(pb_str, pb_config_path)
-        feature_manager_helper = feature_manager.FeatureConfigHelper(pb_config_path)
-        got = feature_manager_helper.append_dependents(["d", "b"])
+        got = self.fm_helper.append_dependents(["d", "b"])
         expected = ["b", "c", "d", "e"]
         assert_eq(expected, got)
 
-    def test_extract_config(self, tmp_path):
-        master_pb_str = """
-            raw_data_dir: "dummy"
-            dataset_name: "dummy"
-            base_features {
-              name: "a"
-              dtype: STRING
-            }
-            transforming_features {
-              index: 1
-              name: "b"
-              dependencies: "a"
-            }
-            transforming_features {
-              index: 2
-              name: "c"
-              dependencies: "a"
-              dependencies: "b"
-            }
-            transforming_features {
-              index: 3
-              name: "d"
-              dependencies: "a"
-            }
-            transforming_features {
-              index: 4
-              name: "e"
-              dependencies: "c"
-            }
-        """
+    def test_extract_config_1(self, tmp_path):
         subset_features = ["e"]
         expected_pb_str = """
             raw_data_dir: "dummy"
@@ -235,17 +178,12 @@ class TestFeatureConfigHelper:
               dependencies: "c"
             }
         """
-        pb_config_path = tmp_path / "tmp.pb"
         new_pb_config_path = tmp_path / "new_tmp.pb"
-        write_str_to_file(master_pb_str, pb_config_path)
         write_str_to_file(expected_pb_str, new_pb_config_path)
-        feature_manager_helper = feature_manager.FeatureConfigHelper(pb_config_path)
-        new_config = feature_manager_helper.extract_config(
-            transforming_features=subset_features
-        )
+        new_config = self.fm_helper.extract_config(selected_features=subset_features)
         assert_eq(parse_feature_config_pb(new_pb_config_path), new_config)
 
-        # Test 2
+    def test_extract_config_2(self, tmp_path):
         subset_features = ["d"]
         expected_pb_str = """
             raw_data_dir: "dummy"
@@ -260,12 +198,7 @@ class TestFeatureConfigHelper:
               dependencies: "a"
             }
         """
-        pb_config_path = tmp_path / "tmp.pb"
         new_pb_config_path = tmp_path / "new_tmp.pb"
-        write_str_to_file(master_pb_str, pb_config_path)
         write_str_to_file(expected_pb_str, new_pb_config_path)
-        feature_manager_helper = feature_manager.FeatureConfigHelper(pb_config_path)
-        new_config = feature_manager_helper.extract_config(
-            transforming_features=subset_features
-        )
+        new_config = self.fm_helper.extract_config(selected_features=subset_features)
         assert_eq(parse_feature_config_pb(new_pb_config_path), new_config)
