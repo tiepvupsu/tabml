@@ -62,7 +62,7 @@ class BaseFeatureManager(ABC):
     @abstractmethod
     def _get_base_transforming_class(self):
         # should be implemented in subclasses.
-        pass
+        raise NotImplementedError
 
     def _get_transforming_class_by_name(self) -> Dict[str, Any]:
         transforming_classes = self.base_transforming_feature_class.__subclasses__()
@@ -154,4 +154,4 @@ class BaseTransformingFeature(ABC):
 
     @abstractmethod
     def transform(self, df):
-        pass
+        raise NotImplementedError
