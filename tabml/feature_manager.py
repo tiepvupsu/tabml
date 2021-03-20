@@ -100,7 +100,7 @@ class BaseFeatureManager(ABC):
         series = transforming_class(
             dependencies=self.config_helper.find_dependencies(feature_name),
             raw_data=self.raw_data,
-        ).transform(self.dataframe)
+        )._transform(self.dataframe)
         dtype = self.feature_metadata[feature_name].dtype
         if dtype == feature_manager_pb2.DATETIME:
             self.dataframe[feature_name] = pd.to_datetime(series)
