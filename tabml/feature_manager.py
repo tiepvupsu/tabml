@@ -182,8 +182,10 @@ class BaseFeatureManager(ABC):
 
 class BaseTransformingFeature(ABC):
     """Base class for transforming features.
+
     In each project, users need to create a subclass of BaseTransformingFeature. All
     transforming features in one project must be subclasses of that subclass.
+
     Attributes:
         name:
             (class attribute) This is the feature name that the class computes. Must be
