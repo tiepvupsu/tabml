@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import pandas as pd
 
@@ -151,6 +151,33 @@ class BaseFeatureManager(ABC):
         features_to_compute.extend(self.config_helper.find_dependents(feature_name))
         for feature_name in features_to_compute:
             self._compute_feature(feature_name)
+
+    def extract_dataframe(
+        self, features_to_select: List[str], filters: Optional[List[str]] = None
+    ):
+        """Extracts a subset of columns and a subset of rows in the dataframe.
+
+        The whole idea of Feature Manager is to create a big dataframe with as many
+        columns and rows as we want, which helps store the whole information in one
+        place. All training/validation/test datasets are stored in this big table and
+        are then extracted later per use case.
+
+        To extract columns, we can simply use a list of column names. To extract rows,
+        we can use a set of boolen filters. Training, validation and test data should
+        be extracted using these filters.
+
+        Args:
+            features_to_select: A list of column names to be selected.
+            filters: A list of boolen filters used to extract rows.
+        """
+        assert (
+            self.dataframe is not None
+        ), "You may forget to load the dataframe, use method load_dataframe first."
+
+        if filters is None:
+            return self.dataframe[features_to_select]
+        query_to_filter = " and ".join(filters)
+        return self.dataframe.query(query_to_filter)[features_to_select]
 
 
 class BaseTransformingFeature(ABC):
