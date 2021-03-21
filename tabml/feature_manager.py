@@ -74,6 +74,30 @@ class BaseFeatureManager(ABC):
             for transforming_class in transforming_classes
         }
 
+    def load_dataframe(self):
+        """Loads the dataframe from disk."""
+        parse_dates = [
+            feature
+            for feature, metadata in self.feature_metadata.items()
+            if metadata.dtype == feature_manager_pb2.DATETIME
+        ]
+        self.dataframe = pd.read_csv(
+            self.dataset_path,
+            dtype={
+                feature: PANDAS_DTYPE_MAPPING[metadata.dtype]
+                for feature, metadata in self.feature_metadata.items()
+                if metadata.dtype != feature_manager_pb2.DATETIME
+            },
+            parse_dates=parse_dates,
+        )
+
+    def save_dataframe(self):
+        """Saves the dataframe to disk."""
+        if not self.dataset_path.parent.exists():
+            self.dataset_path.parent.mkdir(parents=True)
+        logger.info(f"Saving dataframe to {self.dataset_path}")
+        self.dataframe.to_csv(self.dataset_path, index=False)
+
     def compute_feature(self, feature_name: str) -> None:
         """Computes one feature column.
 
