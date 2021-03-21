@@ -122,7 +122,7 @@ class TestBaseFeatureManager:
         cls.fm.initialize_dataframe()
         cls.fm2.initialize_dataframe()
 
-    def test_compute_all_transforming_features(self):
+    def test_compute_all_transforming_features(self, tmp_path):
         self.fm.compute_all_transforming_features()
         expected_dataframe = pd.DataFrame(
             data={
@@ -145,6 +145,15 @@ class TestBaseFeatureManager:
                 "d2": "datetime64[ns]",
             }
         )
+        pd.testing.assert_frame_equal(expected_dataframe, self.fm.dataframe)
+
+        # test save and load dataframe
+        # make a temp dataset_path
+        self.fm.dataset_path = tmp_path / "features" / "dataset.csv"
+        self.fm.save_dataframe()
+        # make sure dataframe is cleared
+        self.fm.dataframe = None
+        self.fm.load_dataframe()
         pd.testing.assert_frame_equal(expected_dataframe, self.fm.dataframe)
 
     def test_update_feature(self, capsys):
