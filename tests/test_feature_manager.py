@@ -9,9 +9,9 @@ class _DummyFeatureManager(BaseFeatureManager):
     """A dummy FeatureManager class to check compute_all_transforming_features."""
 
     def initialize_dataframe(self):
-        dummy_data = {"a": [1]}
+        dummy_data = {"a": [1, 2]}
         self.dataframe = pd.DataFrame(data=dummy_data, dtype="int32")
-        self.dataframe["d1"] = pd.to_datetime(["2021-03-20"])
+        self.dataframe["d1"] = pd.to_datetime(["2021-03-20", "2021-02-11"])
 
     def _get_base_transforming_class(self):
         return _DummyBaseTransformingFeature
@@ -126,13 +126,13 @@ class TestBaseFeatureManager:
         self.fm.compute_all_transforming_features()
         expected_dataframe = pd.DataFrame(
             data={
-                "a": [1],
-                "d1": "2021-03-20",
-                "b": 1,
-                "c": 2,
-                "d": 2,
-                "e": 1,
-                "d2": "2021-03-21",
+                "a": [1, 2],
+                "d1": ["2021-03-20", "2021-02-11"],
+                "b": [1, 2],
+                "c": [2, 4],
+                "d": [2, 3],
+                "e": [1, 3],
+                "d2": ["2021-03-21", "2021-02-12"],
             }
         ).astype(
             {
