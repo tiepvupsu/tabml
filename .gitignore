@@ -131,3 +131,6 @@ dmypy.json
 
 # pb2 protos
 *_pb2.py
+
+# data
+tabml/*/data
