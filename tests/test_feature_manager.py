@@ -161,3 +161,22 @@ class TestBaseFeatureManager:
         # check that "b", "c", "e" are computed.
         captured = capsys.readouterr()
         assert captured.out == "b\nc\ne\n"
+
+    def test_extract_dataframe(self):
+        self.fm.compute_all_transforming_features()
+        features_to_select = ["a", "c", "d2"]
+        filters = ["d2 > '2021-03-01'"]
+        expected_dataframe = pd.DataFrame(
+            data={"a": [1], "c": [2], "d2": ["2021-03-21"]}
+        ).astype({"a": "int32", "c": "int32", "d2": "datetime64[ns]"})
+        pd.testing.assert_frame_equal(
+            expected_dataframe, self.fm.extract_dataframe(features_to_select, filters)
+        )
+
+        # test without filters
+        expected_dataframe = pd.DataFrame(
+            data={"a": [1, 2], "c": [2, 4], "d2": ["2021-03-21", "2021-02-12"]}
+        ).astype({"a": "int32", "c": "int32", "d2": "datetime64[ns]"})
+        pd.testing.assert_frame_equal(
+            expected_dataframe, self.fm.extract_dataframe(features_to_select)
+        )
