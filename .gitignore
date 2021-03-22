@@ -134,3 +134,4 @@ dmypy.json
 
 # data
 tabml/*/data
+!tabml/titanic/data
