@@ -16,6 +16,10 @@ class _DummyFeatureManager(BaseFeatureManager):
     def _get_base_transforming_class(self):
         return _DummyBaseTransformingFeature
 
+    def load_raw_data(self):
+        # required to initiate an instance of BaseFeatureManager
+        raise NotImplementedError
+
 
 class _DummyFeatureManager2(BaseFeatureManager):
     """A dummy FeatureManager class to check to update and clean logics."""
@@ -29,6 +33,10 @@ class _DummyFeatureManager2(BaseFeatureManager):
 
     def _get_base_transforming_class(self):
         return _DummyBaseTransformingFeature
+
+    def load_raw_data(self):
+        # required to initiate an instance of BaseFeatureManager
+        raise NotImplementedError
 
 
 class _DummyBaseTransformingFeature(BaseTransformingFeature):
