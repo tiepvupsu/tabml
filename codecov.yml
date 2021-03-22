@@ -2,11 +2,17 @@ ignore:
   - "setup.py"
   - "tabml/utils/git.py"
 
+codecov:
+  disable_default_path_fixes: false
+
+
 coverage:
   status:
     project:
       default:
-        threshold: 2%
-
-codecov:
-  disable_default_path_fixes: false
+        target: 90%
+        threshold: 0.5%
+    patch:
+      default:
+        target: 85%
+        threshold: 0.5%
