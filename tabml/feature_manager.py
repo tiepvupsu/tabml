@@ -74,6 +74,18 @@ class BaseFeatureManager(ABC):
             for transforming_class in transforming_classes
         }
 
+    @abstractmethod
+    def initialize_dataframe(self):
+        """Inits the main dataframe with base features."""
+        # TODO: check if the set of columns in dataframe after initialiation is exactly
+        # the set of base features.
+        raise NotImplementedError
+
+    @abstractmethod
+    def load_raw_data(self):
+        """Loads data from raw csv files and save them to self.raw_data."""
+        raise NotImplementedError
+
     def load_dataframe(self):
         """Loads the dataframe from disk."""
         parse_dates = [
@@ -151,6 +163,11 @@ class BaseFeatureManager(ABC):
         features_to_compute.extend(self.config_helper.find_dependents(feature_name))
         for feature_name in features_to_compute:
             self._compute_feature(feature_name)
+
+    def run_all(self):
+        self.load_raw_data()
+        self.initialize_dataframe()
+        self.compute_all_transforming_features()
 
     def extract_dataframe(
         self, features_to_select: List[str], filters: Optional[List[str]] = None
