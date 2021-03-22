@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 
 from tabml.feature_manager import BaseFeatureManager, BaseTransformingFeature
+from tabml.utils.git import get_git_repo_dir
 
 
 class FeatureManager(BaseFeatureManager):
@@ -138,7 +139,9 @@ class FeatureCodedTitle(BaseTitanicTransformingFeature):
 
 
 def run():
-    pb_config_path = "./configs/feature_config.pb"
+    pb_config_path = (
+        Path(get_git_repo_dir()) / "tabml/titanic/configs/feature_config.pb"
+    )
     fm = FeatureManager(pb_config_path)
     fm.run_all()
 
