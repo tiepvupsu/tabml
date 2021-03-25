@@ -64,3 +64,10 @@ def clip_one_column(
     upper = training_data.quantile(upper_percentile)
     # apply the clip to all data
     return df[column_name].clip(lower=lower, upper=upper)
+
+
+def transform(df, columns, training_filters, transformer):
+    all_data = df[columns]
+    train_data = df.query(" and ".join(training_filters))[columns]
+    transformer.fit(X=train_data)
+    return transformer.transform(all_data)
