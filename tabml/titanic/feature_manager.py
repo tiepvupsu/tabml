@@ -2,7 +2,9 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
 
+from tabml import data_processing
 from tabml.feature_manager import BaseFeatureManager, BaseTransformingFeature
 from tabml.utils.git import get_git_repo_dir
 
@@ -39,6 +41,13 @@ class FeatureAge(BaseTitanicTransformingFeature):
     def transform(self, df):
         mean_age = self.raw_data["full"]["Age"].mean()
         return self.raw_data["full"]["Age"].fillna(mean_age)
+
+
+class FeatureIsTrain(BaseTitanicTransformingFeature):
+    name = "is_train"
+
+    def transform(self, df):
+        return df["passenger_id"] <= 891
 
 
 class FeatureBucketizedAge(BaseTitanicTransformingFeature):
@@ -136,6 +145,18 @@ class FeatureCodedTitle(BaseTitanicTransformingFeature):
         return df["title"].map(
             {"Master": 0, "Miss": 1, "Mr": 2, "Mrs": 3, "Others": 4, "Unknown": 5}
         )
+
+
+class FeatureMinMaxScaledAge(BaseTitanicTransformingFeature):
+    name = "min_max_scaled_age"
+
+    def transform(self, df):
+        return data_processing.transform(
+            df,
+            columns=["age"],
+            training_filters=["is_train"],
+            transformer=MinMaxScaler(),
+        ).reshape(-1)
 
 
 def run():
