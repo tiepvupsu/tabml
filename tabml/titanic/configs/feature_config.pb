@@ -90,3 +90,18 @@ transforming_features {
   dependencies: "title"
   dtype: INT32
 }
+
+transforming_features {
+  index: 13
+  name: "is_train"
+  dependencies: "passenger_id"
+  dtype: BOOL
+}
+
+transforming_features {
+  index: 14
+  name: "min_max_scaled_age"
+  dependencies: "age"
+  dependencies: "is_train"
+  dtype: FLOAT
+}
