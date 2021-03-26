@@ -1,6 +1,4 @@
 import pandas as pd
-import pytest
-from qcore.asserts import AssertRaises, assert_eq
 
 from tabml.data_processing import QuantileClipper
 
