@@ -6,7 +6,7 @@ from tabml.utils.utils import check_uniqueness
 
 
 class _Feature:
-    def __init__(self, index: int, dtype: str, dependencies: Union[List, None] = None):
+    def __init__(self, index: int, dtype: int, dependencies: Union[List, None] = None):
         self.index = index
         self.dependents: List[str] = []
         self.dtype = dtype
