@@ -130,7 +130,7 @@ class TestFeatureConfigHelper:
         assert_eq(
             True,
             error_message.args[0].startswith(
-                f"Feature weekday depends on feature date that is undefined."
+                "Feature weekday depends on feature date that is undefined."
             ),
         )
 
