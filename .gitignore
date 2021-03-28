@@ -130,7 +130,7 @@ dmypy.json
 .pyre/
 
 # pb2 protos
-*_pb2.py
+# *_pb2.py
 
 # data
 tabml/*/data
