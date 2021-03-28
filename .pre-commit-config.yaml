@@ -1,19 +1,23 @@
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
+    exclude: ^tabml/protos/
     hooks:
     -   id: check-yaml
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
 -   repo: https://github.com/asottile/seed-isort-config
     rev: v2.1.1
+    exclude: ^tabml/protos/
     hooks:
     -   id: seed-isort-config
 -   repo:  https://github.com/timothycrosley/isort
     rev: 4.3.21
     hooks:
     -   id: isort
+        exclude: ^tabml/protos/
 -   repo: https://github.com/psf/black
     rev: 19.3b0
     hooks:
     -   id: black
+        exclude: ^tabml/protos/
