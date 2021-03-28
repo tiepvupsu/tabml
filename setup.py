@@ -16,5 +16,5 @@ setup(
     url="https://github.com/tiepvupsu/tabml",
     license=license,
     packages=find_packages(exclude=("tests", "docs")),
-    package_data={"tabml": ["utils"]},
+    package_dir = {'': 'tabml'}
 )
