@@ -139,9 +139,9 @@ class BaseFeatureManager(ABC):
         )._transform(self.dataframe)
         dtype = self.feature_metadata[feature_name].dtype
         if dtype == feature_manager_pb2.DATETIME:
-            self.dataframe[feature_name] = pd.to_datetime(series)
+            self.dataframe.loc[:, feature_name] = pd.to_datetime(series)
         else:
-            self.dataframe[feature_name] = pd.Series(
+            self.dataframe.loc[:, feature_name] = pd.Series(
                 series, dtype=PANDAS_DTYPE_MAPPING[dtype]
             )
 
