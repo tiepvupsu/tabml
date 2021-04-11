@@ -24,7 +24,15 @@ class FeatureManager(BaseFeatureManager):
 
     def initialize_dataframe(self):
         self.dataframe = self.raw_data["full"][
-            ["median_house_value", "housing_median_age", "total_rooms"]
+            [
+                "median_house_value",
+                "housing_median_age",
+                "total_rooms",
+                "population",
+                "total_bedrooms",
+                "households",
+                "median_income",
+            ]
         ]
 
 
@@ -53,23 +61,55 @@ class FeatureHousingMedianAge(BaseHousingTransformingFeature):
         ).reshape(-1)
 
 
+def _scale_clean_transform(df, columns):
+    return data_processing.fit_train_transform_all(
+        whole_df=df,
+        columns=columns,
+        training_filters=["is_train"],
+        transformer=Pipeline(
+            [
+                ("clip_outlier", data_processing.BoxplotOutlierClipper()),
+                ("std_scaler", StandardScaler()),
+            ]
+        ),
+    ).reshape(-1)
+
+
 class FeatureScaledCleanTotalRooms(BaseHousingTransformingFeature):
     """Feature created by applying box plot to fix outliers then StandardScaler."""
 
     name = "scaled_clean_total_rooms"
 
     def transform(self, df):
-        return data_processing.fit_train_transform_all(
-            whole_df=df,
-            columns=["total_rooms"],
-            training_filters=["is_train"],
-            transformer=Pipeline(
-                [
-                    ("clip_outlier", data_processing.BoxplotOutlierClipper()),
-                    ("std_scaler", StandardScaler()),
-                ]
-            ),
-        ).reshape(-1)
+        return _scale_clean_transform(df, ["total_rooms"])
+
+
+class FeatureScaledCleanTotalBedrooms(BaseHousingTransformingFeature):
+    name = "scaled_clean_total_bedrooms"
+
+    def transform(self, df):
+        return _scale_clean_transform(df, ["total_bedrooms"])
+
+
+class FeatureScaledCleanPopulation(BaseHousingTransformingFeature):
+    name = "scaled_clean_population"
+
+    def transform(self, df):
+        return _scale_clean_transform(df, ["population"])
+
+
+class FeatureScaledCleanHouseholds(BaseHousingTransformingFeature):
+    name = "scaled_clean_households"
+
+    def transform(self, df):
+        return _scale_clean_transform(df, ["households"])
+
+
+class FeatureScaledCleanMedianIncome(BaseHousingTransformingFeature):
+    name = "scaled_clean_median_income"
+
+    def transform(self, df):
+        return _scale_clean_transform(df, ["median_income"])
 
 
 def run():
