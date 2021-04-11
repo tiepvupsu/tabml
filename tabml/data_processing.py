@@ -1,5 +1,6 @@
-from typing import Optional
+from typing import Optional, Tuple
 
+import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 
 
@@ -42,6 +43,37 @@ class QuantileClipper(BaseEstimator, TransformerMixin):
 
     def transform(self, X):
         return X.clip(lower=self.lower, upper=self.upper)
+
+
+def find_boxplot_boundaries(
+    col: pd.Series, whisker_coeff: float = 1.5
+) -> Tuple[float, float]:
+    """Findx minimum and maximum in boxplot.
+
+    Args:
+        col: a pandas serires of input.
+        whisker_coeff: whisker coefficient in box plot
+    """
+    Q1 = col.quantile(0.25)
+    Q3 = col.quantile(0.75)
+    IQR = Q3 - Q1
+    lower = Q1 - whisker_coeff * IQR
+    upper = Q3 + whisker_coeff * IQR
+    return lower, upper
+
+
+class BoxplotOutlierClipper(BaseEstimator, TransformerMixin):
+    def __init__(self, whisker_coeff: float = 1.5):
+        self.whisker = whisker_coeff
+        self.lower: float = float("-inf")
+        self.upper: float = float("inf")
+
+    def fit(self, X: pd.Series):
+        self.lower, self.upper = find_boxplot_boundaries(X, self.whisker)
+        return self
+
+    def transform(self, X):
+        return X.clip(self.lower, self.upper, axis=0)
 
 
 def transform(df, columns, training_filters, transformer):
