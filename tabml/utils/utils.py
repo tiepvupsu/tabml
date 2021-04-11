@@ -1,6 +1,9 @@
 import random
 import string
+from pathlib import Path
 from typing import Any, Collection, Set
+
+import git
 
 
 def random_string(length: int = 10) -> str:
@@ -43,3 +46,9 @@ def check_uniqueness(items: Collection) -> None:
             duplicates.add(item)
         seen_items.add(item)
     assert not duplicates, f"There are duplicate objects in the list: {duplicates}."
+
+
+def get_git_root():
+    git_repo = git.Repo(Path.cwd(), search_parent_directories=True)
+    git_root = git_repo.git.rev_parse("--show-toplevel")
+    return git_root
