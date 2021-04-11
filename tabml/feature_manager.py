@@ -168,6 +168,7 @@ class BaseFeatureManager(ABC):
         self.load_raw_data()
         self.initialize_dataframe()
         self.compute_all_transforming_features()
+        self.save_dataframe()
 
     def extract_dataframe(
         self, features_to_select: List[str], filters: Optional[List[str]] = None
