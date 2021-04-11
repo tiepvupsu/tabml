@@ -19,6 +19,26 @@ base_features {
   dtype: FLOAT
 }
 
+base_features {
+  name: "population"
+  dtype: FLOAT
+}
+
+base_features {
+  name: "total_bedrooms"
+  dtype: FLOAT
+}
+
+base_features {
+  name: "households"
+  dtype: FLOAT
+}
+
+base_features {
+  name: "median_income"
+  dtype: FLOAT
+}
+
 transforming_features {
   name: "is_train"
   index: 1
@@ -36,13 +56,39 @@ transforming_features {
 transforming_features {
   name: "scaled_clean_total_rooms"
   index: 3
-  dtype: INT32
+  dtype: FLOAT
   dependencies: "is_train"
   dependencies: "total_rooms"
 }
 
-# transforming_features {
-#   name: "population"
-#   index: 4
-#   dtype: INT32
-# }
+transforming_features {
+  name: "scaled_clean_population"
+  index: 4
+  dtype: FLOAT
+  dependencies: "is_train"
+  dependencies: "population"
+}
+
+transforming_features {
+  name: "scaled_clean_total_bedrooms"
+  index: 5
+  dtype: FLOAT
+  dependencies: "is_train"
+  dependencies: "total_bedrooms"
+}
+
+transforming_features {
+  name: "scaled_clean_households"
+  index: 6
+  dtype: FLOAT
+  dependencies: "is_train"
+  dependencies: "households"
+}
+
+transforming_features {
+  name: "scaled_clean_median_income"
+  index: 7
+  dtype: FLOAT
+  dependencies: "is_train"
+  dependencies: "median_income"
+}
