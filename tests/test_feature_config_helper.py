@@ -10,7 +10,7 @@ class TestFeatureConfigHelper:
     @pytest.fixture(autouse=True)
     def setup_class(cls, tmp_path):
         feature_config_str = """
-            raw_data_dir: "dummy"
+            raw_data {data_dir: "dummy"}
             dataset_name: "dummy"
             base_features {
               name: "a"
@@ -45,7 +45,7 @@ class TestFeatureConfigHelper:
     def test_raise_value_error_with_invalid_indexes(self, tmp_path):
         invalid_index_pb_str = """
             # invalid config with indexes are not continuous
-            raw_data_dir: "dummy"
+            raw_data {data_dir: "dummy"}
             dataset_name: "dummy"
             base_features {
               name: "TIME"
@@ -78,7 +78,7 @@ class TestFeatureConfigHelper:
 
     def test_raise_assertion_error_with_duplicate_features(self, tmp_path):
         pb_str = """
-            raw_data_dir: "dummy"
+            raw_data {data_dir: "dummy"}
             dataset_name: "dummy"
             base_features {
               name: "TIME"
@@ -109,7 +109,7 @@ class TestFeatureConfigHelper:
 
     def test_raise_value_error_with_invalid_dependencies(self, tmp_path):
         invalid_dependency_pb_str = """
-            raw_data_dir: "dummy"
+            raw_data {data_dir: "dummy"}
             dataset_name: "dummy"
             base_features {
               name: "TIME"
@@ -155,7 +155,7 @@ class TestFeatureConfigHelper:
     def test_extract_config_1(self, tmp_path):
         subset_features = ["e"]
         expected_pb_str = """
-            raw_data_dir: "dummy"
+            raw_data {data_dir: "dummy"}
             dataset_name: "dummy"
             base_features {
               name: "a"
@@ -186,7 +186,7 @@ class TestFeatureConfigHelper:
     def test_extract_config_2(self, tmp_path):
         subset_features = ["d"]
         expected_pb_str = """
-            raw_data_dir: "dummy"
+            raw_data {data_dir: "dummy"}
             dataset_name: "dummy"
             base_features {
               name: "a"
