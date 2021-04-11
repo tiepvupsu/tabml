@@ -45,13 +45,12 @@ class FeatureHousingMedianAge(BaseHousingTransformingFeature):
     name = "scaled_housing_median_age"
 
     def transform(self, df):
-        # fit StandardScaler() on train data, transform whole data
-        # NOTE: StandardScaler requires 2D inputs
-        train_data = df.query("is_train")[["housing_median_age"]]
-        scaler = StandardScaler()
-        scaler.fit(train_data)
-        # return a 1d array for pandas series
-        return scaler.transform(df[["housing_median_age"]]).reshape(-1)
+        return data_processing.fit_train_transform_all(
+            whole_df=df,
+            columns=["housing_median_age"],
+            training_filters=["is_train"],
+            transformer=StandardScaler(),
+        ).reshape(-1)
 
 
 class FeatureScaledCleanTotalRooms(BaseHousingTransformingFeature):
@@ -60,16 +59,17 @@ class FeatureScaledCleanTotalRooms(BaseHousingTransformingFeature):
     name = "scaled_clean_total_rooms"
 
     def transform(self, df):
-        train_data = df.query("is_train")[["total_rooms"]]
-        all_data = df[["total_rooms"]]
-        transformer = Pipeline(
-            [
-                ("clip_outlier", data_processing.BoxplotOutlierClipper()),
-                ("std_scaler", StandardScaler()),
-            ]
-        )
-        transformer.fit(train_data)
-        return transformer.transform(all_data).reshape(-1)
+        return data_processing.fit_train_transform_all(
+            whole_df=df,
+            columns=["total_rooms"],
+            training_filters=["is_train"],
+            transformer=Pipeline(
+                [
+                    ("clip_outlier", data_processing.BoxplotOutlierClipper()),
+                    ("std_scaler", StandardScaler()),
+                ]
+            ),
+        ).reshape(-1)
 
 
 def run():
