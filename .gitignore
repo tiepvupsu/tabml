@@ -134,8 +134,8 @@ dmypy.json
 
 # data
 tabml/*/data
-!tabml/titanic/data
-!tabml/housing/data
+!tabml/titanic/data/train.csv
+!tabml/housing/data/housing.csv
 
 # vscode
 coverage.code-workspace
