@@ -151,7 +151,7 @@ class FeatureMinMaxScaledAge(BaseTitanicTransformingFeature):
     name = "min_max_scaled_age"
 
     def transform(self, df):
-        return data_processing.transform(
+        return data_processing.fit_train_transform_all(
             df,
             columns=["age"],
             training_filters=["is_train"],
