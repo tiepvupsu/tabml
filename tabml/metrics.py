@@ -178,6 +178,17 @@ def compute_maxf1_stats(labels: Collection, preds: Collection) -> List[float]:
     return [max_f1, max_f1_threshold, max_f1_precision, max_f1_recall]
 
 
+class SMAPE(BaseMetric):
+    name = "smape"  # symmetric-mean-percentage-error
+    score_names = ["smape"]
+    is_higher_better = False
+
+    def _compute_scores(self, labels: Collection, preds: Collection) -> List[float]:
+        nominator = 2 * np.abs(np.array(preds) - np.array(labels))
+        denominator = np.abs(labels) + np.abs(preds)
+        return [100 * np.mean(np.divide(nominator, denominator))]
+
+
 def get_instantiated_metric_dict() -> Dict[str, BaseMetric]:
     res = {}
     for sub_class in BaseMetric.__subclasses__():

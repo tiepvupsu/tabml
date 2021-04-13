@@ -132,6 +132,15 @@ class TestF1Score:
         assert_eq(expected, got)
 
 
+class TestSmape:
+    def test_computation(self):
+        labels = [1, 100, 1000]
+        preds = [10, 10, 800]
+        expected = 200 / 3 * (9 / 11 + 90 / 110 + 200 / 1800)
+        got = metrics.SMAPE().compute_scores(labels, preds)["smape"]
+        np.testing.assert_almost_equal(expected, got)
+
+
 def test_metrics_have_unique_name():
     metric_by_name = metrics.get_instantiated_metric_dict()
     metric_names = metric_by_name.keys()
