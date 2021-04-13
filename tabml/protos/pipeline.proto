@@ -17,7 +17,7 @@ message Saver {
 
 // Next id: 10
 message Config {
-    optional string config_name = 7 [default = "unnamed"];
+    required string config_name = 7;
     required DataLoader data_loader = 1;
     required ModelWrapper model_wrapper = 2;
     required Trainer trainer = 3;

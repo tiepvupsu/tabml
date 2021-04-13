@@ -32,6 +32,7 @@ class FeatureManager(BaseFeatureManager):
                 "total_bedrooms",
                 "households",
                 "median_income",
+                "ocean_proximity",
             ]
         ]
 
@@ -111,6 +112,13 @@ class FeatureScaledCleanMedianIncome(BaseHousingTransformingFeature):
 
     def transform(self, df):
         return _scale_clean_transform(df, ["median_income"])
+
+
+class FeatureLog10MedianHouseValue(BaseHousingTransformingFeature):
+    name = "log10_median_house_value"
+
+    def transform(self, df):
+        return np.log10(df["median_house_value"])
 
 
 def run():
