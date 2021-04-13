@@ -1,6 +1,6 @@
 import pathlib
 
-from google.protobuf import text_format
+from google.protobuf import json_format, text_format
 
 from tabml.protos import feature_manager_pb2, path_pb2, pipeline_pb2
 from tabml.utils import utils
@@ -23,3 +23,7 @@ def get_absolute_path(path: path_pb2.Path) -> pathlib.Path:
     if path.is_absolute_path:
         return path.path
     return utils.get_full_path(path.path)
+
+
+def pb_to_dict(config):
+    return json_format.MessageToDict(config, preserving_proto_field_name=True)

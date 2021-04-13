@@ -39,6 +39,11 @@ base_features {
   dtype: FLOAT
 }
 
+base_features {
+  name: "ocean_proximity"
+  dtype: STRING
+}
+
 transforming_features {
   name: "is_train"
   index: 1
@@ -91,4 +96,11 @@ transforming_features {
   dtype: FLOAT
   dependencies: "is_train"
   dependencies: "median_income"
+}
+
+transforming_features {
+  name: "log10_median_house_value"
+  dtype: FLOAT
+  index: 8
+  dependencies: "median_house_value"
 }

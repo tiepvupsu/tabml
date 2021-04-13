@@ -34,6 +34,8 @@ class ExperimentManger:
             path_to_config: path to proto pipeline config file.
             should_create_new_run_dir: create new experiment subfolder (True) or not
                 (False). If not, set the experiment subfolder to the most recent run.
+            run_prefix: prefix of the run name subfolder inside exp_root_dir
+            run_dir: run dir name (run_prefix + timestamp)
         """
         self._path_to_config = path_to_config
         self._config = parse_pipeline_config_pb(self._path_to_config)
