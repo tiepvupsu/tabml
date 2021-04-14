@@ -1,6 +1,7 @@
 import pandas as pd
+from qcore.asserts import assert_eq
 
-from tabml.data_processing import QuantileClipper
+from tabml.data_processing import QuantileClipper, find_boxplot_boundaries
 
 
 class TestQuantileClipper:
@@ -16,3 +17,12 @@ class TestQuantileClipper:
             lower_percentile=0.05, upper_percentile=0.95, interpolation="midpoint"
         ).fit_transform(df["col"])
         pd.testing.assert_series_equal(expected, got, check_names=False)
+
+
+class TestFindBoxPlotBoundaries:
+    def test_1(self):
+        df = pd.DataFrame(data={"a": ["a", "b", "c", "d"], "val": [1, 2, 3, 4]})
+        got = find_boxplot_boundaries(df["val"])
+        # Q1 = 1.75, Q3 = 3.25, IQR = 1.5
+        expected = -0.5, 5.5
+        assert_eq(expected, got)
