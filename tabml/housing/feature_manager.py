@@ -44,6 +44,7 @@ class FeatureAge(BaseHousingTransformingFeature):
     name = "is_train"
 
     def transform(self, df):
+        np.random.seed(42)
         random_array = np.random.rand(len(df))
         validation_size = 0.1
         return random_array > validation_size
