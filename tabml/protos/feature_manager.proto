@@ -2,6 +2,8 @@ syntax = "proto2";
 
 package tabml.protos;
 
+import "tabml/protos/path.proto";
+
 enum DType {
   BOOL = 1;
   INT32 = 2;
@@ -39,18 +41,9 @@ message TransformingFeature {
   optional DType dtype = 4 [default = STRING];
 }
 
-message RawData {
-  // data directory
-  optional string data_dir = 1;
-
-  // is the path absolute. If not, the path is relative to the root of the repo where
-  // python is run.
-  optional bool is_absolute_path = 2 [default = true];
-}
-
 message FeatureConfig {
   //  directory of raw data files
-  optional RawData raw_data = 1;
+  optional Path raw_data_dir = 1;
 
   // name of the dataframe to store features, also the name of the csv dataframe file.
   // The csv file path will be raw_data_dir / features / dataset_name + ".csv".
