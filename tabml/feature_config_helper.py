@@ -41,9 +41,9 @@ class FeatureConfigHelper:
     def __init__(self, pb_config_path: str):
         self._config = parse_feature_config_pb(pb_config_path)
         if self._config.raw_data.is_absolute_path:
-            self.raw_data_dir = self._config.raw_data.data_dir
+            self.raw_data_dir = self._config.raw_data_dir.path
         else:
-            self.raw_data_dir = Path(get_git_root()) / self._config.raw_data.data_dir
+            self.raw_data_dir = Path(get_git_root()) / self._config.raw_data_dir.path
         self.dataset_name = self._config.dataset_name
         self.base_features = [feature.name for feature in self._config.base_features]
         self.transforming_features = [
