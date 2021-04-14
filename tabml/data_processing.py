@@ -68,12 +68,12 @@ class BoxplotOutlierClipper(BaseEstimator, TransformerMixin):
         self.lower: float = float("-inf")
         self.upper: float = float("inf")
 
-    def fit(self, X: pd.Series):
+    def fit(self, X: pd.DataFrame, y=None):
         self.lower, self.upper = find_boxplot_boundaries(X, self.whisker)
         return self
 
-    def transform(self, X):
-        return X.clip(self.lower, self.upper, axis=0)
+    def transform(self, X: pd.DataFrame):
+        return X.clip(self.lower, self.upper, axis="columns")
 
 
 def fit_train_transform_all(
