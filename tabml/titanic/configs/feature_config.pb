@@ -1,8 +1,8 @@
 # proto-file: tabml/protos/feature_manager.proto
 # proto-message: FeatureConfig
 
-raw_data {
-  data_dir: "tabml/titanic/data"
+raw_data_dir {
+  path: "tabml/titanic/data"
   is_absolute_path: false
 }
 
