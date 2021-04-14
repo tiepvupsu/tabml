@@ -141,3 +141,5 @@ tabml/*/data
 coverage.code-workspace
 
 *.DS_Store
+
+**/experiments
