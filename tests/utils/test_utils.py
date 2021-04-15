@@ -1,4 +1,5 @@
 import random
+from pathlib import Path
 
 from qcore.asserts import AssertRaises, assert_eq
 
@@ -37,3 +38,27 @@ class TestShowFeatureImportance:
                 "All feature importances need to be non-negative, got data = "
             ),
         )
+
+
+class TestCheckUniqness:
+    def test_pass_if_unique(self):
+        items = [1, 2, 3, 4]
+        utils.check_uniqueness(items)
+
+    def test_assert_if_not_unique(self):
+        items = [1, 2, 3, 1]
+        with AssertRaises(AssertionError) as assert_raises:
+            utils.check_uniqueness(items)
+
+        assertion_error = assert_raises.expected_exception_found
+        assert_eq(
+            "There are duplicate objects in the list: {1: 2}.", assertion_error.args[0]
+        )
+
+
+def test_save_and_load_pickle(tmp_path):
+    an_object = random.randint(1, 100)
+    filename = utils.random_string(4)
+    utils.save_as_pickle(an_object, tmp_path, filename)
+    another_object = utils.load_pickle(Path(tmp_path) / filename)
+    assert_eq(an_object, another_object)
