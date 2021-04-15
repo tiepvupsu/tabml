@@ -1,12 +1,15 @@
+import pickle
 import random
 import string
 import subprocess
 import tempfile
 import typing
+from collections import Counter
 from pathlib import Path
-from typing import Any, Collection, Set
+from typing import Any, Collection
 
 import git
+import GPUtil
 
 from tabml.utils.logger import logger
 
@@ -44,16 +47,13 @@ def check_uniqueness(items: Collection) -> None:
     Raises:
         Assertion error with list of duplicate objects.
     """
-    seen_items: Set[Any] = set()
-    duplicates = set()
-    for item in items:
-        if item in seen_items:
-            duplicates.add(item)
-        seen_items.add(item)
+    counter = Counter(items)
+    duplicates = {item: count for item, count in counter.items() if count > 1}
     assert not duplicates, f"There are duplicate objects in the list: {duplicates}."
 
 
 def get_git_root():
+    """Gets the root path of the current git repo."""
     git_repo = git.Repo(Path.cwd(), search_parent_directories=True)
     git_root = git_repo.git.rev_parse("--show-toplevel")
     return git_root
@@ -79,10 +79,7 @@ def show_feature_importance(data: typing.Dict[str, float]) -> None:
     assert data is not None, "input dictionary can not be empty"
     tmp_file = tempfile.NamedTemporaryFile()
     # sort feature by desecending importance
-    feature_importance_tuples = sorted(
-        [(feature, importance) for feature, importance in data.items()],
-        key=lambda x: -x[1],
-    )
+    feature_importance_tuples = sorted(data.items(), key=lambda x: -x[1])
 
     if feature_importance_tuples[-1][-1] < 0:
         raise ValueError(
@@ -98,3 +95,53 @@ def show_feature_importance(data: typing.Dict[str, float]) -> None:
 
     logger.info("Feature importance:")
     logger.info(subprocess.getoutput(f"termgraph {tmp_file.name}"))
+
+
+def save_as_pickle(an_object: Any, path: str, filename: str) -> None:
+    """Saves an object as a pickle file.
+
+    Args:
+        an_object: A python object. Can be list, dict etc.
+        path: The path where to save.
+        filename: The filename
+    """
+    if not Path(path).exists():
+        Path(path).mkdir(parents=True, exist_ok=True)
+
+    file_path = Path(path) / filename
+    with open(file_path, "wb") as handle:
+        pickle.dump(an_object, handle)
+    logger.info(f"File is saved successfully to {file_path}.")
+
+
+def load_pickle(path_to_obj):
+    # open a file, where you stored the pickled data
+    file = open(path_to_obj, "rb")
+    # dump information to that file
+    obj = pickle.load(file)
+    # close the file
+    file.close()
+
+    return obj
+
+
+def is_gpu_available():
+    return (
+        len(
+            GPUtil.getAvailable(
+                order="first",
+                limit=1,
+                maxLoad=0.5,
+                maxMemory=0.5,
+                includeNan=False,
+                excludeID=[],
+                excludeUUID=[],
+            )
+        )
+        > 0
+    )
+
+
+def get_full_path(path_relative_to_repo_dir: str):
+    """Gets the full path given a path relative to the repo dir."""
+    return Path(get_git_root()) / path_relative_to_repo_dir
