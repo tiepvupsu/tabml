@@ -56,38 +56,34 @@ class BaseFeatureManager(ABC):
         self.features_in_config: List[str] = self.config_helper.all_features
         self.raw_data: Dict[str, Any] = {}
         self.dataframe: pd.DataFrame = pd.DataFrame()
-        self.base_transforming_feature_class = self._get_base_transforming_class()
-        self.transforming_class_by_feature_name = self._get_transforming_class_by_name()
+        self.transforming_class_by_feature_name: Dict[str, Any] = {}
 
-    @abstractmethod
     def _get_base_transforming_class(self):
-        # should be implemented in subclasses.
         raise NotImplementedError
 
-    def _get_transforming_class_by_name(self) -> Dict[str, Any]:
-        transforming_classes = self.base_transforming_feature_class.__subclasses__()
+    def _get_transforming_class_by_name(self):
+        base_transforming_feature_class = self._get_base_transforming_class()
+        transforming_classes = base_transforming_feature_class.__subclasses__()
         check_uniqueness(
             [transforming_class.name for transforming_class in transforming_classes]
         )
-        return {
+        self.transforming_class_by_feature_name = {
             transforming_class.name: transforming_class
             for transforming_class in transforming_classes
         }
 
-    @abstractmethod
     def initialize_dataframe(self):
         """Inits the main dataframe with base features."""
         # TODO: check if the set of columns in dataframe after initialiation is exactly
         # the set of base features.
         raise NotImplementedError
 
-    @abstractmethod
     def load_raw_data(self):
         """Loads data from raw csv files and save them to self.raw_data."""
         raise NotImplementedError
 
     def load_dataframe(self):
-        """Loads the dataframe from disk."""
+        """Loads the dataframe from disk with appropriate types."""
         parse_dates = [
             feature
             for feature, metadata in self.feature_metadata.items()
@@ -125,6 +121,8 @@ class BaseFeatureManager(ABC):
             f"Feature {feature_name} already exists in the dataframe. Do you want to "
             "update it (using update_feature() method) instead?"
         )
+        if not self.transforming_class_by_feature_name:
+            self._get_transforming_class_by_name()
         self._compute_feature(feature_name)
 
     def _compute_feature(self, feature_name: str) -> None:
