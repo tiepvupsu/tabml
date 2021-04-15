@@ -31,9 +31,6 @@ class _DummyFeatureManager2(BaseFeatureManager):
         dummy_data = {"a": [1]}
         self.dataframe = pd.DataFrame(data=dummy_data)
 
-    def _get_base_transforming_class(self):
-        return _DummyBaseTransformingFeature
-
     def load_raw_data(self):
         # required to initiate an instance of BaseFeatureManager
         raise NotImplementedError
