@@ -1,6 +1,6 @@
 config_name: "lgbm"
 data_loader {
-    cls_name: "tabml.housing.data_loaders.HousingDataLoader"
+    cls_name: "tabml.data_loaders.BaseDataLoader"
     feature_manager_config_path {path : "tabml/housing/configs/feature_config.pb"}
 
     features_to_model: "scaled_housing_median_age"
