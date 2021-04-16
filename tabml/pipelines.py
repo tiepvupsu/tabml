@@ -2,6 +2,7 @@ from abc import ABC
 
 from tabml import experiment_manager
 from tabml.data_loaders import BaseDataLoader
+from tabml.model_analysis import ModelAnalysis
 from tabml.trainers import BaseTrainer
 from tabml.utils import factory
 from tabml.utils.logger import logger
@@ -61,3 +62,26 @@ class BasePipeline(ABC):
         return factory.create(self.config.trainer.cls_name)(
             self.model_wrapper, self.data_loader, self.config
         )
+
+    def analyze_model(self) -> None:
+        """Analyze the model on the validation dataset.
+
+        The trained model is evaluated based on metrics for predictions slicing by
+        each categorical feature specified by features_to_analyze.
+        """
+        logger.info("Model Analysis")
+        assert len(self.config.model_analysis.metrics) > 0, (
+            "At least one metrics in model_analysis must be specified. "
+            "Add the metrics in model_analysis in the pipeline config"
+        )
+        assert len(self.config.model_analysis.by_features) > 0, (
+            "At least one by_features in model_analysis must be specified. "
+            "Add the by_features in model_analysis in the pipeline config"
+        )
+        ModelAnalysis(
+            self.data_loader,
+            self.model_wrapper,
+            self.config.model_analysis.by_features,
+            metric_names=self.config.model_analysis.metrics,
+            output_dir=self.exp_manager.get_model_analysis_dir(),
+        ).analyze()
