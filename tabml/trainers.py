@@ -49,17 +49,12 @@ class BaseBoostingTrainer(BaseTrainer):
         assert (
             self.data_loader.label_col is not None
         ), "self.data_loader.label_col must be declared in BaseDataLoader subclasses."
-        train_data = extract_feature_label(
-            self.data_loader.get_train_ds(self.train_full), self.data_loader.label_col
-        )
-        val_data = extract_feature_label(
-            self.data_loader.get_val_ds(), self.data_loader.label_col
-        )
-        train_feature, train_label = train_data
+        train_feature, train_label = self.data_loader.get_train_data_and_label()
+        val_data = self.data_loader.get_val_data_and_label()
+
         self.model_wrapper.feature_names = train_feature.columns
 
-        fit_params = self._get_fit_params(train_data, val_data)
-        del train_data, val_data
+        fit_params = self._get_fit_params((train_feature, train_label), val_data)
 
         self.model_wrapper.model.fit(X=train_feature, y=train_label, **fit_params)
         self.model_wrapper.show_feature_importance()
@@ -76,11 +71,3 @@ class LgbmTrainer(BaseBoostingTrainer):
             **pb_to_dict(self.config.trainer.lgbm_params),
         }
         return fit_params
-
-
-def extract_feature_label(
-    dataset: pd.DataFrame, label_col: str
-) -> Tuple[pd.DataFrame, pd.Series]:
-    feature = dataset.copy()
-    label = feature.pop(label_col)
-    return (feature, label)
