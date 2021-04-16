@@ -22,6 +22,7 @@ class ExperimentManger:
 
     log_filename = "run.log"
     config_filename = "config.pb"
+    _model_analysis_dir = "model_analysis"
 
     def __init__(
         self,
@@ -60,6 +61,11 @@ class ExperimentManger:
 
     def get_config_path(self):
         return self._make_path(self.config_filename)
+
+    def get_model_analysis_dir(self):
+        res = self._make_path(self._model_analysis_dir)
+        _make_dir_if_needed(res)
+        return res
 
     def _make_path(self, filename: str) -> str:
         return os.path.join(self.run_dir, filename)
