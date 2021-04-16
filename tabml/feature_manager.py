@@ -50,13 +50,14 @@ class BaseFeatureManager(ABC):
         self.raw_data_dir = self.config_helper.raw_data_dir
         self.dataset_name = self.config_helper.dataset_name
         self.feature_metadata = self.config_helper.feature_metadata
-        self.dataset_path = (
-            Path(self.raw_data_dir) / "features" / f"{self.dataset_name}.csv"
-        )
+        self.dataset_path = self.get_dataset_path()
         self.features_in_config: List[str] = self.config_helper.all_features
         self.raw_data: Dict[str, Any] = {}
         self.dataframe: pd.DataFrame = pd.DataFrame()
         self.transforming_class_by_feature_name: Dict[str, Any] = {}
+
+    def get_dataset_path(self):
+        return Path(self.raw_data_dir) / "features" / f"{self.dataset_name}.csv"
 
     def _get_base_transforming_class(self):
         raise NotImplementedError
