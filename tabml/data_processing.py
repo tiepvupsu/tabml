@@ -78,7 +78,10 @@ class BoxplotOutlierClipper(BaseEstimator, TransformerMixin):
 
 
 def fit_train_transform_all(
-    whole_df: pd.DataFrame, columns: List[str], training_filters: List[str], transformer
+    whole_df: pd.DataFrame,
+    input_columns: List[str],
+    training_filters: List[str],
+    transformer,
 ):
     """Fits transformer on training data and use it to transform all data.
 
@@ -89,7 +92,7 @@ def fit_train_transform_all(
         whole_df:
             The whole dataframe, including all data and neccessary columns for filtering
             training data.
-        columns:
+        input_columns:
             A list of column names used to fit the transformer
         training_filters:
             A list of filters used to extract training data
@@ -99,8 +102,8 @@ def fit_train_transform_all(
     Returns:
         Transformed array of all data.
     """
-    all_data = whole_df[columns]
-    train_data = whole_df.query(" and ".join(training_filters))[columns]
+    all_data = whole_df[input_columns]
+    train_data = whole_df.query(" and ".join(training_filters))[input_columns]
     transformer.fit(X=train_data)
     return transformer.transform(all_data)
 

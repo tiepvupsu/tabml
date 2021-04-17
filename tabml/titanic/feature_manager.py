@@ -56,7 +56,7 @@ class FeatureImputedAge(BaseTitanicTransformingFeature):
     def transform(self, df):
         return data_processing.fit_train_transform_all(
             df,
-            columns=["age"],
+            input_columns=["age"],
             training_filters=["is_train"],
             transformer=SimpleImputer(strategy="mean"),
         ).reshape(-1)
@@ -165,7 +165,7 @@ class FeatureMinMaxScaledAge(BaseTitanicTransformingFeature):
     def transform(self, df):
         return data_processing.fit_train_transform_all(
             df,
-            columns=["imputed_age"],
+            input_columns=["imputed_age"],
             training_filters=["is_train"],
             transformer=MinMaxScaler(),
         ).reshape(-1)
