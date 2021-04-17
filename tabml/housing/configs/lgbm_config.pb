@@ -30,6 +30,12 @@ model_wrapper {
 }
 trainer {
     cls_name: "tabml.trainers.LgbmTrainer"
+    lgbm_params {
+        categorical_feature: "encoded_ocean_proximity"
+        categorical_feature: "hashed_bucketized_latitude_X_bucketized_longitude"
+        categorical_feature: "bucketized_latitude"
+        categorical_feature: "bucketized_longitude"
+    }
 }
 metrics: "smape"
 model_analysis {
