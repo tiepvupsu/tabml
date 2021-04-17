@@ -2,6 +2,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import MinMaxScaler
 
 from tabml import data_processing
@@ -29,25 +30,36 @@ class FeatureManager(BaseFeatureManager):
         self.dataframe["sibsp"] = self.raw_data["full"]["SibSp"]
         self.dataframe["parch"] = self.raw_data["full"]["Parch"]
         self.dataframe["fare"] = self.raw_data["full"]["Fare"]
+        self.dataframe["age"] = self.raw_data["full"]["Age"]
 
 
 class BaseTitanicTransformingFeature(BaseTransformingFeature):
     pass
 
 
-class FeatureAge(BaseTitanicTransformingFeature):
-    name = "age"
-
-    def transform(self, df):
-        mean_age = self.raw_data["full"]["Age"].mean()
-        return self.raw_data["full"]["Age"].fillna(mean_age)
-
-
 class FeatureIsTrain(BaseTitanicTransformingFeature):
     name = "is_train"
 
     def transform(self, df):
-        return df["passenger_id"] <= 891
+        np.random.seed(42)
+        total_train_samples = 891
+        random_array = np.random.rand(len(df))
+        # mask test data by 0
+        random_array[total_train_samples:] = 0
+        validation_size = 0.1
+        return np.array(random_array > validation_size, dtype=bool)
+
+
+class FeatureImputedAge(BaseTitanicTransformingFeature):
+    name = "imputed_age"
+
+    def transform(self, df):
+        return data_processing.fit_train_transform_all(
+            df,
+            columns=["age"],
+            training_filters=["is_train"],
+            transformer=SimpleImputer(strategy="mean"),
+        ).reshape(-1)
 
 
 class FeatureBucketizedAge(BaseTitanicTransformingFeature):
@@ -55,7 +67,7 @@ class FeatureBucketizedAge(BaseTitanicTransformingFeature):
     bins = [10, 18, 30, 40, 65]
 
     def transform(self, df):
-        return np.digitize(df["age"], self.bins).tolist()
+        return np.digitize(df["imputed_age"], self.bins).tolist()
 
 
 class FeatureSurvived(BaseTitanicTransformingFeature):
@@ -153,7 +165,7 @@ class FeatureMinMaxScaledAge(BaseTitanicTransformingFeature):
     def transform(self, df):
         return data_processing.fit_train_transform_all(
             df,
-            columns=["age"],
+            columns=["imputed_age"],
             training_filters=["is_train"],
             transformer=MinMaxScaler(),
         ).reshape(-1)
