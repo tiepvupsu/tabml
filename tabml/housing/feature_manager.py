@@ -1,7 +1,9 @@
+import hashlib
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from category_encoders.hashing import HashingEncoder
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
@@ -33,6 +35,8 @@ class FeatureManager(BaseFeatureManager):
                 "households",
                 "median_income",
                 "ocean_proximity",
+                "latitude",
+                "longitude",
             ]
         ]
 
@@ -119,6 +123,42 @@ class FeatureLog10MedianHouseValue(BaseHousingTransformingFeature):
 
     def transform(self, df):
         return np.log10(df["median_house_value"])
+
+
+class FeatureBucketizedLatitude(BaseHousingTransformingFeature):
+    name = "bucketized_latitude"
+
+    def transform(self, df):
+        return pd.qcut(df["latitude"], q=10, labels=False)
+
+
+class FeatureBucketizedLongitude(BaseHousingTransformingFeature):
+    name = "bucketized_longitude"
+
+    def transform(self, df):
+        return pd.qcut(df["longitude"], q=10, labels=False)
+
+
+class FeatureBucketizedLatitudeXBucketizedLongitude(BaseHousingTransformingFeature):
+    name = "bucketized_latitude_X_bucketized_longitude"
+
+    def transform(self, df):
+        # TODO make feature cross more generic
+        return data_processing.cross_columns(
+            df, cols=["bucketized_latitude", "bucketized_longitude"]
+        )
+
+
+class FeatureHasdedBucketizedLatitudeXBucketizedLongitude(
+    BaseHousingTransformingFeature
+):
+    name = "hashed_bucketized_latitude_X_bucketized_longitude"
+
+    def transform(self, df):
+        hash_bucket_size = 256
+        return df["bucketized_latitude_X_bucketized_longitude"].apply(
+            lambda x: data_processing.hash_modulo(x, hash_bucket_size)
+        )
 
 
 def run():
