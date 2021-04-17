@@ -89,6 +89,6 @@ class LgbmClassifierModelWrapper(BaseLgbmModelWrapper):
         return self.model.predict_proba(data)[:, 1]
 
 
-class LGBMRegressorModelWrapper(BaseLgbmModelWrapper):
+class LgbmRegressorModelWrapper(BaseLgbmModelWrapper):
     def build_model(self):
         return LGBMRegressor(**self.params)
