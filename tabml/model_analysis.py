@@ -156,11 +156,7 @@ class ModelAnalysis:
     ) -> Dict[str, Union[str, float]]:
         labels = df_with_pred[self.label_col]
 
-        res = {
-            f"encoded_{feature_name}": feature_value,
-            f"raw_{feature_name}": feature_value,
-            "sample_count": len(df_with_pred),
-        }
+        res = {feature_name: feature_value, "sample_count": len(df_with_pred)}
         for metric in self.metrics:
             if metric.need_pred_proba:
                 res.update(
