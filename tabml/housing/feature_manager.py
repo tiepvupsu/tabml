@@ -59,16 +59,16 @@ class FeatureHousingMedianAge(BaseHousingTransformingFeature):
     def transform(self, df):
         return data_processing.fit_train_transform_all(
             whole_df=df,
-            columns=["housing_median_age"],
+            input_columns=["housing_median_age"],
             training_filters=["is_train"],
             transformer=StandardScaler(),
         ).reshape(-1)
 
 
-def _scale_clean_transform(df, columns):
+def _scale_clean_transform(df, input_columns):
     return data_processing.fit_train_transform_all(
         whole_df=df,
-        columns=columns,
+        input_columns=input_columns,
         training_filters=["is_train"],
         transformer=Pipeline(
             [
