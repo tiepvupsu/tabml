@@ -1,4 +1,5 @@
-from typing import List, Optional, Tuple
+import hashlib
+from typing import Any, List, Optional, Tuple
 
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -114,3 +115,10 @@ def cross_columns(df: pd.DataFrame, cols: List[str]) -> pd.Series:
         cols: columns to cross.
     """
     return df[cols].apply(lambda x: "_X_".join(str(x[col]) for col in cols), axis=1)
+
+
+def hash_modulo(val: Any, mod: int) -> int:
+    # TODO: make it faster and with more ways of hashing
+    md5 = hashlib.md5()
+    md5.update(str(val).encode())
+    return int(md5.hexdigest(), 32) % mod
