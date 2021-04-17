@@ -139,6 +139,7 @@ tabml/*/data
 
 # vscode
 coverage.code-workspace
+.vscode/
 
 *.DS_Store
 
