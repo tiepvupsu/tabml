@@ -29,6 +29,7 @@ metrics: "accuracy_score"
 model_analysis {
   metrics: "accuracy_score"
   metrics: "roc_auc"
+  metrics: "max_f1"
   by_features: "sex"
   by_features: "pclass"
 }
