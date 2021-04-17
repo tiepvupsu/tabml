@@ -102,3 +102,15 @@ def fit_train_transform_all(
     train_data = whole_df.query(" and ".join(training_filters))[columns]
     transformer.fit(X=train_data)
     return transformer.transform(all_data)
+
+
+def cross_columns(df: pd.DataFrame, cols: List[str]) -> pd.Series:
+    """Crosses multiple columns to create a new column.
+
+    Resulting column has dtype = string, values of input columns are joined by "_X_"
+
+    Args:
+        df: input dataframe.
+        cols: columns to cross.
+    """
+    return df[cols].apply(lambda x: "_X_".join(str(x[col]) for col in cols), axis=1)
