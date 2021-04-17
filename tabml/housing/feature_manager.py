@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 from tabml import data_processing
 from tabml.feature_manager import BaseFeatureManager, BaseTransformingFeature
@@ -153,10 +153,17 @@ class FeatureHasdedBucketizedLatitudeXBucketizedLongitude(
     name = "hashed_bucketized_latitude_X_bucketized_longitude"
 
     def transform(self, df):
-        hash_bucket_size = 256
+        hash_bucket_size = 128
         return df["bucketized_latitude_X_bucketized_longitude"].apply(
             lambda x: data_processing.hash_modulo(x, hash_bucket_size)
         )
+
+
+class FeatureEncodedOceanProximity(BaseHousingTransformingFeature):
+    name = "encoded_ocean_proximity"
+
+    def transform(self, df):
+        return LabelEncoder().fit_transform(df["ocean_proximity"])
 
 
 def run():
