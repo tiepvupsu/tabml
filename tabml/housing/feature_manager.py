@@ -153,7 +153,7 @@ class FeatureHasdedBucketizedLatitudeXBucketizedLongitude(
     name = "hashed_bucketized_latitude_X_bucketized_longitude"
 
     def transform(self, df):
-        hash_bucket_size = 128
+        hash_bucket_size = 256
         return df["bucketized_latitude_X_bucketized_longitude"].apply(
             lambda x: data_processing.hash_modulo(x, hash_bucket_size)
         )
