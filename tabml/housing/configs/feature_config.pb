@@ -142,3 +142,10 @@ transforming_features {
   dtype: INT32
   dependencies: "bucketized_latitude_X_bucketized_longitude"
 }
+
+transforming_features {
+  name: "encoded_ocean_proximity"
+  index:  13
+  dtype: INT32
+  dependencies: "ocean_proximity"
+}

@@ -11,6 +11,7 @@ data_loader {
     features_to_model: "bucketized_latitude"
     features_to_model: "bucketized_longitude"
     features_to_model: "hashed_bucketized_latitude_X_bucketized_longitude"
+    features_to_model: "encoded_ocean_proximity"
 
     label_col: "median_house_value"
 
