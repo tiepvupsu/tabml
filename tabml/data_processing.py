@@ -114,7 +114,7 @@ def cross_columns(df: pd.DataFrame, cols: List[str]) -> pd.Series:
         df: input dataframe.
         cols: columns to cross.
     """
-    return df[cols].apply(lambda x: "_X_".join(str(x[col]) for col in cols), axis=1)
+    return df.apply(lambda x: "_X_".join(str(x[col]) for col in cols), axis=1)
 
 
 def hash_modulo(val: Any, mod: int) -> int:
