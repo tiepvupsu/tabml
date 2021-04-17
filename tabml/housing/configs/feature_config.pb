@@ -43,6 +43,15 @@ base_features {
   name: "ocean_proximity"
   dtype: STRING
 }
+base_features {
+  name: "longitude"
+  dtype: FLOAT
+}
+
+base_features {
+  name: "latitude"
+  dtype: FLOAT
+}
 
 transforming_features {
   name: "is_train"
@@ -103,4 +112,33 @@ transforming_features {
   dtype: FLOAT
   index: 8
   dependencies: "median_house_value"
+}
+
+transforming_features {
+  name: "bucketized_longitude"
+  index: 9
+  dtype: INT32
+  dependencies: "longitude"
+}
+
+transforming_features {
+  name: "bucketized_latitude"
+  index: 10
+  dtype: INT32
+  dependencies: "latitude"
+}
+
+transforming_features {
+  name: "bucketized_latitude_X_bucketized_longitude"
+  index: 11
+  dtype: STRING
+  dependencies: "bucketized_latitude"
+  dependencies: "bucketized_longitude"
+}
+
+transforming_features {
+  name: "hashed_bucketized_latitude_X_bucketized_longitude"
+  index: 12
+  dtype: INT32
+  dependencies: "bucketized_latitude_X_bucketized_longitude"
 }
