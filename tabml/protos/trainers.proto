@@ -5,6 +5,7 @@ package tabml.protos;
 message TrainerLgbmParams{
     optional bool verbose = 1;
     optional int32 early_stopping_rounds = 2;
+    repeated string categorical_feature = 3;
 }
 
 message TrainerXgboostParams{
