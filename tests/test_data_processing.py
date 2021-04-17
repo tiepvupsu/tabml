@@ -36,3 +36,11 @@ class TestFindBoxPlotBoundaries:
             data={"val": [-2.5, 1, 2, 3, 4, 7.5], "val2": [-2.5, 1, 2, 3, 4, 7.5]}
         )
         pd.testing.assert_frame_equal(expected, got)
+
+
+class TestCrossColumns:
+    def test_1(self):
+        df = pd.DataFrame(data={"a": ["x", "y", "z"], "b": [1, 2, 3]})
+        expected = pd.Series(data=["x_X_1", "y_X_2", "z_X_3"])
+        got = data_processing.cross_columns(df, cols=["a", "b"])
+        pd.testing.assert_series_equal(expected, got, check_names=False)
