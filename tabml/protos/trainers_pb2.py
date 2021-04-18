@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto2',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1btabml/protos/trainers.proto\x12\x0ctabml.protos\"`\n\x11TrainerLgbmParams\x12\x0f\n\x07verbose\x18\x01 \x01(\x08\x12\x1d\n\x15\x65\x61rly_stopping_rounds\x18\x02 \x01(\x05\x12\x1b\n\x13\x63\x61tegorical_feature\x18\x03 \x03(\t\"F\n\x14TrainerXgboostParams\x12\x0f\n\x07verbose\x18\x01 \x01(\x08\x12\x1d\n\x15\x65\x61rly_stopping_rounds\x18\x02 \x01(\x05\"-\n\x14TrainerSklearnParams\x12\x15\n\rsample_weight\x18\x01 \x01(\x02\"\xf4\x01\n\x07Trainer\x12\x10\n\x08\x63ls_name\x18\x01 \x02(\t\x12\x19\n\ntrain_full\x18\x02 \x01(\x08:\x05\x66\x61lse\x12\x36\n\x0blgbm_params\x18\x03 \x01(\x0b\x32\x1f.tabml.protos.TrainerLgbmParamsH\x00\x12<\n\x0exgboost_params\x18\x04 \x01(\x0b\x32\".tabml.protos.TrainerXgboostParamsH\x00\x12<\n\x0esklearn_params\x18\x05 \x01(\x0b\x32\".tabml.protos.TrainerSklearnParamsH\x00\x42\x08\n\x06params'
+  serialized_pb=b'\n\x1btabml/protos/trainers.proto\x12\x0ctabml.protos\"u\n\x11TrainerLgbmParams\x12\x0f\n\x07verbose\x18\x01 \x01(\x08\x12\x1d\n\x15\x65\x61rly_stopping_rounds\x18\x02 \x01(\x05\x12\x1b\n\x13\x63\x61tegorical_feature\x18\x03 \x03(\t\x12\x13\n\x0b\x65val_metric\x18\x04 \x03(\t\"F\n\x14TrainerXgboostParams\x12\x0f\n\x07verbose\x18\x01 \x01(\x08\x12\x1d\n\x15\x65\x61rly_stopping_rounds\x18\x02 \x01(\x05\"-\n\x14TrainerSklearnParams\x12\x15\n\rsample_weight\x18\x01 \x01(\x02\"\xf4\x01\n\x07Trainer\x12\x10\n\x08\x63ls_name\x18\x01 \x02(\t\x12\x19\n\ntrain_full\x18\x02 \x01(\x08:\x05\x66\x61lse\x12\x36\n\x0blgbm_params\x18\x03 \x01(\x0b\x32\x1f.tabml.protos.TrainerLgbmParamsH\x00\x12<\n\x0exgboost_params\x18\x04 \x01(\x0b\x32\".tabml.protos.TrainerXgboostParamsH\x00\x12<\n\x0esklearn_params\x18\x05 \x01(\x0b\x32\".tabml.protos.TrainerSklearnParamsH\x00\x42\x08\n\x06params'
 )
 
 
@@ -54,6 +54,13 @@ _TRAINERLGBMPARAMS = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='eval_metric', full_name='tabml.protos.TrainerLgbmParams.eval_metric', index=3,
+      number=4, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -67,7 +74,7 @@ _TRAINERLGBMPARAMS = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=45,
-  serialized_end=141,
+  serialized_end=162,
 )
 
 
@@ -105,8 +112,8 @@ _TRAINERXGBOOSTPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=143,
-  serialized_end=213,
+  serialized_start=164,
+  serialized_end=234,
 )
 
 
@@ -137,8 +144,8 @@ _TRAINERSKLEARNPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=215,
-  serialized_end=260,
+  serialized_start=236,
+  serialized_end=281,
 )
 
 
@@ -202,8 +209,8 @@ _TRAINER = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=263,
-  serialized_end=507,
+  serialized_start=284,
+  serialized_end=528,
 )
 
 _TRAINER.fields_by_name['lgbm_params'].message_type = _TRAINERLGBMPARAMS

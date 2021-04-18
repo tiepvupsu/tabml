@@ -6,6 +6,8 @@ message TrainerLgbmParams{
     optional bool verbose = 1;
     optional int32 early_stopping_rounds = 2;
     repeated string categorical_feature = 3;
+    // eval_metric in lgbm trainer param does not end with 's'.
+    repeated string eval_metric = 4;
 }
 
 message TrainerXgboostParams{
