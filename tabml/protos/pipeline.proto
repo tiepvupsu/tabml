@@ -21,8 +21,6 @@ message Config {
     required DataLoader data_loader = 1;
     required ModelWrapper model_wrapper = 2;
     required Trainer trainer = 3;
-    // Make name `metrics` clearer
-    repeated string metrics = 4;
     optional ModelAnalysis model_analysis = 8;
     optional Saver saver = 5;
 }
