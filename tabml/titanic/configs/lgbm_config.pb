@@ -25,7 +25,6 @@ model_wrapper {
 trainer {
   cls_name: "tabml.trainers.LgbmTrainer"
 }
-metrics: "accuracy_score"
 model_analysis {
   metrics: "accuracy_score"
   metrics: "roc_auc"

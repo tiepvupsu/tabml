@@ -38,9 +38,9 @@ trainer {
         categorical_feature: "hashed_bucketized_latitude_X_bucketized_longitude"
         categorical_feature: "bucketized_latitude"
         categorical_feature: "bucketized_longitude"
+        eval_metric: "rmse"
     }
 }
-metrics: "smape"
 model_analysis {
     metrics: "smape"
     metrics: "rmse"
