@@ -66,7 +66,6 @@ class LgbmTrainer(BaseBoostingTrainer):
         fit_params = {
             "eval_set": [train_data, val_data],
             "eval_names": ["train", "val"],
-            "eval_metric": self.config.metrics,
             "callbacks": [boosting_logger_eval(model="lgbm")],
             **pb_to_dict(self.config.trainer.lgbm_params),
         }
