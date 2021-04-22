@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto2',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n!tabml/protos/model_wrappers.proto\x12\x0ctabml.protos\"\xcb\x03\n\x16ModelWrapperLgbmParams\x12\x15\n\rlearning_rate\x18\x01 \x01(\x02\x12\x14\n\x0cn_estimators\x18\x02 \x01(\x05\x12\x12\n\nnum_leaves\x18\x03 \x01(\x05\x12\x11\n\tmax_depth\x18\x04 \x01(\x05\x12\x1d\n\tobjective\x18\x05 \x01(\t:\nregression\x12\x18\n\x10\x63olsample_bytree\x18\x06 \x01(\x02\x12\x11\n\tsubsample\x18\x07 \x01(\x02\x12\x11\n\treg_alpha\x18\x08 \x01(\x02\x12\x16\n\x0emin_split_gain\x18\t \x01(\x02\x12\x12\n\nreg_lambda\x18\n \x01(\x02\x12\x18\n\x10min_child_weight\x18\x0b \x01(\x02\x12\x19\n\x11min_child_samples\x18\x0c \x01(\x05\x12\x18\n\x0crandom_state\x18\r \x01(\x05:\x02\x34\x32\x12\x16\n\x0esubsample_freq\x18\x0e \x01(\x05\x12\x19\n\x11subsample_for_bin\x18\x0f \x01(\x05\x12\x15\n\rboosting_type\x18\x10 \x01(\t\x12\x0e\n\x06metric\x18\x11 \x01(\t\x12\x18\n\x10scale_pos_weight\x18\x12 \x01(\x05\x12\x0f\n\x07max_bin\x18\x13 \x01(\x05\"\xa0\x02\n\x19ModelWrapperXgboostParams\x12\x0f\n\x07use_gpu\x18\x01 \x01(\x08\x12\x11\n\tmax_depth\x18\x02 \x01(\x05\x12\x14\n\x0cn_estimators\x18\x03 \x01(\x05\x12\r\n\x05gamma\x18\x04 \x01(\x02\x12#\n\tobjective\x18\x05 \x01(\t:\x10reg:squarederror\x12\x18\n\x10\x63olsample_bytree\x18\x06 \x01(\x02\x12\x11\n\tsubsample\x18\x07 \x01(\x02\x12\x11\n\treg_alpha\x18\x08 \x01(\x02\x12\x12\n\nreg_lambda\x18\t \x01(\x02\x12\x15\n\rlearning_rate\x18\n \x01(\x02\x12\x18\n\x10min_child_weight\x18\x0b \x01(\x02\x12\x10\n\x04seed\x18\x0c \x01(\x05:\x02\x34\x32\"\xaa\x01\n\x0cModelWrapper\x12\x10\n\x08\x63ls_name\x18\x01 \x02(\t\x12;\n\x0blgbm_params\x18\x02 \x01(\x0b\x32$.tabml.protos.ModelWrapperLgbmParamsH\x00\x12\x41\n\x0exgboost_params\x18\x03 \x01(\x0b\x32\'.tabml.protos.ModelWrapperXgboostParamsH\x00\x42\x08\n\x06params'
+  serialized_pb=b'\n!tabml/protos/model_wrappers.proto\x12\x0ctabml.protos\"\xcb\x03\n\x16ModelWrapperLgbmParams\x12\x15\n\rlearning_rate\x18\x01 \x01(\x02\x12\x14\n\x0cn_estimators\x18\x02 \x01(\x05\x12\x12\n\nnum_leaves\x18\x03 \x01(\x05\x12\x11\n\tmax_depth\x18\x04 \x01(\x05\x12\x1d\n\tobjective\x18\x05 \x01(\t:\nregression\x12\x18\n\x10\x63olsample_bytree\x18\x06 \x01(\x02\x12\x11\n\tsubsample\x18\x07 \x01(\x02\x12\x11\n\treg_alpha\x18\x08 \x01(\x02\x12\x16\n\x0emin_split_gain\x18\t \x01(\x02\x12\x12\n\nreg_lambda\x18\n \x01(\x02\x12\x18\n\x10min_child_weight\x18\x0b \x01(\x02\x12\x19\n\x11min_child_samples\x18\x0c \x01(\x05\x12\x18\n\x0crandom_state\x18\r \x01(\x05:\x02\x34\x32\x12\x16\n\x0esubsample_freq\x18\x0e \x01(\x05\x12\x19\n\x11subsample_for_bin\x18\x0f \x01(\x05\x12\x15\n\rboosting_type\x18\x10 \x01(\t\x12\x0e\n\x06metric\x18\x11 \x01(\t\x12\x18\n\x10scale_pos_weight\x18\x12 \x01(\x05\x12\x0f\n\x07max_bin\x18\x13 \x01(\x05\"\xa0\x02\n\x19ModelWrapperXgboostParams\x12\x0f\n\x07use_gpu\x18\x01 \x01(\x08\x12\x11\n\tmax_depth\x18\x02 \x01(\x05\x12\x14\n\x0cn_estimators\x18\x03 \x01(\x05\x12\r\n\x05gamma\x18\x04 \x01(\x02\x12#\n\tobjective\x18\x05 \x01(\t:\x10reg:squarederror\x12\x18\n\x10\x63olsample_bytree\x18\x06 \x01(\x02\x12\x11\n\tsubsample\x18\x07 \x01(\x02\x12\x11\n\treg_alpha\x18\x08 \x01(\x02\x12\x12\n\nreg_lambda\x18\t \x01(\x02\x12\x15\n\rlearning_rate\x18\n \x01(\x02\x12\x18\n\x10min_child_weight\x18\x0b \x01(\x02\x12\x10\n\x04seed\x18\x0c \x01(\x05:\x02\x34\x32\"A\n\x10\x43\x61tFeatureTabNet\x12\x0f\n\x07\x66\x65\x61ture\x18\x01 \x01(\t\x12\x0b\n\x03\x64im\x18\x02 \x01(\x05\x12\x0f\n\x07\x65mb_dim\x18\x03 \x01(\x05\"\xa0\x03\n\x18ModelWrapperTabNetParams\x12\x0e\n\x03n_d\x18\x01 \x01(\x05:\x01\x38\x12\x0e\n\x03n_a\x18\x02 \x01(\x05:\x01\x38\x12\x12\n\x07n_steps\x18\x03 \x01(\x05:\x01\x33\x12\x12\n\x05gamma\x18\x04 \x01(\x02:\x03\x31.3\x12\x34\n\x0c\x63\x61t_features\x18\x05 \x03(\x0b\x32\x1e.tabml.protos.CatFeatureTabNet\x12\x18\n\rn_independent\x18\x06 \x01(\x05:\x01\x32\x12\x13\n\x08n_shared\x18\x07 \x01(\x05:\x01\x32\x12\x16\n\x07\x65psilon\x18\x08 \x01(\x02:\x05\x31\x65-15\x12\x0f\n\x04seed\x18\t \x01(\x05:\x01\x30\x12\x16\n\x08momentum\x18\n \x01(\x02:\x04\x30.02\x12\x19\n\nclip_value\x18\x0b \x01(\x02:\x05\x31\x65+12\x12\x1c\n\rlambda_sparse\x18\x0c \x01(\x02:\x05\x30.001\x12$\n\nmodel_name\x18\r \x01(\t:\x10\x44reamQuarkTabNet\x12\x19\n\x0b\x64\x65vice_name\x18\x0e \x01(\t:\x04\x61uto\x12\x1c\n\tmask_type\x18\x0f \x01(\t:\tsparsemax\"\xeb\x01\n\x0cModelWrapper\x12\x10\n\x08\x63ls_name\x18\x01 \x02(\t\x12;\n\x0blgbm_params\x18\x02 \x01(\x0b\x32$.tabml.protos.ModelWrapperLgbmParamsH\x00\x12\x41\n\x0exgboost_params\x18\x03 \x01(\x0b\x32\'.tabml.protos.ModelWrapperXgboostParamsH\x00\x12?\n\rtabnet_params\x18\x04 \x01(\x0b\x32&.tabml.protos.ModelWrapperTabNetParamsH\x00\x42\x08\n\x06params'
 )
 
 
@@ -292,6 +292,182 @@ _MODELWRAPPERXGBOOSTPARAMS = _descriptor.Descriptor(
 )
 
 
+_CATFEATURETABNET = _descriptor.Descriptor(
+  name='CatFeatureTabNet',
+  full_name='tabml.protos.CatFeatureTabNet',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='feature', full_name='tabml.protos.CatFeatureTabNet.feature', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='dim', full_name='tabml.protos.CatFeatureTabNet.dim', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='emb_dim', full_name='tabml.protos.CatFeatureTabNet.emb_dim', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=804,
+  serialized_end=869,
+)
+
+
+_MODELWRAPPERTABNETPARAMS = _descriptor.Descriptor(
+  name='ModelWrapperTabNetParams',
+  full_name='tabml.protos.ModelWrapperTabNetParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='n_d', full_name='tabml.protos.ModelWrapperTabNetParams.n_d', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=True, default_value=8,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='n_a', full_name='tabml.protos.ModelWrapperTabNetParams.n_a', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=True, default_value=8,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='n_steps', full_name='tabml.protos.ModelWrapperTabNetParams.n_steps', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=True, default_value=3,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='gamma', full_name='tabml.protos.ModelWrapperTabNetParams.gamma', index=3,
+      number=4, type=2, cpp_type=6, label=1,
+      has_default_value=True, default_value=float(1.3),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='cat_features', full_name='tabml.protos.ModelWrapperTabNetParams.cat_features', index=4,
+      number=5, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='n_independent', full_name='tabml.protos.ModelWrapperTabNetParams.n_independent', index=5,
+      number=6, type=5, cpp_type=1, label=1,
+      has_default_value=True, default_value=2,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='n_shared', full_name='tabml.protos.ModelWrapperTabNetParams.n_shared', index=6,
+      number=7, type=5, cpp_type=1, label=1,
+      has_default_value=True, default_value=2,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='epsilon', full_name='tabml.protos.ModelWrapperTabNetParams.epsilon', index=7,
+      number=8, type=2, cpp_type=6, label=1,
+      has_default_value=True, default_value=float(1e-15),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='seed', full_name='tabml.protos.ModelWrapperTabNetParams.seed', index=8,
+      number=9, type=5, cpp_type=1, label=1,
+      has_default_value=True, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='momentum', full_name='tabml.protos.ModelWrapperTabNetParams.momentum', index=9,
+      number=10, type=2, cpp_type=6, label=1,
+      has_default_value=True, default_value=float(0.02),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='clip_value', full_name='tabml.protos.ModelWrapperTabNetParams.clip_value', index=10,
+      number=11, type=2, cpp_type=6, label=1,
+      has_default_value=True, default_value=float(1e+12),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='lambda_sparse', full_name='tabml.protos.ModelWrapperTabNetParams.lambda_sparse', index=11,
+      number=12, type=2, cpp_type=6, label=1,
+      has_default_value=True, default_value=float(0.001),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='model_name', full_name='tabml.protos.ModelWrapperTabNetParams.model_name', index=12,
+      number=13, type=9, cpp_type=9, label=1,
+      has_default_value=True, default_value=b"DreamQuarkTabNet".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='device_name', full_name='tabml.protos.ModelWrapperTabNetParams.device_name', index=13,
+      number=14, type=9, cpp_type=9, label=1,
+      has_default_value=True, default_value=b"auto".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mask_type', full_name='tabml.protos.ModelWrapperTabNetParams.mask_type', index=14,
+      number=15, type=9, cpp_type=9, label=1,
+      has_default_value=True, default_value=b"sparsemax".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=872,
+  serialized_end=1288,
+)
+
+
 _MODELWRAPPER = _descriptor.Descriptor(
   name='ModelWrapper',
   full_name='tabml.protos.ModelWrapper',
@@ -321,6 +497,13 @@ _MODELWRAPPER = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='tabnet_params', full_name='tabml.protos.ModelWrapper.tabnet_params', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -338,20 +521,27 @@ _MODELWRAPPER = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=805,
-  serialized_end=975,
+  serialized_start=1291,
+  serialized_end=1526,
 )
 
+_MODELWRAPPERTABNETPARAMS.fields_by_name['cat_features'].message_type = _CATFEATURETABNET
 _MODELWRAPPER.fields_by_name['lgbm_params'].message_type = _MODELWRAPPERLGBMPARAMS
 _MODELWRAPPER.fields_by_name['xgboost_params'].message_type = _MODELWRAPPERXGBOOSTPARAMS
+_MODELWRAPPER.fields_by_name['tabnet_params'].message_type = _MODELWRAPPERTABNETPARAMS
 _MODELWRAPPER.oneofs_by_name['params'].fields.append(
   _MODELWRAPPER.fields_by_name['lgbm_params'])
 _MODELWRAPPER.fields_by_name['lgbm_params'].containing_oneof = _MODELWRAPPER.oneofs_by_name['params']
 _MODELWRAPPER.oneofs_by_name['params'].fields.append(
   _MODELWRAPPER.fields_by_name['xgboost_params'])
 _MODELWRAPPER.fields_by_name['xgboost_params'].containing_oneof = _MODELWRAPPER.oneofs_by_name['params']
+_MODELWRAPPER.oneofs_by_name['params'].fields.append(
+  _MODELWRAPPER.fields_by_name['tabnet_params'])
+_MODELWRAPPER.fields_by_name['tabnet_params'].containing_oneof = _MODELWRAPPER.oneofs_by_name['params']
 DESCRIPTOR.message_types_by_name['ModelWrapperLgbmParams'] = _MODELWRAPPERLGBMPARAMS
 DESCRIPTOR.message_types_by_name['ModelWrapperXgboostParams'] = _MODELWRAPPERXGBOOSTPARAMS
+DESCRIPTOR.message_types_by_name['CatFeatureTabNet'] = _CATFEATURETABNET
+DESCRIPTOR.message_types_by_name['ModelWrapperTabNetParams'] = _MODELWRAPPERTABNETPARAMS
 DESCRIPTOR.message_types_by_name['ModelWrapper'] = _MODELWRAPPER
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -368,6 +558,20 @@ ModelWrapperXgboostParams = _reflection.GeneratedProtocolMessageType('ModelWrapp
   # @@protoc_insertion_point(class_scope:tabml.protos.ModelWrapperXgboostParams)
   })
 _sym_db.RegisterMessage(ModelWrapperXgboostParams)
+
+CatFeatureTabNet = _reflection.GeneratedProtocolMessageType('CatFeatureTabNet', (_message.Message,), {
+  'DESCRIPTOR' : _CATFEATURETABNET,
+  '__module__' : 'tabml.protos.model_wrappers_pb2'
+  # @@protoc_insertion_point(class_scope:tabml.protos.CatFeatureTabNet)
+  })
+_sym_db.RegisterMessage(CatFeatureTabNet)
+
+ModelWrapperTabNetParams = _reflection.GeneratedProtocolMessageType('ModelWrapperTabNetParams', (_message.Message,), {
+  'DESCRIPTOR' : _MODELWRAPPERTABNETPARAMS,
+  '__module__' : 'tabml.protos.model_wrappers_pb2'
+  # @@protoc_insertion_point(class_scope:tabml.protos.ModelWrapperTabNetParams)
+  })
+_sym_db.RegisterMessage(ModelWrapperTabNetParams)
 
 ModelWrapper = _reflection.GeneratedProtocolMessageType('ModelWrapper', (_message.Message,), {
   'DESCRIPTOR' : _MODELWRAPPER,

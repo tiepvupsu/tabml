@@ -44,11 +44,99 @@ message ModelWrapperXgboostParams {
     optional int32 seed = 12 [default = 42];
 }
 
+
+message CatFeatureTabNet {
+    optional string feature = 1;
+    optional int32 dim = 2;
+    optional int32 emb_dim = 3;
+}
+
+message ModelWrapperTabNetParams {
+    // Follows https://github.com/dreamquark-ai/tabnet#model-parameters.
+
+    // Width of the decision prediction layer. Bigger values gives more capacity to the
+    // model with the risk of overfitting. Values typically range from 8 to 64.
+    optional int32 n_d = 1 [default = 8];
+
+    // Width of the attention embedding for each mask. According to the paper n_d=n_a is
+    // usually a good choice. (default=8)
+    optional int32 n_a = 2 [default = 8];
+
+    // Number of steps in the architecture (usually between 3 and 10)
+    optional int32 n_steps = 3 [default=3];
+
+    // This is the coefficient for feature reusage in the masks. A value close to 1 will
+    // make mask selection least correlated between layers. Values range from 1 to 2.0.
+    optional float gamma = 4 [default = 1.3];
+
+    repeated CatFeatureTabNet cat_features = 5;
+
+    // Number of independent Gated Linear Units layers at each step. Usual values range
+    // from 1 to 5.
+    optional int32 n_independent = 6 [default = 2];
+
+    // Number of shared Gated Linear Units at each step Usual values range from 1 to 5
+    optional int32 n_shared = 7 [default = 2];
+
+    // Should be left untouched.
+    optional float epsilon = 8 [default = 1e-15];
+
+    // Random seed for reproducibility
+    optional int32 seed = 9 [default = 0];
+
+    // Momentum for batch normalization, typically ranges from 0.01 to 0.4 (default=0.02)
+    optional float momentum = 10 [default = 0.02];
+
+    // If a float is given this will clip the gradient at clip_value.
+    optional float clip_value = 11 [default = 999999999999];
+
+    // This is the extra sparsity loss coefficient as proposed in the original paper.
+    // The bigger this coefficient is, the sparser your model will be in terms of
+    // feature selection. Depending on the difficulty of your problem, reducing this
+    // value could help.
+    optional float lambda_sparse = 12 [default = 1e-3];
+
+    // Pytorch optimizer function
+    // TODO: add TorchOptimizer message
+    // optional optimizer_fn : torch.optim (default=torch.optim.Adam)
+
+    // Parameters compatible with optimizer_fn used initialize the optimizer. Since we
+    // have Adam as our default optimizer, we use this to define the initial learning
+    // rate used for training. As mentionned in the original paper, a large initial
+    // learning of 0.02 with decay is a good option.
+    // optimizer_params: dict (default=dict(lr=2e-2))
+
+    // Pytorch Scheduler to change learning rates during training.
+    // scheduler_fn : torch.optim.lr_scheduler (default=None)
+
+    // Dictionnary of parameters to apply to the scheduler_fn. Ex : {"gamma": 0.95, "step_size": 10}
+    /// scheduler_params : dict
+
+    // Name of the model used for saving in disk, you can customize this to easily
+    // retrieve and reuse your trained models.
+    optional string model_name = 13 [default = 'DreamQuarkTabNet'];
+
+    // Path defining where to save models.
+    // will be defined in model_trainer
+    // saving_path : str (default = './')
+
+    // Verbosity for notebooks plots, set to 1 to see every epoch, 0 to get None.
+    // verbose : int (default=1)
+
+    // 'cpu' for cpu training, 'gpu' for gpu training, 'auto' to auto detect gpu.
+    optional string device_name = 14 [default = 'auto'];
+
+    // Either "sparsemax" or "entmax" : this is the masking function to use for
+    // selecting features
+    optional string mask_type = 15 [default = 'sparsemax'];
+}
+
 message ModelWrapper {
     required string cls_name = 1;
 
     oneof params {
         ModelWrapperLgbmParams lgbm_params = 2;
         ModelWrapperXgboostParams xgboost_params = 3;
+        ModelWrapperTabNetParams tabnet_params = 4;
     }
 }
