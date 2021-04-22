@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Tuple
+from typing import Any, Dict, Tuple
 
 import pandas as pd
 
@@ -70,3 +70,24 @@ class LgbmTrainer(BaseBoostingTrainer):
             **pb_to_dict(self.config.trainer.lgbm_params),
         }
         return fit_params
+
+
+class TabNetTrainer(BaseTrainer):
+    def train(self, model_dir: str) -> None:
+        assert (
+            self.data_loader.label_col is not None
+        ), "self.data_loader.label_col must be declared in BaseDataLoader subclasses."
+
+        train_feature, train_label = self.data_loader.get_train_data_and_label()
+        val_feature, val_label = self.data_loader.get_val_data_and_label()
+
+        # TODO: add TabNettrainer proro message
+        self.fit_params: Dict[str, Any] = {}
+
+        self.model_wrapper.model.fit(
+            train_feature.to_numpy(),
+            train_label,
+            eval_set=[(val_feature.to_numpy(), val_label)],
+            **self.fit_params,
+        )
+        # save_as_pickle(self.model_wrapper.model, model_dir, self.save_model_name)
