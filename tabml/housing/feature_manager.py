@@ -92,6 +92,7 @@ class FeatureScaledCleanTotalBedrooms(BaseHousingTransformingFeature):
     name = "scaled_clean_total_bedrooms"
 
     def transform(self, df):
+        # TODO: impute total_bedrooms
         return _scale_clean_transform(df, ["total_bedrooms"])
 
 
