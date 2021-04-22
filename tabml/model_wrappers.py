@@ -96,8 +96,8 @@ class LgbmRegressorModelWrapper(BaseLgbmModelWrapper):
 
 
 class BaseSklearnModelWrapper(BaseModelWrapper):
-    def __init__(self, config, data_loader):
-        super(BaseSklearnModelWrapper, self).__init__(config, data_loader)
+    def __init__(self, config):
+        super(BaseSklearnModelWrapper, self).__init__(config)
         self.params = self.get_params()
         self.model = self.build_model()
 
@@ -123,8 +123,8 @@ class BaseSklearnModelWrapper(BaseModelWrapper):
 
 
 class BaseTabNetModelWrapper(BaseSklearnModelWrapper):
-    def __init__(self, config, data_loader):
-        super().__init__(config, data_loader)
+    def __init__(self, config):
+        super().__init__(config)
 
     def get_params(self):
         return get_tabnet_params(self.config)
@@ -132,12 +132,12 @@ class BaseTabNetModelWrapper(BaseSklearnModelWrapper):
 
 class TabNetClassifierModelWrapper(BaseTabNetModelWrapper):
     def build_model(self):
-        return TabNetClassifier(self.params)
+        return TabNetClassifier(**self.params)
 
 
 class TabNetRegressorModelWrapper(BaseTabNetModelWrapper):
     def build_model(self):
-        return TabNetRegressor(self.params)
+        return TabNetRegressor(**self.params)
 
 
 def get_tabnet_params(config) -> Dict[str, Any]:
