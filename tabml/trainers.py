@@ -86,8 +86,8 @@ class TabNetTrainer(BaseTrainer):
 
         self.model_wrapper.model.fit(
             train_feature.to_numpy(),
-            train_label,
-            eval_set=[(val_feature.to_numpy(), val_label)],
+            train_label.to_numpy().reshape(-1, 1),
+            eval_set=[(val_feature.to_numpy(), val_label.to_numpy().reshape(-1, 1))],
             **self.fit_params,
         )
         # save_as_pickle(self.model_wrapper.model, model_dir, self.save_model_name)
