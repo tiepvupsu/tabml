@@ -124,4 +124,4 @@ def hash_modulo(val: Any, mod: int) -> int:
     # TODO: make it faster and with more ways of hashing
     md5 = hashlib.md5()
     md5.update(str(val).encode())
-    return int(md5.hexdigest(), 32) % mod
+    return int(md5.hexdigest(), 16) % mod
