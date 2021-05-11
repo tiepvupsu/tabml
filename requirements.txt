@@ -13,6 +13,7 @@ pandas-profiling==2.9.0
 pre-commit==2.2.0
 protobuf==3.13.0
 pytest==5.3.5
+pytorch-lightning==1.3.1
 qcore==0.5.1
 scikit-learn==0.24.1
 # scikit-optimize==0.7.4
