@@ -14,7 +14,7 @@ torch.multiprocessing.set_sharing_strategy("file_system")
 
 
 class MatrixFactorization(pl.LightningModule):
-    def __init__(self, n_users, n_items, n_factors=40, dropout_p=0.25, sparse=False):
+    def __init__(self, n_users, n_items, n_factors=40, dropout_p=0, sparse=False):
         """
         Parameters
         ----------
@@ -38,7 +38,7 @@ class MatrixFactorization(pl.LightningModule):
         self.n_factors = n_factors
         self.user_biases = nn.Embedding(n_users, 1, sparse=sparse)
         self.item_biases = nn.Embedding(n_items, 1, sparse=sparse)
-        self.bias = nn.Embedding(1, 1)
+        self.bias = nn.Parameter(torch.rand(1))
         self.user_embeddings = nn.Embedding(n_users, n_factors, sparse=sparse)
         self.item_embeddings = nn.Embedding(n_items, n_factors, sparse=sparse)
 
@@ -66,9 +66,8 @@ class MatrixFactorization(pl.LightningModule):
         ues = self.user_embeddings(users)
         uis = self.item_embeddings(items)
 
-        preds = self.user_biases(users)
-        breakpoint()
-        preds += self.item_biases(items) + self.bias(0)
+        preds = self.user_biases(users) + self.bias
+        preds += self.item_biases(items)
         preds += torch.reshape(
             torch.diag(
                 torch.matmul(
@@ -81,24 +80,17 @@ class MatrixFactorization(pl.LightningModule):
         return torch.clip(preds.squeeze(), min=1, max=5)
 
     def training_step(self, batch, batch_idx):
-        # training_step defines the train loop. It is independent of forward
-        # x, y = batch
-        # x = x.view(x.size(0), -1)
-        # z = self.encoder(x)
-        # x_hat = self.decoder(z)
-        # loss = F.mse_loss(x_hat, x)
-        # self.log("train_loss", loss)
-        # return loss
         users, items, rating = batch
         rating = rating.to(torch.float32)
         output = self.forward(users, items)
-        # breakpoint()
-        loss = F.mse_loss(output, rating)
+        loss = F.mse_loss(rating, output)
         self.log("train_loss", loss)
         return loss
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=10)
+        optimizer = torch.optim.SGD(
+            self.parameters(), lr=0.5, momentum=0.5, weight_decay=1e-3
+        )  # learning rate
         return optimizer
 
 
@@ -157,11 +149,6 @@ class MF(nn.Module):
 
         preds = self.user_biases(users) + self.bias
         preds += self.item_biases(items)
-        # preds += (self.dropout(ues) * self.dropout(uis)).sum(dim=1, keepdim=True)
-        # breakpoint()
-        # preds = (ues * uis).sum(dim=1, keepdim=True)
-        # preds = torch.diag(ues * uis.T)
-        # breakpoint()
         preds += torch.reshape(
             torch.diag(
                 torch.matmul(
@@ -172,7 +159,6 @@ class MF(nn.Module):
         )
 
         return torch.clip(preds.squeeze(), min=1, max=5)
-        # return preds.squeeze()
 
 
 class MlDataset(Dataset):
@@ -190,7 +176,7 @@ def eval_model(model, train_dataloader):
     loss = 0
     for users, items, rating in train_dataloader:
         pred = model(users, items)
-        loss += F.mse_loss(pred, rating)
+        loss += F.mse_loss(pred, rating) ** 0.5
     avg_loss = loss / len(train_dataloader)
     print(f"avg rmse: {avg_loss}")
 
@@ -208,7 +194,7 @@ def run_pipeline():
     # https://files.grouplens.org/datasets/movielens/ml-100k-README.txt
     n_users = 943
     n_movies = 1682
-    n_factors = 40
+    n_factors = 30
     model = MatrixFactorization(n_users=n_users, n_items=n_movies, n_factors=n_factors)
     trainer = pl.Trainer(gpus=1, max_epochs=100)
     trainer.fit(model, train_dataloader, validation_dataloader)
@@ -225,7 +211,7 @@ def run_pipeline2():
     n_movies = 1682
     n_factors = 30
     num_epoches = 1000
-    learning_rate = 1
+    learning_rate = 0.1
     batch_size = 256
     training_data = MlDataset("data/ml-100k/u1.base")
     validation_data = MlDataset("data/ml-100k/u1.test")
@@ -242,14 +228,17 @@ def run_pipeline2():
     user_optimizer = torch.optim.SGD(
         [model.user_biases.weight, model.user_embeddings.weight, model.bias],
         lr=learning_rate,
-        # momentum=0.9,
+        momentum=0.5,
         weight_decay=1e-3,
     )  # learning rate
     item_optimizer = torch.optim.SGD(
         [model.item_biases.weight, model.item_embeddings.weight, model.bias],
         lr=learning_rate,
-        # momentum=0.9,
+        momentum=0.5,
         weight_decay=1e-3,
+    )  # learning rate
+    all_optimizer = torch.optim.SGD(
+        model.parameters(), lr=learning_rate, momentum=0.5, weight_decay=1e-3
     )  # learning rate
     for n in range(num_epoches):
         total_loss = 0
@@ -260,16 +249,18 @@ def run_pipeline2():
             # user update
             preds = model(users, items)
             loss = criterion(preds, ratings)
-            user_optimizer.zero_grad()
+            # user_optimizer.zero_grad()
+            all_optimizer.zero_grad()
             loss.backward()
-            user_optimizer.step()
+            # user_optimizer.step()
+            all_optimizer.step()
             # item update
-            preds = model(users, items)
-            loss = criterion(preds, ratings)
-            item_optimizer.zero_grad()
-            loss.backward()
-            item_optimizer.step()
-            total_loss += loss.item()
+            # preds = model(users, items)
+            # loss = criterion(preds, ratings)
+            # item_optimizer.zero_grad()
+            # loss.backward()
+            # item_optimizer.step()
+            total_loss += loss.item() ** 0.5
         # Evaluation on validation dataset.
         # total_loss = 0
         total_loss2 = 0
@@ -280,7 +271,7 @@ def run_pipeline2():
                 ratings = ratings.to(device).to(torch.float32)
                 preds = model(users, items)
                 loss = criterion(ratings, preds)
-                total_loss2 += loss.item()
+                total_loss2 += loss.item() ** 0.5
         print(
             f"Epoch {n+ 1}/{num_epoches}, "
             f"train loss: {total_loss/len(train_dataloader):.3f}, "
@@ -289,5 +280,5 @@ def run_pipeline2():
 
 
 if __name__ == "__main__":
-    # run_pipeline()
-    run_pipeline2()
+    run_pipeline()
+    # run_pipeline2()
