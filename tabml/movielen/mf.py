@@ -38,6 +38,7 @@ class MatrixFactorization(pl.LightningModule):
         self.n_factors = n_factors
         self.user_biases = nn.Embedding(n_users, 1, sparse=sparse)
         self.item_biases = nn.Embedding(n_items, 1, sparse=sparse)
+        self.bias = nn.Embedding(1, 1)
         self.user_embeddings = nn.Embedding(n_users, n_factors, sparse=sparse)
         self.item_embeddings = nn.Embedding(n_items, n_factors, sparse=sparse)
 
@@ -66,8 +67,16 @@ class MatrixFactorization(pl.LightningModule):
         uis = self.item_embeddings(items)
 
         preds = self.user_biases(users)
-        preds += self.item_biases(items)
-        preds += (self.dropout(ues) * self.dropout(uis)).sum(dim=1, keepdim=True)
+        breakpoint()
+        preds += self.item_biases(items) + self.bias(0)
+        preds += torch.reshape(
+            torch.diag(
+                torch.matmul(
+                    self.dropout(ues), torch.transpose(self.dropout(uis), 0, 1)
+                )
+            ),
+            (-1, 1),
+        )
 
         return torch.clip(preds.squeeze(), min=1, max=5)
 
@@ -89,7 +98,7 @@ class MatrixFactorization(pl.LightningModule):
         return loss
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
+        optimizer = torch.optim.Adam(self.parameters(), lr=10)
         return optimizer
 
 
@@ -118,6 +127,7 @@ class MF(nn.Module):
         self.n_factors = n_factors
         self.user_biases = nn.Embedding(n_users, 1, sparse=sparse)
         self.item_biases = nn.Embedding(n_items, 1, sparse=sparse)
+        self.bias = nn.Parameter(torch.rand(1))
         self.user_embeddings = nn.Embedding(n_users, n_factors, sparse=sparse)
         self.item_embeddings = nn.Embedding(n_items, n_factors, sparse=sparse)
 
@@ -145,11 +155,23 @@ class MF(nn.Module):
         ues = self.user_embeddings(users)
         uis = self.item_embeddings(items)
 
-        preds = self.user_biases(users)
+        preds = self.user_biases(users) + self.bias
         preds += self.item_biases(items)
-        preds += (self.dropout(ues) * self.dropout(uis)).sum(dim=1, keepdim=True)
+        # preds += (self.dropout(ues) * self.dropout(uis)).sum(dim=1, keepdim=True)
+        # breakpoint()
+        # preds = (ues * uis).sum(dim=1, keepdim=True)
+        # preds = torch.diag(ues * uis.T)
+        # breakpoint()
+        preds += torch.reshape(
+            torch.diag(
+                torch.matmul(
+                    self.dropout(ues), torch.transpose(self.dropout(uis), 0, 1)
+                )
+            ),
+            (-1, 1),
+        )
 
-        return torch.clip(preds.squeeze(), min=0, max=5)
+        return torch.clip(preds.squeeze(), min=1, max=5)
         # return preds.squeeze()
 
 
@@ -176,11 +198,12 @@ def eval_model(model, train_dataloader):
 def run_pipeline():
     training_data = MlDataset("data/ml-100k/u1.base")
     validation_data = MlDataset("data/ml-100k/u1.test")
+    batch_size = 256
     train_dataloader = DataLoader(
-        training_data, batch_size=64, shuffle=True, num_workers=10
+        training_data, batch_size=batch_size, shuffle=True, num_workers=10
     )
     validation_dataloader = DataLoader(
-        validation_data, batch_size=64, shuffle=False, num_workers=10
+        validation_data, batch_size=batch_size, shuffle=False, num_workers=10
     )
     # https://files.grouplens.org/datasets/movielens/ml-100k-README.txt
     n_users = 943
@@ -196,33 +219,37 @@ def run_pipeline():
 
 
 def run_pipeline2():
+    batch_size = 30
+    # https://files.grouplens.org/datasets/movielens/ml-100k-README.txt
+    n_users = 943
+    n_movies = 1682
+    n_factors = 30
+    num_epoches = 1000
+    learning_rate = 1
+    batch_size = 256
     training_data = MlDataset("data/ml-100k/u1.base")
     validation_data = MlDataset("data/ml-100k/u1.test")
-    batch_size = 64
     train_dataloader = DataLoader(
         training_data, batch_size=batch_size, shuffle=True, num_workers=10
     )
     validation_dataloader = DataLoader(
         validation_data, batch_size=batch_size, shuffle=False, num_workers=10
     )
-    # https://files.grouplens.org/datasets/movielens/ml-100k-README.txt
-    n_users = 943
-    n_movies = 1682
-    n_factors = 100
-    num_epoches = 1000
     device = torch.device("cuda:0")
     model = MF(n_users=n_users, n_items=n_movies, n_factors=n_factors)
     model = model.to(device)
     criterion = torch.nn.MSELoss()
     user_optimizer = torch.optim.SGD(
-        [model.user_biases.weight, model.user_embeddings.weight],
-        lr=5e-3,
-        weight_decay=1e-6,
+        [model.user_biases.weight, model.user_embeddings.weight, model.bias],
+        lr=learning_rate,
+        # momentum=0.9,
+        weight_decay=1e-3,
     )  # learning rate
     item_optimizer = torch.optim.SGD(
-        [model.item_biases.weight, model.item_embeddings.weight],
-        lr=5e-3,
-        weight_decay=1e-6,
+        [model.item_biases.weight, model.item_embeddings.weight, model.bias],
+        lr=learning_rate,
+        # momentum=0.9,
+        weight_decay=1e-3,
     )  # learning rate
     for n in range(num_epoches):
         total_loss = 0
@@ -262,5 +289,5 @@ def run_pipeline2():
 
 
 if __name__ == "__main__":
-    run_pipeline()
-    # run_pipeline2()
+    # run_pipeline()
+    run_pipeline2()
