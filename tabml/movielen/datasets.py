@@ -1,8 +1,9 @@
 from typing import List
 
-import pandas as pd
+import numpy as np
 import pandas as pd
 import torch
+from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, Dataset, random_split
 
 NUM_MOVIES = 3883
@@ -45,12 +46,12 @@ class FactorizationMachineDataset(Dataset):
         """
         movie_id, movie_genre, user_id, user_gender, user_age, user_occupation
         """
-        user_ind = self.rating_df[self.rating_col_inds["user_ind"]][ind] - 1
+        user_ind = self.rating_df[self.rating_col_inds["user_ind"]].iloc[ind] - 1
         assert user_ind < NUM_USERS
-        movie_id = self.rating_df[self.rating_col_inds["movie_ind"]][ind]
+        movie_id = self.rating_df[self.rating_col_inds["movie_ind"]].iloc[ind]
         movie_true_ind = self.find_movie_index(movie_id)
         assert movie_true_ind < NUM_MOVIES
-        rating = self.rating_df[self.rating_col_inds["rating"]][ind]
+        rating = self.rating_df[self.rating_col_inds["rating"]].iloc[ind]
         gender_ind = self.gender_vocab.find_index(
             self.user_df[self.user_col_inds["gender"]][user_ind]
         )
@@ -133,4 +134,10 @@ def get_ml_1m_dataset():
     rating_df = pd.read_csv("data/ml-1m/ratings.dat", header=None, delimiter="::")
     user_df = pd.read_csv("data/ml-1m/users.dat", header=None, delimiter="::")
     movie_df = pd.read_csv("data/ml-1m/movies.dat", header=None, delimiter="::")
-    return FactorizationMachineDataset(user_df, movie_df, rating_df)
+    rating_df_train = rating_df.sample(frac=0.8, random_state=200)
+    rating_df_val = rating_df.drop(rating_df_train.index)
+
+    return (
+        FactorizationMachineDataset(user_df, movie_df, rating_df_train),
+        FactorizationMachineDataset(user_df, movie_df, rating_df_val),
+    )

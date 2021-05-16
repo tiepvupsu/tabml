@@ -63,24 +63,21 @@ def eval_model(model, train_dataloader):
 
 
 def run_pipeline():
-    training_data = datasets.get_ml_1m_dataset()
-    # TODO: split training dataset
-    validation_data = training_data  # for now
-    batch_size = 1024
+    training_data, validation_data = datasets.get_ml_1m_dataset()
+    batch_size = 256
     n_factors = 30
+    num_workers = min(batch_size, 14)
     train_dataloader = DataLoader(
-        training_data, batch_size=batch_size, shuffle=True, num_workers=12
+        training_data, batch_size=batch_size, shuffle=True, num_workers=num_workers
     )
     validation_dataloader = DataLoader(
-        validation_data, batch_size=batch_size, shuffle=False, num_workers=12
+        validation_data, batch_size=batch_size, shuffle=False, num_workers=num_workers
     )
     model = FactorizationMachine(
         num_inputs=training_data.input_dim, num_factors=n_factors
     )
-    trainer = pl.Trainer(gpus=1, max_epochs=10)
-    trainer.fit(model, train_dataloader, validation_dataloader)
-    print("Train loss")
-    eval_model(model, train_dataloader)
+    trainer = pl.Trainer(gpus=1, max_epochs=1)
+    trainer.fit(model, train_dataloader)
     print("Validation loss")
     eval_model(model, validation_dataloader)
 
