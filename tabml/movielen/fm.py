@@ -1,15 +1,9 @@
-import os
-
-import pandas as pd
 import pytorch_lightning as pl
 import torch
 import torch.multiprocessing
 import torch.nn.functional as F
 from torch import nn
-from torch.utils import data
-from torch.utils.data import DataLoader, Dataset, random_split
-from torchvision import transforms
-from torchvision.datasets import MNIST
+from torch.utils.data import DataLoader
 
 from tabml.movielen import datasets
 

@@ -1,10 +1,8 @@
 from typing import List
 
-import numpy as np
 import pandas as pd
 import torch
-from sklearn.model_selection import train_test_split
-from torch.utils.data import DataLoader, Dataset, random_split
+from torch.utils.data import Dataset
 
 NUM_MOVIES = 3883
 NUM_USERS = 6040

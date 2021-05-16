@@ -1,14 +1,10 @@
-import os
-
 import pandas as pd
 import pytorch_lightning as pl
 import torch
 import torch.multiprocessing
 import torch.nn.functional as F
 from torch import nn
-from torch.utils.data import DataLoader, Dataset, random_split
-from torchvision import transforms
-from torchvision.datasets import MNIST
+from torch.utils.data import DataLoader, Dataset
 
 torch.multiprocessing.set_sharing_strategy("file_system")
 
@@ -204,81 +200,5 @@ def run_pipeline():
     eval_model(model, validation_dataloader)
 
 
-def run_pipeline2():
-    batch_size = 30
-    # https://files.grouplens.org/datasets/movielens/ml-100k-README.txt
-    n_users = 943
-    n_movies = 1682
-    n_factors = 30
-    num_epoches = 1000
-    learning_rate = 0.1
-    batch_size = 256
-    training_data = MlDataset("data/ml-100k/u1.base")
-    validation_data = MlDataset("data/ml-100k/u1.test")
-    train_dataloader = DataLoader(
-        training_data, batch_size=batch_size, shuffle=True, num_workers=10
-    )
-    validation_dataloader = DataLoader(
-        validation_data, batch_size=batch_size, shuffle=False, num_workers=10
-    )
-    device = torch.device("cuda:0")
-    model = MF(n_users=n_users, n_items=n_movies, n_factors=n_factors)
-    model = model.to(device)
-    criterion = torch.nn.MSELoss()
-    user_optimizer = torch.optim.SGD(
-        [model.user_biases.weight, model.user_embeddings.weight, model.bias],
-        lr=learning_rate,
-        momentum=0.5,
-        weight_decay=1e-3,
-    )  # learning rate
-    item_optimizer = torch.optim.SGD(
-        [model.item_biases.weight, model.item_embeddings.weight, model.bias],
-        lr=learning_rate,
-        momentum=0.5,
-        weight_decay=1e-3,
-    )  # learning rate
-    all_optimizer = torch.optim.SGD(
-        model.parameters(), lr=learning_rate, momentum=0.5, weight_decay=1e-3
-    )  # learning rate
-    for n in range(num_epoches):
-        total_loss = 0
-        for users, items, ratings in train_dataloader:
-            users = users.to(device)
-            items = items.to(device)
-            ratings = ratings.to(device).to(torch.float32)
-            # user update
-            preds = model(users, items)
-            loss = criterion(preds, ratings)
-            # user_optimizer.zero_grad()
-            all_optimizer.zero_grad()
-            loss.backward()
-            # user_optimizer.step()
-            all_optimizer.step()
-            # item update
-            # preds = model(users, items)
-            # loss = criterion(preds, ratings)
-            # item_optimizer.zero_grad()
-            # loss.backward()
-            # item_optimizer.step()
-            total_loss += loss.item() ** 0.5
-        # Evaluation on validation dataset.
-        # total_loss = 0
-        total_loss2 = 0
-        with torch.no_grad():
-            for users, items, ratings in validation_dataloader:
-                users = users.to(device)
-                items = items.to(device)
-                ratings = ratings.to(device).to(torch.float32)
-                preds = model(users, items)
-                loss = criterion(ratings, preds)
-                total_loss2 += loss.item() ** 0.5
-        print(
-            f"Epoch {n+ 1}/{num_epoches}, "
-            f"train loss: {total_loss/len(train_dataloader):.3f}, "
-            f"val loss: {total_loss2/len(validation_dataloader):.3f}"
-        )
-
-
 if __name__ == "__main__":
     run_pipeline()
-    # run_pipeline2()
