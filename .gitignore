@@ -144,3 +144,6 @@ coverage.code-workspace
 *.DS_Store
 
 **/experiments
+
+# lighting_logs
+**/lightning_logs
