@@ -18,6 +18,7 @@ setup(
     packages=find_packages(exclude=("tests", "docs")),
     install_requires=[
         "GitPython==3.1.13",
+        "GPUtil==1.4.0",
         "kaggle==1.5.6",
         "lightgbm==2.3.1",
         "loguru==0.5.1",
