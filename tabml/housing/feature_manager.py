@@ -9,6 +9,11 @@ from tabml import data_processing
 from tabml.feature_manager import BaseFeatureManager, BaseTransformingFeature
 from tabml.utils.git import get_git_repo_dir
 
+DATA_URL = (
+    "https://media.githubusercontent.com/media/tiepvupsu/tabml_data/master/"
+    "california_housing/housing.csv"
+)
+
 
 class FeatureManager(BaseFeatureManager):
     def __init__(self, pb_config_path):
@@ -18,8 +23,7 @@ class FeatureManager(BaseFeatureManager):
         return BaseHousingTransformingFeature
 
     def load_raw_data(self):
-        raw_data_dir = Path(self.raw_data_dir)
-        full_df = pd.read_csv(raw_data_dir / "housing.csv")
+        full_df = pd.read_csv(DATA_URL)
         self.raw_data["full"] = full_df
 
     def initialize_dataframe(self):
