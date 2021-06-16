@@ -14,7 +14,7 @@ pre-commit==2.2.0
 protobuf==3.13.0
 pytest==5.3.5
 qcore==0.5.1
-scikit-learn==0.24.1
+scikit-learn==0.24.2
 # scikit-optimize==0.7.4
 scipy==1.6.2
 # pytorch-tabnet==3.1.1
