@@ -26,7 +26,7 @@ setup(
         "pandas==1.1.4",
         "pandas-profiling==2.9.0",
         "protobuf==3.13.0",
-        "scikit-learn==0.24.1",
+        "scikit-learn==0.24.2",
         "scipy==1.6.2",
     ],
 )
