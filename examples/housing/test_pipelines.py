@@ -1,4 +1,4 @@
-from tabml.housing import pipelines
+import pipelines
 
 
 def test_full_pipeline():
