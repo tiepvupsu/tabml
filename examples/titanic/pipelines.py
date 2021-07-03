@@ -2,7 +2,7 @@ from tabml.pipelines import BasePipeline
 
 
 def train_lgbm():
-    path_to_config = "tabml/titanic/configs/lgbm_config.pb"
+    path_to_config = "examples/titanic/configs/lgbm_config.pb"
     pipeline = BasePipeline(path_to_config)
     pipeline.run()
     pipeline.analyze_model()
