@@ -1,4 +1,4 @@
-import pipelines
+from . import pipelines
 
 
 def test_full_pipeline():

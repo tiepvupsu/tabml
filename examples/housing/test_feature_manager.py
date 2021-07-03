@@ -1,4 +1,4 @@
-import feature_manager
+from . import feature_manager
 
 
 def test_run():
