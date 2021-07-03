@@ -1,4 +1,4 @@
-from tabml.titanic import feature_manager
+import feature_manager
 
 
 def test_run():

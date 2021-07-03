@@ -2,7 +2,7 @@
 # proto-message: FeatureConfig
 
 raw_data_dir {
-  path: "tabml/titanic/data"
+  path: "examples/titanic/data"
   is_absolute_path: false
 }
 
