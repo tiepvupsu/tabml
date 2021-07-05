@@ -1,12 +1,10 @@
-from typing import Tuple
-
 import pandas as pd
 
 SUPPORTED_DATASETS = ("titanic", "california_housing", "movielen-1m")
 DATA_SOURCE = "https://media.githubusercontent.com/media/tiepvupsu/tabml_data/master/"
 
 
-def download_as_dataframes(dataset_name: str) -> Tuple[pd.DataFrame]:
+def download_as_dataframes(dataset_name: str):
     if dataset_name not in SUPPORTED_DATASETS:
         raise ValueError(
             f"{dataset_name} is not supported. Available datasets: {SUPPORTED_DATASETS}"
@@ -19,7 +17,7 @@ def download_as_dataframes(dataset_name: str) -> Tuple[pd.DataFrame]:
     }[dataset_name]
 
 
-def download_titanic() -> Tuple[pd.DataFrame]:
+def download_titanic():
     return (
         pd.read_csv(DATA_SOURCE + "titanic/train.csv"),
         pd.read_csv(DATA_SOURCE + "titanic/test.csv"),
@@ -27,11 +25,11 @@ def download_titanic() -> Tuple[pd.DataFrame]:
     )
 
 
-def download_california_housing() -> Tuple[pd.DataFrame]:
+def download_california_housing():
     return pd.read_csv(DATA_SOURCE + "california_housing/housing.csv")
 
 
-def download_movielen_1m() -> Tuple[pd.DataFrame]:
+def download_movielen_1m():
     users = pd.read_csv(
         DATA_SOURCE + "movielens/ml-1m/users.dat",
         delimiter="::",
