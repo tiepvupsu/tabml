@@ -1,6 +1,7 @@
 import os
 import tempfile
 import zipfile
+from typing import Dict
 
 import pandas as pd
 from six.moves.urllib.request import urlretrieve
@@ -9,7 +10,7 @@ SUPPORTED_DATASETS = ("titanic", "california_housing", "movielen-1m")
 DATA_SOURCE = "https://media.githubusercontent.com/media/tiepvupsu/tabml_data/master/"
 
 
-def download_as_dataframes(dataset_name: str):
+def download_as_dataframes(dataset_name: str) -> Dict[str, pd.DataFrame]:
     if dataset_name not in SUPPORTED_DATASETS:
         raise ValueError(
             f"{dataset_name} is not supported. Available datasets: {SUPPORTED_DATASETS}"
@@ -22,19 +23,19 @@ def download_as_dataframes(dataset_name: str):
     }[dataset_name]
 
 
-def download_titanic():
-    return (
-        pd.read_csv(DATA_SOURCE + "titanic/train.csv"),
-        pd.read_csv(DATA_SOURCE + "titanic/test.csv"),
-        pd.read_csv(DATA_SOURCE + "titanic/gender_submission.csv"),
-    )
+def download_titanic() -> Dict[str, pd.DataFrame]:
+    return {
+        "train": pd.read_csv(DATA_SOURCE + "titanic/train.csv"),
+        "test": pd.read_csv(DATA_SOURCE + "titanic/test.csv"),
+        "gender_submission": pd.read_csv(DATA_SOURCE + "titanic/gender_submission.csv"),
+    }
 
 
-def download_california_housing():
-    return pd.read_csv(DATA_SOURCE + "california_housing/housing.csv")
+def download_california_housing() -> Dict[str, pd.DataFrame]:
+    return {"housing": pd.read_csv(DATA_SOURCE + "california_housing/housing.csv")}
 
 
-def download_movielen_1m():
+def download_movielen_1m() -> Dict[str, pd.DataFrame]:
     url = "http://files.grouplens.org/datasets/movielens/ml-1m.zip"
     # Download and extract ml-1m dataset to a temporary folder.
     tmp_dir = tempfile.mkdtemp()
@@ -65,4 +66,4 @@ def download_movielen_1m():
         usecols=["UserID", "MovieID", "Rating", "Timestamp"],
     )
 
-    return users, movies, ratings
+    return {"users": users, "movies": movies, "ratings": ratings}
