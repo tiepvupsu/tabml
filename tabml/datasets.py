@@ -1,4 +1,9 @@
+import os
+import tempfile
+import zipfile
+
 import pandas as pd
+from six.moves.urllib.request import urlretrieve
 
 SUPPORTED_DATASETS = ("titanic", "california_housing", "movielen-1m")
 DATA_SOURCE = "https://media.githubusercontent.com/media/tiepvupsu/tabml_data/master/"
@@ -30,14 +35,22 @@ def download_california_housing():
 
 
 def download_movielen_1m():
+    url = "http://files.grouplens.org/datasets/movielens/ml-1m.zip"
+    # Download and extract ml-1m dataset to a temporary folder.
+    tmp_dir = tempfile.mkdtemp()
+    tmp_file_path = os.path.join(tmp_dir, "tmp.zip")
+    urlretrieve(url, tmp_file_path)
+    with zipfile.ZipFile(tmp_file_path, "r") as tmp_zip:
+        tmp_zip.extractall(tmp_dir)
+
     users = pd.read_csv(
-        DATA_SOURCE + "movielens/ml-1m/users.dat",
+        os.path.join(tmp_dir, "ml-1m/users.dat"),
         delimiter="::",
         engine="python",
         names=["UserID", "Gender", "Age", "Occupation", "Zip-code"],
     )
     movies = pd.read_csv(
-        DATA_SOURCE + "movielens/ml-1m/movies.dat",
+        os.path.join(tmp_dir, "ml-1m/movies.dat"),
         delimiter="::",
         encoding="ISO-8859-1",
         engine="python",
@@ -45,7 +58,7 @@ def download_movielen_1m():
     )
 
     ratings = pd.read_csv(
-        DATA_SOURCE + "movielens/ml-1m/ratings.dat",
+        os.path.join(tmp_dir, "ml-1m/ratings.dat"),
         delimiter="::",
         engine="python",
         names=["UserID", "MovieID", "Rating", "Timestamp"],
