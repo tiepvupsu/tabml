@@ -1,11 +1,10 @@
 import os
 
+from tabml.utils.utils import change_working_dir_pytest
+
 from . import feature_manager
 
-# import pytest
 
-
+@change_working_dir_pytest
 def test_run(request):
-    os.chdir(request.fspath.dirname)
     feature_manager.run()
-    os.chdir(request.config.invocation_dir)
