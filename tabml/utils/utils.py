@@ -1,3 +1,4 @@
+import os
 import pickle
 import random
 import string
@@ -142,6 +143,11 @@ def is_gpu_available():
     )
 
 
-def get_full_path(path_relative_to_repo_dir: str):
-    """Gets the full path given a path relative to the repo dir."""
-    return Path(get_git_root()) / path_relative_to_repo_dir
+def change_working_dir_pytest(func):
+    # https://stackoverflow.com/a/62055409/11871829
+    def apply(request):
+        os.chdir(request.fspath.dirname)
+        func()
+        os.chdir(request.config.invocation_dir)
+
+    return apply

@@ -1,11 +1,7 @@
 # proto-file: tabml/protos/feature_manager.proto
 # proto-message: FeatureConfig
 
-raw_data_dir {
-  path: "examples/titanic/data"
-  is_absolute_path: false
-}
-
+raw_data_dir: "data"
 dataset_name: "sample"
 base_features {
   name: "passenger_id"

@@ -7,7 +7,6 @@ from tabml.trainers import BaseTrainer
 from tabml.utils import factory
 from tabml.utils.logger import logger
 from tabml.utils.pb_helpers import parse_pipeline_config_pb
-from tabml.utils.utils import get_full_path
 
 
 class BasePipeline(ABC):
@@ -25,13 +24,10 @@ class BasePipeline(ABC):
             a base.experiment_manager.ExperimentManager object.
     """
 
-    def __init__(self, path_to_config: str, is_absolute_path: bool = False):
+    def __init__(self, path_to_config: str):
         logger.info("=" * 80)
         logger.info(f"Running pipeline with config {path_to_config}")
         logger.info("=" * 80)
-        path_to_config = (
-            path_to_config if is_absolute_path else get_full_path(path_to_config)
-        )
         self.exp_manager = experiment_manager.ExperimentManger(path_to_config)
         self.config = parse_pipeline_config_pb(path_to_config)
         self.data_loader = self._get_data_loader()

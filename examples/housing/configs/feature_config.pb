@@ -1,7 +1,7 @@
 # proto-file: tabml/protos/feature_manager.proto
 # proto-message: FeatureConfig
 
-raw_data_dir {path: "examples/housing/data" is_absolute_path: false}
+raw_data_dir: "data"
 dataset_name: "processed"
 
 base_features {

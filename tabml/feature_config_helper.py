@@ -1,7 +1,7 @@
 import copy
 from typing import Dict, List, Union
 
-from tabml.utils.pb_helpers import get_absolute_path, parse_feature_config_pb
+from tabml.utils.pb_helpers import parse_feature_config_pb
 from tabml.utils.utils import check_uniqueness
 
 
@@ -39,7 +39,7 @@ class FeatureConfigHelper:
 
     def __init__(self, pb_config_path: str):
         self._config = parse_feature_config_pb(pb_config_path)
-        self.raw_data_dir = get_absolute_path(self._config.raw_data_dir)
+        self.raw_data_dir = self._config.raw_data_dir
         self.dataset_name = self._config.dataset_name
         self.base_features = [feature.name for feature in self._config.base_features]
         self.transforming_features = [

@@ -1,7 +1,7 @@
 config_name: "lgbm"
 data_loader {
   cls_name: "tabml.data_loaders.BaseDataLoader"
-  feature_manager_config_path {path: "examples/titanic/configs/feature_config.pb"}
+  feature_manager_config_path: "configs/feature_config.pb"
 
   features_to_model: "coded_sex"
   features_to_model: "imputed_age"
