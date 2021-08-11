@@ -5,7 +5,7 @@ import setuptools
 setup(
     name="tabml",  # How you named your package folder (MyLib)
     packages=setuptools.find_packages(),
-    version="0.1.2",  # Start with a small number and increase it with every change you make
+    version="0.1.3",  # Start with a small number and increase it with every change you make
     license="apache-2.0",  # Chose a license from here: https://help.github.com/articles/licensing-a-repository
     description="A package for machine learning with tabular data",  # Give a short description about your library
     author="Tiep Vu",  # Type in your name
