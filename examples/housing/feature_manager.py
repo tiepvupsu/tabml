@@ -171,9 +171,7 @@ class FeatureEncodedOceanProximity(BaseHousingTransformingFeature):
 
 
 def run():
-    pb_config_path = (
-        Path(get_git_repo_dir()) / "examples/housing/configs/feature_config.pb"
-    )
+    pb_config_path = "configs/feature_config.pb"
     fm = FeatureManager(pb_config_path)
     fm.run_all()
 
