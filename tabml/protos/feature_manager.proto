@@ -2,8 +2,6 @@ syntax = "proto2";
 
 package tabml.protos;
 
-import "tabml/protos/path.proto";
-
 enum DType {
   BOOL = 1;
   INT32 = 2;
@@ -43,7 +41,7 @@ message TransformingFeature {
 
 message FeatureConfig {
   //  directory of raw data files
-  optional Path raw_data_dir = 1;
+  optional string raw_data_dir = 1;
 
   // name of the dataframe to store features, also the name of the csv dataframe file.
   // The csv file path will be raw_data_dir / features / dataset_name + ".csv".

@@ -2,7 +2,6 @@ syntax = "proto2";
 
 package tabml.protos;
 
-import "tabml/protos/path.proto";
 
 // Next id: 11
 message DataLoader {
@@ -13,7 +12,7 @@ message DataLoader {
     optional bool gen_profiling = 3 [default = false];
 
     // path to feature_manager pb config
-    optional Path feature_manager_config_path = 4;
+    optional string feature_manager_config_path = 4;
     // list of features going in to the model
     repeated string features_to_model = 5;
 
