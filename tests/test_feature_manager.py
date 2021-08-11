@@ -79,7 +79,7 @@ class TestBaseFeatureManager:
     @pytest.fixture(autouse=True)
     def setup_class(cls, tmp_path):
         pb_str = """
-            raw_data_dir {path: "dummy"}
+            raw_data_dir: "dummy"
             dataset_name: "dummy"
             base_features {
               name: "a"
