@@ -1,9 +1,6 @@
-import pathlib
-
 from google.protobuf import json_format, text_format
 
-from tabml.protos import feature_manager_pb2, path_pb2, pipeline_pb2
-from tabml.utils import utils
+from tabml.protos import feature_manager_pb2, pipeline_pb2
 
 
 def parse_feature_config_pb(feature_manager_pbtxt_path: str):
