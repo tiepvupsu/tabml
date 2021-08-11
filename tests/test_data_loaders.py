@@ -16,7 +16,7 @@ class TestBaseDataLoader:
         # feature manager config
         dataset_dir = tmp_path / "dataset"
         fm_pb_str = f"""
-        raw_data_dir {{path: "{dataset_dir}" is_absolute_path: true}}
+        raw_data_dir: "{dataset_dir}"
         dataset_name: "dummy"
         base_features {{name: "a" dtype: INT32}}
         transforming_features {{name: "b" index: 1 dtype: INT32}}
@@ -47,7 +47,7 @@ class TestBaseDataLoader:
         config_name: "dummy"
         data_loader {{
             cls_name: "tabml.data_loaders.BaseDataLoader"
-            feature_manager_config_path {{path: "{fm_pb_path}" is_absolute_path: true}}
+            feature_manager_config_path: "{fm_pb_path}"
             label_col: "label"
             features_to_model: "a"
             features_to_model: "b"
