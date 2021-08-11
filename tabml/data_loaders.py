@@ -3,7 +3,6 @@ import typing
 import pandas as pd
 
 from tabml.feature_manager import BaseFeatureManager
-from tabml.utils.pb_helpers import get_absolute_path
 
 
 class BaseDataLoader:
@@ -21,9 +20,7 @@ class BaseDataLoader:
         self.feature_manager.load_dataframe()
 
     def _get_feature_manager(self):
-        fm_config_path = get_absolute_path(
-            self.config.data_loader.feature_manager_config_path
-        )
+        fm_config_path = self.config.data_loader.feature_manager_config_path
         return BaseFeatureManager(fm_config_path)
 
     def _extract_data_and_label(

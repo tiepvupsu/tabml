@@ -7,7 +7,6 @@ from tabml.trainers import BaseTrainer
 from tabml.utils import factory
 from tabml.utils.logger import logger
 from tabml.utils.pb_helpers import parse_pipeline_config_pb
-from tabml.utils.utils import get_full_path
 
 
 class BasePipeline(ABC):
