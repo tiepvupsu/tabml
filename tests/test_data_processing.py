@@ -31,7 +31,10 @@ class TestFindBoxPlotBoundaries:
         df = pd.DataFrame(
             data={"val": [-10, 1, 2, 3, 4, 10], "val2": [-10, 1, 2, 3, 4, 10]}
         )
-        got = data_processing.BoxplotOutlierClipper().fit_transform(df)
+        got = pd.DataFrame(
+            data=data_processing.BoxplotOutlierClipper().fit_transform(df),
+            columns=["val", "val2"],
+        )
         expected = pd.DataFrame(
             data={"val": [-2.5, 1, 2, 3, 4, 7.5], "val2": [-2.5, 1, 2, 3, 4, 7.5]}
         )

@@ -1,6 +1,7 @@
 import hashlib
 from typing import Any, List, Optional, Tuple
 
+import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 
@@ -74,7 +75,8 @@ class BoxplotOutlierClipper(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X: pd.DataFrame):
-        return X.clip(self.lower, self.upper, axis="columns")
+        # return array to be consistent with scikit transformer
+        return np.array(X.clip(self.lower, self.upper, axis="columns"))
 
 
 def fit_train_transform_all(
