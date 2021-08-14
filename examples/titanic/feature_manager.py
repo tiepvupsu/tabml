@@ -7,7 +7,6 @@ from sklearn.preprocessing import MinMaxScaler
 
 from tabml import data_processing
 from tabml.feature_manager import BaseFeatureManager, BaseTransformingFeature
-from tabml.utils.git import get_git_repo_dir
 
 
 class FeatureManager(BaseFeatureManager):
