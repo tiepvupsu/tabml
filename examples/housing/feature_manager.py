@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import numpy as np
 import pandas as pd
 from sklearn.pipeline import Pipeline
@@ -7,7 +5,6 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 from tabml import data_processing
 from tabml.feature_manager import BaseFeatureManager, BaseTransformingFeature
-from tabml.utils.git import get_git_repo_dir
 
 DATA_URL = (
     "https://media.githubusercontent.com/media/tiepvupsu/tabml_data/master/"
