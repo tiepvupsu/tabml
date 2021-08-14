@@ -37,6 +37,8 @@ new_project project-name
 
 ### Install and build/update proto
 
+Note: do this only if you update protos.
+
 ```
 apt install -y protobuf-compiler
 tabml_build_proto
@@ -44,8 +46,7 @@ tabml_build_proto
 
 ### Check that everthing is working
 
-#### Small test - Titanic
-Verify that everything is working
+by running test
 
 ```
 2tabml
