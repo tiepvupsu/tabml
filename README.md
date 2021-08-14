@@ -30,11 +30,6 @@ commit:
 pre-commit install
 ```
 
-### Create new project
-```
-new_project project-name
-```
-
 ### Install and build/update proto
 
 Note: do this only if you update protos.
