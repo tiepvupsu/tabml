@@ -4,6 +4,11 @@
 raw_data_dir: "data"
 dataset_name: "processed"
 
+base_features{
+  name: "house_id"
+  dtype: INT32
+}
+
 base_features {
   name: "median_house_value"
   dtype: FLOAT
@@ -57,6 +62,7 @@ transforming_features {
   name: "is_train"
   index: 1
   dtype: BOOL
+  dependencies: "house_id"
 }
 
 transforming_features {
