@@ -107,7 +107,11 @@ class FeatureConfigHelper:
         return sorted(feature_names, key=lambda x: self.feature_metadata[x].index)
 
     def find_dependencies(self, feature_name: str) -> List[str]:
-        return self.feature_metadata[feature_name].dependencies
+        # NOTE: repeated fields in proto are NOT parsed to python lists but
+        # <class 'google.protobuf.pyext._message.RepeatedScalarContainer'>.
+        # pandas 1.1.4 accepts the above type as an array of column names but
+        # pandas 1.3.1 does not!
+        return list(self.feature_metadata[feature_name].dependencies)
 
     def get_dependencies_recursively(self, features: List[str]) -> List[str]:
         """Gets all dependencies of a list of features recursively.
