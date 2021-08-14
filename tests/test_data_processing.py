@@ -28,14 +28,10 @@ class TestFindBoxPlotBoundaries:
         assert_eq(expected, got)
 
     def test_2(self):
-        df = pd.DataFrame(
-            data={"val": [-10, 1, 2, 3, 4, 10], "val2": [-10, 1, 2, 3, 4, 10]}
-        )
+        df = pd.Series([-10, 1, 2, 3, 4, 10])
         got = data_processing.BoxplotOutlierClipper().fit_transform(df)
-        expected = pd.DataFrame(
-            data={"val": [-2.5, 1, 2, 3, 4, 7.5], "val2": [-2.5, 1, 2, 3, 4, 7.5]}
-        )
-        pd.testing.assert_frame_equal(expected, got)
+        expected = pd.Series([-2.5, 1, 2, 3, 4, 7.5])
+        pd.testing.assert_series_equal(expected, got)
 
 
 class TestCrossColumns:
