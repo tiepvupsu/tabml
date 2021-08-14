@@ -1,11 +1,9 @@
-from pathlib import Path
-
 import numpy as np
 import pandas as pd
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import MinMaxScaler
 
-from tabml import data_processing
+from tabml import data_processing, datasets
 from tabml.feature_manager import BaseFeatureManager, BaseTransformingFeature
 
 
@@ -17,10 +15,10 @@ class FeatureManager(BaseFeatureManager):
         return BaseTitanicTransformingFeature
 
     def load_raw_data(self):
-        raw_data_dir = Path(self.raw_data_dir)
-        train_df = pd.read_csv(raw_data_dir / "train.csv")
-        test_df = pd.read_csv(raw_data_dir / "test.csv")
-        full_df = pd.concat([train_df, test_df], axis=0, ignore_index=True)
+        df_dict = datasets.download_titanic()
+        full_df = pd.concat(
+            [df_dict["train"], df_dict["test"]], axis=0, ignore_index=True
+        )
         self.raw_data["full"] = full_df
 
     def initialize_dataframe(self):

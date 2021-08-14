@@ -21,11 +21,13 @@ class FeatureManager(BaseFeatureManager):
 
     def load_raw_data(self):
         full_df = pd.read_csv(DATA_URL)
+        full_df["house_id"] = full_df.index
         self.raw_data["full"] = full_df
 
     def initialize_dataframe(self):
         self.dataframe = self.raw_data["full"][
             [
+                "house_id",
                 "median_house_value",
                 "housing_median_age",
                 "total_rooms",
@@ -44,14 +46,12 @@ class BaseHousingTransformingFeature(BaseTransformingFeature):
     pass
 
 
-class FeatureAge(BaseHousingTransformingFeature):
+class FeatureIsTrain(BaseHousingTransformingFeature):
     name = "is_train"
 
     def transform(self, df):
-        np.random.seed(42)
-        random_array = np.random.rand(len(df))
-        validation_size = 0.1
-        return random_array > validation_size
+        # use 90% data for training
+        return df["house_id"].apply(lambda x: data_processing.hash_modulo(x, 100) < 90)
 
 
 class FeatureHousingMedianAge(BaseHousingTransformingFeature):
