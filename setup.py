@@ -25,6 +25,7 @@ setup(
         "protobuf>=3.13.0",
         "scikit-learn>=0.24.2",
         "scipy>=1.6.2",
+        "termgraph>=0.4.2"
     ],
     classifiers=[
         "Development Status :: 3 - Alpha",
