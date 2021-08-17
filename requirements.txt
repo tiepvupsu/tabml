@@ -6,7 +6,7 @@ isort==4.3.21
 kaggle==1.5.6
 lightgbm==2.3.1
 loguru==0.5.1
-mypy==0.761
+mypy==0.910
 numpy==1.18.5
 pandas==1.1.4
 pandas-profiling==2.9.0
