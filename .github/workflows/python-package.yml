@@ -47,7 +47,7 @@ jobs:
     - name: Lint with flake8, tpye check with mypy
       run: |
         flake8 ./tabml ./tests ./examples
-        mypy ./tabml ./tests ./examples # see configs in /mypy.ini
+        mypy --install-types ./tabml ./tests ./examples # see configs in /mypy.ini
     - name: Test with pytest
       run: |
         # python3 -m pytest -s --durations=0 . # https://stackoverflow.com/a/55095253
