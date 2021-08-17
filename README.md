@@ -1,3 +1,5 @@
+[![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)
+[![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380/)
 [![tests](https://github.com/tiepvupsu/tabml/actions/workflows/python-package.yml/badge.svg)](https://github.com/tiepvupsu/tabml/actions/workflows/python-package.yml)
 [![codecov](https://codecov.io/gh/tiepvupsu/tabml/branch/master/graph/badge.svg?token=4JLG0YYUZU)](https://codecov.io/gh/tiepvupsu/tabml)
 
