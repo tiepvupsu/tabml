@@ -16,7 +16,7 @@ pytest==5.3.5
 qcore==0.5.1
 scikit-learn==0.24.2
 # scikit-optimize==0.7.4
-scipy==1.6.2
+scipy==1.5.4
 # pytorch-tabnet==3.1.1
 termgraph==0.4.2
 # xgboost==1.1.1

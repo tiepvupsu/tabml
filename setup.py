@@ -24,7 +24,7 @@ setup(
         "pandas-profiling>=2.9.0",
         "protobuf>=3.13.0",
         "scikit-learn>=0.24.2",
-        "scipy>=1.6.2",
+        "scipy>=1.5.4",
         "termgraph>=0.4.2"
     ],
     classifiers=[
