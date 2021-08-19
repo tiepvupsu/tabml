@@ -1,5 +1,5 @@
 import hashlib
-from typing import Any, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -77,6 +77,48 @@ class BoxplotOutlierClipper(BaseEstimator, TransformerMixin):
     def transform(self, X: pd.DataFrame):
         # return array to be consistent with scikit transformer
         return np.array(X.clip(self.lower, self.upper, axis="columns"))
+
+
+class CategoryEncoder:
+    """A class to support encoding categorical columns.
+
+    Attributes:
+        vocab_map: a dictionary mapping each category to an integer
+    """
+
+    def __init__(self, vocab_map: Dict[Any, int]):
+        self.vocab_map = vocab_map
+
+    def get_encoded(self, series: pd.Series):
+        """Maps each category to an integer based on vocabulary map.
+
+        Unknown category will be mapped to the extra integer.
+        """
+        return (
+            series.map(self.vocab_map)
+            .fillna(max([*self.vocab_map.values()]) + 1)
+            .astype(int)
+        )
+
+    @classmethod
+    def from_list(cls, vocab: List[Any]):
+        vocab_map = {word: i for i, word in enumerate(vocab)}
+        return cls(vocab_map)
+
+    @classmethod
+    def from_lines_in_txt(cls, file_path: str):
+        """Instantiates from a txt file, each line is a word."""
+        with open(file_path, "r") as file:
+            vocab = [line.strip() for line in file if line.strip()]
+            return cls.from_list(vocab)
+
+    @classmethod
+    def from_mapping_in_csv(cls, file_path: str):
+        """Instantiates from a csv file, each line is a mapping, no header."""
+        df = pd.read_csv(file_path, names=["word", "code"])
+        df["code"] = df["code"].astype(int)
+        vocab_map = {word.strip(): code for word, code in zip(df["word"], df["code"])}
+        return cls(vocab_map)
 
 
 def fit_train_transform_all(
