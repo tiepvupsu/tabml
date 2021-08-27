@@ -75,9 +75,10 @@ class BasePipeline(ABC):
             "Add the by_features in model_analysis in the pipeline config"
         )
         ModelAnalysis(
-            self.data_loader,
-            self.model_wrapper,
-            self.config.model_analysis.by_features,
+            data_loader=self.data_loader,
+            model_wrapper=self.model_wrapper,
+            features_to_analyze=self.config.model_analysis.by_features,
+            label_to_analyze=self.config.model_analysis.by_label,
             metric_names=self.config.model_analysis.metrics,
             output_dir=self.exp_manager.get_model_analysis_dir(),
         ).analyze()
