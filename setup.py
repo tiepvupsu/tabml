@@ -11,7 +11,7 @@ setup(
     author="Tiep Vu",
     author_email="vuhuutiep@gmail.com",
     url="https://github.com/tiepvupsu/tabml",
-    download_url="https://github.com/tiepvupsu/tabml/archive/refs/tags/v_015.tar.gz",
+    download_url="https://github.com/tiepvupsu/tabml/archive/refs/tags/v_016.tar.gz",
     keywords=["Machine Learning", "Tabular"],
     install_requires=[
         "GitPython>=3.1.13",
