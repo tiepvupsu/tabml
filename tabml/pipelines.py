@@ -22,9 +22,11 @@ class BasePipeline(ABC):
             a trainer object, a subclass of base.trainers.BaseTrainer.
         exp_manager:
             a base.experiment_manager.ExperimentManager object.
+        custom_model_wrapper:
+            model_wrapper defined by users.
     """
 
-    def __init__(self, path_to_config: str):
+    def __init__(self, path_to_config: str, custom_model_wrapper=None):
         logger.info("=" * 80)
         logger.info(f"Running pipeline with config {path_to_config}")
         logger.info("=" * 80)
@@ -32,7 +34,7 @@ class BasePipeline(ABC):
         self.config = parse_pipeline_config_pb(path_to_config)
         self.data_loader = self._get_data_loader()
         assert self.data_loader.label_col is not None, "label_col must be specified"
-        self._get_model_wrapper()
+        self._get_model_wrapper(custom_model_wrapper)
         self.trainer = self._get_trainer()
 
         logger.add(self.exp_manager.get_log_path())
@@ -49,10 +51,13 @@ class BasePipeline(ABC):
     def _get_data_loader(self) -> BaseDataLoader:
         return factory.create(self.config.data_loader.cls_name)(self.config)
 
-    def _get_model_wrapper(self):
-        self.model_wrapper = factory.create(self.config.model_wrapper.cls_name)(
-            self.config
-        )
+    def _get_model_wrapper(self, custom_model_wrapper):
+        if custom_model_wrapper:
+            self.model_wrapper = custom_model_wrapper(self.config)
+        else:
+            self.model_wrapper = factory.create(self.config.model_wrapper.cls_name)(
+                self.config
+            )
 
     def _get_trainer(self) -> BaseTrainer:
         return factory.create(self.config.trainer.cls_name)(

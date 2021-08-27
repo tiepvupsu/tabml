@@ -24,7 +24,7 @@ data_loader {
     submission_filters: "not is_train"
 }
 model_wrapper {
-    cls_name: "tabml.model_wrappers.LgbmRegressorModelWrapper"
+    # use a custom lgbm model_wrapper
     lgbm_params {
         learning_rate: 0.1
         n_estimators: 200
