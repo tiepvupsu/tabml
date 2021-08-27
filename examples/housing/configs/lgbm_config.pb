@@ -15,7 +15,7 @@ data_loader {
     features_to_model: "hashed_bucketized_latitude_X_bucketized_longitude"
     features_to_model: "encoded_ocean_proximity"
 
-    label_col: "median_house_value"
+    label_col: "log10_median_house_value"
 
     train_filters: "is_train"
 
@@ -45,4 +45,5 @@ model_analysis {
     metrics: "smape"
     metrics: "rmse"
     by_features: "ocean_proximity"
+    by_label: "median_house_value"
 }
