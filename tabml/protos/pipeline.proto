@@ -9,6 +9,11 @@ import "tabml/protos/data_loaders.proto";
 message ModelAnalysis {
     repeated string metrics = 1;
     repeated string by_features = 2;
+
+    // This field specifies the label for analysis. In some cases, we use a
+    // transformation of the true label for training but need to evaluate on the
+    // original label.
+    optional string by_label = 3;
 }
 
 message Saver {

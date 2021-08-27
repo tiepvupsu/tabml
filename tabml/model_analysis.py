@@ -51,6 +51,7 @@ class ModelAnalysis:
         features_to_analyze: List[str],
         metric_names: List[str],
         output_dir: str,
+        label_to_analyze: str = "",
         pred_col: str = "prediction",
         pred_proba_col: str = "prediction_probability",
     ):
@@ -60,7 +61,7 @@ class ModelAnalysis:
         self.features_to_analyze = features_to_analyze
         self.metrics = _get_metrics(metric_names)
         self.output_dir = output_dir
-        self.label_col = self.data_loader.label_col
+        self.label_to_analyze = label_to_analyze or self.data_loader.label_col
         self.pred_col = pred_col
         self.pred_proba_col = pred_proba_col
         need_pred_proba_list = [metric.need_pred_proba for metric in self.metrics]
@@ -87,7 +88,9 @@ class ModelAnalysis:
 
     def _get_dataset(self, dataset_name: str):
         all_features = (
-            list(self.features_to_analyze) + self.data_loader.features_and_label
+            list(self.features_to_analyze)
+            + self.data_loader.features
+            + [self.label_to_analyze]
         )
         if dataset_name == "train":
             return self.data_loader.feature_manager.extract_dataframe(
@@ -154,7 +157,7 @@ class ModelAnalysis:
     def _get_metric_dict(
         self, feature_name: str, feature_value: Any, df_with_pred: pd.DataFrame
     ) -> Dict[str, Union[str, float]]:
-        labels = df_with_pred[self.label_col]
+        labels = df_with_pred[self.label_to_analyze]
 
         res = {feature_name: feature_value, "sample_count": len(df_with_pred)}
         for metric in self.metrics:
