@@ -17,6 +17,9 @@ class ModelInference:
         self.fm = feature_manager_cls(feature_config_path)
         self.pipeline = BasePipeline(pipeline_config_path)
         self.pipeline.model_wrapper.load_model(model_path)
+        self.features_to_model = list(
+            self.pipeline.config.data_loader.features_to_model
+        )
 
     @classmethod
     def init_from_model_path(cls, model_path):
@@ -31,10 +34,9 @@ class ModelInference:
         Makes prediction for new samples.
 
         The sample should be given in a form of a list of dictionaries whose keys are
-        the raw features. The feature manager transform the raw_data into a processed dataframe that
-        is fed into the model to make predictions.
+        the raw features. The feature manager transform the raw_data into a processed
+        dataframe that is fed into the model to make predictions.
         """
-        features_to_model = list(self.pipeline.config.data_loader.features_to_model)
         self.fm.get_raw_data_one_sample(raw_data)
-        features = self.fm.transform_new_samples(raw_data, features_to_model)
-        return self.pipeline.model_wrapper.predict(features[features_to_model])
+        features = self.fm.transform_new_samples(raw_data, self.features_to_model)
+        return self.pipeline.model_wrapper.predict(features[self.features_to_model])
