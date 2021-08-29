@@ -28,21 +28,16 @@ class ModelInference:
 
     def predict(self, raw_data: List[Dict[str, Any]]) -> List[Any]:
         """
-        Makes prediction for one sample.
+        Makes prediction for new samples.
 
-        The sample should be given in a form of dictionary with keys being the
-        raw features.  The raw features should be in the list of base features
-        from the feature config.
+        The sample should be given in a form of a list of dictionaries whose keys are
+        the raw features.
 
-        The feature manager transform the raw_data into a one-row dataframe that is fed
-        into the model to make prediction.
-
-        TODO: Allow raw_data in different forms (json, proto, dataframe, etc)
+        The feature manager transform the raw_data into a processed dataframe that is fed
+        into the model to make predictions.
         """
 
         features_to_model = list(self.pipeline.config.data_loader.features_to_model)
         self.fm.get_raw_data_one_sample(raw_data)
-        features = self.fm.generate_all_features_for_one_sample(
-            raw_data, features_to_model
-        )
+        features = self.fm.transform_new_samples(raw_data, features_to_model)
         return self.pipeline.model_wrapper.predict(features[features_to_model])
