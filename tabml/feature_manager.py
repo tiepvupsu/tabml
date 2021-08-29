@@ -229,7 +229,6 @@ class BaseFeatureManager(ABC):
         )
         return self.dataframe
 
-    @abstractmethod
     def set_raw_data(self, raw_data_samples: Any):
         NotImplementedError
 
