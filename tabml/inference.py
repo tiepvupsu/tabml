@@ -37,6 +37,5 @@ class ModelInference:
         """
 
         features_to_model = list(self.pipeline.config.data_loader.features_to_model)
-        self.fm.get_raw_data_one_sample(raw_data)
         features = self.fm.transform_new_samples(raw_data, features_to_model)
         return self.pipeline.model_wrapper.predict(features[features_to_model])
