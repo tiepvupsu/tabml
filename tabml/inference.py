@@ -21,7 +21,7 @@ class ModelInference:
     @classmethod
     def init_from_model_path(cls, model_path):
         """
-        feature_config_path and pipelien_config_path could be inferred from model_path
+        pipeline_config_path could be inferred from model_path
         """
         # TODO: implement me
         NotImplementedError
