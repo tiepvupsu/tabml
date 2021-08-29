@@ -258,6 +258,26 @@ class BaseFeatureManager(ABC):
         query_to_filter = " and ".join(filters)
         return self.dataframe.query(query_to_filter)[features_to_select]
 
+    def get_raw_data_one_sample(self, raw_data: Dict[str, Any]) -> None:
+        """Loads data from one sample for inference."""
+        NotImplementedError
+
+    def generate_all_features_for_one_sample(
+        self, raw_data: Dict[str, Any], transforming_features: List[str]
+    ) -> pd.DataFrame:
+        self.get_raw_data_one_sample(raw_data)
+        self.initialize_dataframe()
+        # remove base features from the list since they are already commputed.
+        transforming_features_and_dependencies = [
+            feature
+            for feature in self.config_helper.get_dependencies_recursively(
+                list(transforming_features)
+            )
+            if feature not in self.config_helper.base_features
+        ]
+        self.compute_all_transforming_features(transforming_features_and_dependencies)
+        return self.dataframe
+
 
 class BaseTransformingFeature(ABC):
     """Base class for transforming features.

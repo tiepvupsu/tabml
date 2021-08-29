@@ -21,11 +21,11 @@ def test_full_pipeline():
 def test_inference():
     feature_config_path = "./configs/feature_config.pb"
     lgbm_config_path = "./configs/lgbm_config.pb"
-    em = ExperimentManger(lgbm_config_path)
-    last_model_run_dir = em.get_most_recent_run_dir()
+    last_model_run_dir = ExperimentManger(lgbm_config_path).get_most_recent_run_dir()
     model_path = Path(last_model_run_dir) / "model_0"
     model_inference = ModelInference(
         feature_config_path=feature_config_path,
+        feature_manager_cls=feature_manager.FeatureManager,
         pipeline_config_path=lgbm_config_path,
         model_path=model_path,
     )
@@ -42,5 +42,5 @@ def test_inference():
         "Cabin": None,
         "Embarked": "C",
     }
-    model_inference.predict_one_sample(raw_data)
-    model_inference.predict_one_batch([raw_data, raw_data])
+    model_inference.predict_one_sample([raw_data, raw_data])
+    # model_inference.predict_one_batch([raw_data, raw_data])
