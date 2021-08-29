@@ -2,7 +2,6 @@
 
 from typing import Any, Dict, List
 
-from tabml.feature_manager import BaseFeatureManager
 from tabml.pipelines import BasePipeline
 
 
@@ -10,7 +9,7 @@ class ModelInference:
     def __init__(
         self,
         feature_config_path: str,
-        feature_manager_cls: BaseFeatureManager,
+        feature_manager_cls,
         pipeline_config_path: str,
         model_path: str = None,
     ):
