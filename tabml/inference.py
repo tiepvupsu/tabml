@@ -10,12 +10,23 @@ class ModelInference:
     def __init__(
         self,
         feature_config_path: str,
+        feature_manager_cls: BaseFeatureManager,
         pipeline_config_path: str,
         model_path: str = None,
     ):
-        ...
+        self.fm = feature_manager_cls(feature_config_path)
+        self.pipeline = BasePipeline(pipeline_config_path)
+        self.pipeline.model_wrapper.load_model(model_path)
 
-    def predict_one_sample(self, raw_data: Dict[str, Any]) -> float:
+    @classmethod
+    def init_from_model_path(cls, model_path):
+        """
+        feature_config_path and pipelien_config_path could be inferred from model_path
+        """
+        # TODO: implement me
+        NotImplementedError
+
+    def predict(self, raw_data: List[Dict[str, Any]]) -> List[Any]:
         """
         Makes prediction for one sample.
 
@@ -28,7 +39,10 @@ class ModelInference:
 
         TODO: Allow raw_data in different forms (json, proto, dataframe, etc)
         """
-        ...
 
-    def predict_one_batch(self, raw_batch_data: List[Dict[str, Any]]) -> List[float]:
-        ...
+        features_to_model = list(self.pipeline.config.data_loader.features_to_model)
+        self.fm.get_raw_data_one_sample(raw_data)
+        features = self.fm.generate_all_features_for_one_sample(
+            raw_data, features_to_model
+        )
+        return self.pipeline.model_wrapper.predict(features[features_to_model])

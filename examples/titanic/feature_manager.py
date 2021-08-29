@@ -1,3 +1,6 @@
+from pathlib import Path
+from typing import Any, Dict
+
 import numpy as np
 import pandas as pd
 from sklearn.impute import SimpleImputer
@@ -5,6 +8,8 @@ from sklearn.preprocessing import MinMaxScaler
 
 from tabml import datasets
 from tabml.feature_manager import BaseFeatureManager, BaseTransformingFeature
+from tabml.inference import ModelInference
+from tabml.pipelines import BasePipeline
 
 
 class FeatureManager(BaseFeatureManager):
@@ -178,5 +183,35 @@ def run():
     fm.run_all()
 
 
+def inference():
+    feature_config_path = "./configs/feature_config.pb"
+    lgbm_config_path = "./configs/lgbm_config.pb"
+    # last_model_run_dir = ExperimentManger(lgbm_config_path).get_most_recent_run_dir()
+    # model_path = Path(last_model_run_dir) / "model_0"
+    model_path = "./experiments/lgbm_210828_173453/model_0"
+    model_inference = ModelInference(
+        feature_config_path=feature_config_path,
+        feature_manager_cls=FeatureManager,
+        pipeline_config_path=lgbm_config_path,
+        model_path=model_path,
+    )
+    raw_data = {
+        "PassengerId": 1,
+        "Pclass": 1,
+        "Name": "First, Dr. Last",
+        "Sex": "female",
+        "Age": 30,
+        "SibSp": 3,
+        "Parch": 0,
+        "Ticket": 12345,
+        "Fare": 10.0,
+        "Cabin": None,
+        "Embarked": "C",
+    }
+    # TODO: fix min_max_scaled_age
+    print(model_inference.predict([raw_data]))
+
+
 if __name__ == "__main__":
-    run()
+    # run()
+    inference()
