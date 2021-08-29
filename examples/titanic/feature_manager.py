@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import MinMaxScaler
 
-from tabml import data_processing, datasets
+from tabml import datasets
 from tabml.feature_manager import BaseFeatureManager, BaseTransformingFeature
 
 
@@ -50,13 +50,13 @@ class FeatureIsTrain(BaseTitanicTransformingFeature):
 class FeatureImputedAge(BaseTitanicTransformingFeature):
     name = "imputed_age"
 
+    def fit(self, df):
+        self.transformer = SimpleImputer(strategy="mean")
+        train_data = df.query("is_train")[["age"]]
+        self.transformer.fit(train_data)
+
     def transform(self, df):
-        return data_processing.fit_train_transform_all(
-            df,
-            input_columns=["age"],
-            training_filters=["is_train"],
-            transformer=SimpleImputer(strategy="mean"),
-        ).reshape(-1)
+        return self.transformer.transform(df[["age"]]).reshape(-1)
 
 
 class FeatureBucketizedAge(BaseTitanicTransformingFeature):
@@ -159,13 +159,13 @@ class FeatureCodedTitle(BaseTitanicTransformingFeature):
 class FeatureMinMaxScaledAge(BaseTitanicTransformingFeature):
     name = "min_max_scaled_age"
 
+    def fit(self, df):
+        self.transformer = MinMaxScaler()
+        train_data = df.query("is_train")[["imputed_age"]]
+        self.transformer.fit(train_data)
+
     def transform(self, df):
-        return data_processing.fit_train_transform_all(
-            df,
-            input_columns=["imputed_age"],
-            training_filters=["is_train"],
-            transformer=MinMaxScaler(),
-        ).reshape(-1)
+        return self.transformer.transform(df[["imputed_age"]]).reshape(-1)
 
 
 def run():
