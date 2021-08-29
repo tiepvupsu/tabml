@@ -96,6 +96,11 @@ class ExperimentManger:
         most_recent_run_dir = os.path.join(self.exp_root_dir, sub)
         return most_recent_run_dir
 
+    @classmethod
+    def get_config_path_from_model_path(cls, model_path: str) -> str:
+        run_dir = Path(model_path).parents[0]
+        return str(run_dir / cls.config_filename)
+
 
 def _make_dir_if_needed(dir_path: str):
     if not os.path.exists(dir_path):
