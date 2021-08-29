@@ -1,6 +1,7 @@
+import pickle
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 
@@ -43,6 +44,12 @@ class BaseFeatureManager(ABC):
             {feature_name: a transforming feature generating that feature}.
             All the transforming features must be direct subclasses of
             self.base_transforming_feature_class.
+        transformer_dict:
+            A dictionary of {feature_name: its transformer}. This transformer_dict is
+            formed and saved to a pickle in the "training" stage. In "serving" stage,
+            it's loaded and does the transformations.
+        transformer_path:
+            pickle path to save transformers.
     """
 
     def __init__(self, pb_config_path: str):
@@ -55,9 +62,14 @@ class BaseFeatureManager(ABC):
         self.raw_data: Dict[str, Any] = {}
         self.dataframe: pd.DataFrame = pd.DataFrame()
         self.transforming_class_by_feature_name: Dict[str, Any] = {}
+        self.transformer_dict: Dict[str, Any] = {}
+        self.transformer_path = self.get_transformer_path()
 
     def get_dataset_path(self):
         return Path(self.raw_data_dir) / "features" / f"{self.dataset_name}.csv"
+
+    def get_transformer_path(self):
+        return Path(self.raw_data_dir) / "features" / "transformers.pickle"
 
     def _get_base_transforming_class(self):
         raise NotImplementedError
@@ -100,6 +112,11 @@ class BaseFeatureManager(ABC):
             parse_dates=parse_dates,
         )
 
+    def load_transformers(self):
+        """Loads transformers from pickle."""
+        with open(self.transformer_path, "rb") as pickle_file:
+            self.transformer_dict = pickle.load(pickle_file)
+
     def save_dataframe(self):
         """Saves the dataframe to disk."""
         if not self.dataset_path.parent.exists():
@@ -107,7 +124,15 @@ class BaseFeatureManager(ABC):
         logger.info(f"Saving dataframe to {self.dataset_path}")
         self.dataframe.to_csv(self.dataset_path, index=False)
 
-    def compute_feature(self, feature_name: str) -> None:
+    def save_transformers(self):
+        """Saves the transformers to disk."""
+        if not self.dataset_path.parent.exists():
+            self.dataset_path.parent.mkdir(parents=True)
+        logger.info(f"Saving transformers to {self.transformer_path}")
+        with open(self.transformer_path, "wb") as pickle_file:
+            pickle.dump(self.transformer_dict, pickle_file)
+
+    def compute_feature(self, feature_name: str, is_training: bool = True) -> None:
         """Computes one feature column.
 
         This method should be used only when a new feature is added to the dataframe.
@@ -124,18 +149,22 @@ class BaseFeatureManager(ABC):
         )
         if not self.transforming_class_by_feature_name:
             self._get_transforming_class_by_name()
-        self._compute_feature(feature_name)
+        self._compute_feature(feature_name, is_training=is_training)
 
-    def _compute_feature(self, feature_name: str) -> None:
+    def _compute_feature(self, feature_name: str, is_training: bool = True) -> None:
         if self.dataframe is None:
             raise NotImplementedError(
                 "self.dataframe must be initialized in self.initialize_dataframe()"
             )
         transforming_class = self.transforming_class_by_feature_name[feature_name]
-        series = transforming_class(
+        transformer = self.transformer_dict.get(feature_name)
+        transformer_object = transforming_class(
             dependencies=self.config_helper.find_dependencies(feature_name),
             raw_data=self.raw_data,
-        )._transform(self.dataframe)
+        )
+        series = transformer_object._transform(self.dataframe, transformer)
+        if is_training:
+            self.transformer_dict[feature_name] = transformer_object.transformer
         dtype = self.feature_metadata[feature_name].dtype
         if dtype == feature_manager_pb2.DATETIME:
             self.dataframe.loc[:, feature_name] = pd.to_datetime(series)
@@ -144,14 +173,18 @@ class BaseFeatureManager(ABC):
                 series, dtype=PANDAS_DTYPE_MAPPING[dtype]
             )
 
-    def compute_all_transforming_features(self):
+    def compute_all_transforming_features(
+        self, transforming_features: Union[List[str], None] = None, is_training=True
+    ):
         """Computes all transforming feature.
 
         Should be done occasionally. After the first time this method is called, it's
         expected that features are updated one by one or in a set of few features.
         """
-        for feature_name in self.config_helper.transforming_features:
-            self.compute_feature(feature_name)
+        if transforming_features is None:
+            transforming_features = self.config_helper.transforming_features
+        for feature_name in transforming_features:
+            self.compute_feature(feature_name, is_training=is_training)
 
     def update_feature(self, feature_name: str):
         """Updates one feature in the dataframe.
@@ -168,6 +201,35 @@ class BaseFeatureManager(ABC):
         self.initialize_dataframe()
         self.compute_all_transforming_features()
         self.save_dataframe()
+        self.save_transformers()
+
+    def transform_new_samples(self, raw_data_samples, transforming_features):
+        self.set_raw_data(raw_data_samples)
+        self.initialize_dataframe()
+        self.load_transformers()
+        if transforming_features is None:
+            # If transforming features are not specified, get all transforming features.
+            transforming_features_and_dependencies = (
+                self.config_helper.transforming_features
+            )
+        else:
+            # Find all dependencies for the transforming features. The base features
+            # should be excluded since they are pre-computed in
+            # self.initialize_dataframe()
+            transforming_features_and_dependencies = [
+                feature
+                for feature in self.config_helper.get_dependencies_recursively(
+                    list(transforming_features)
+                )
+                if feature not in self.config_helper.base_features
+            ]
+        self.compute_all_transforming_features(
+            transforming_features_and_dependencies, is_training=False
+        )
+        return self.dataframe
+
+    def set_raw_data(self, raw_data_samples: Any):
+        NotImplementedError
 
     def extract_dataframe(
         self, features_to_select: List[str], filters: Optional[List[str]] = None
@@ -214,13 +276,22 @@ class BaseTransformingFeature(ABC):
     def __init__(self, dependencies: List[str], raw_data: Dict):
         self.dependencies = dependencies
         self.raw_data = raw_data
+        self.transformer = None
 
-    def _transform(self, dataframe):
+    def _transform(self, dataframe, transformer=None):
         logger.info(f"Computing feature {self.name} in pandas ...")
         # This is to make sure that _transform_ methods do not use any columns other
         # than dependencies.
         df = dataframe[self.dependencies]
+        self.transformer = transformer
+        if transformer is None:
+            self.fit(dataframe)
         return self.transform(df)
+
+    def fit(self, df):
+        # The subclasses need to override this method if there is a need to fit the
+        # transformer to data.
+        self.transformer = None
 
     @abstractmethod
     def transform(self, df):
