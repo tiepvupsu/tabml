@@ -209,7 +209,6 @@ class BaseFeatureManager(ABC):
         self.load_transformers()
         if transforming_features is None:
             # If transforming features are not specified, get all transforming features.
-
             transforming_features_and_dependencies = (
                 self.config_helper.transforming_features
             )

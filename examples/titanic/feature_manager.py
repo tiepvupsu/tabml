@@ -22,6 +22,7 @@ class FeatureManager(BaseFeatureManager):
         self.raw_data["full"] = full_df
 
     def set_raw_data(self, raw_data_samples):
+        # raw_data_samples is a list of dictionary.
         self.raw_data["full"] = pd.DataFrame(data=raw_data_samples)
 
     def initialize_dataframe(self):
