@@ -29,18 +29,31 @@ def test_inference():
         pipeline_config_path=lgbm_config_path,
         model_path=model_path,
     )
-    raw_data = {
-        "PassengerId": 1,
-        "Pclass": 1,
-        "Name": "First, Dr. Last",
-        "Sex": "female",
-        "Age": 30,
-        "SibSp": 3,
-        "Parch": 0,
-        "Ticket": 12345,
-        "Fare": 10.0,
-        "Cabin": None,
-        "Embarked": "C",
-    }
-    model_inference.predict_one_sample([raw_data, raw_data])
-    # model_inference.predict_one_batch([raw_data, raw_data])
+    raw_data_samples = [
+        {
+            "PassengerId": 1,
+            "Pclass": 1,
+            "Name": "First, Mr. Last",
+            "Sex": "female",
+            "SibSp": 3,
+            "Parch": 0,
+            "Ticket": 12345,
+            "Fare": 10.0,
+            "Cabin": None,
+            "Embarked": "C",
+        },
+        {
+            "PassengerId": 2,
+            "Pclass": 1,
+            "Name": "First, Mrs. Last",
+            "Sex": "male",
+            "Age": 60,
+            "SibSp": 0,
+            "Parch": 2,
+            "Ticket": 12345,
+            "Fare": 100.0,
+            "Cabin": None,
+            "Embarked": "Q",
+        },
+    ]
+    model_inference.predict(raw_data_samples)
