@@ -21,6 +21,9 @@ class FeatureManager(BaseFeatureManager):
         )
         self.raw_data["full"] = full_df
 
+    def set_raw_data(self, raw_data_samples):
+        self.raw_data["full"] = pd.DataFrame(data=raw_data_samples)
+
     def initialize_dataframe(self):
         self.dataframe = pd.DataFrame()
         self.dataframe["passenger_id"] = self.raw_data["full"]["PassengerId"]
@@ -174,5 +177,52 @@ def run():
     fm.run_all()
 
 
+def fit_example():
+    pb_config_path = "configs/feature_config.pb"
+    fm = FeatureManager(pb_config_path)
+    raw_data_samples = [
+        {
+            "PassengerId": 1,
+            "Pclass": 1,
+            "Name": "First, Mr. Last",
+            "Sex": "female",
+            # "Age": 30,
+            "SibSp": 3,
+            "Parch": 0,
+            "Ticket": 12345,
+            "Fare": 10.0,
+            "Cabin": None,
+            "Embarked": "C",
+        },
+        {
+            "PassengerId": 2,
+            "Pclass": 1,
+            "Name": "First, Mrs. Last",
+            "Sex": "male",
+            "Age": 60,
+            "SibSp": 0,
+            "Parch": 2,
+            "Ticket": 12345,
+            "Fare": 100.0,
+            "Cabin": None,
+            "Embarked": "Q",
+        },
+    ]
+    transforming_features = [
+        "imputed_age",
+        "bucketized_age",
+        "min_max_scaled_age",
+        "title",
+        "coded_title",
+        "coded_sex",
+    ]
+    print(
+        fm.transform_new_samples(
+            raw_data_samples, transforming_features=transforming_features
+        )
+    )
+
+
 if __name__ == "__main__":
-    run()
+    # run()
+    fit_example()

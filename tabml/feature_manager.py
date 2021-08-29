@@ -1,7 +1,7 @@
 import pickle
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 
@@ -114,7 +114,8 @@ class BaseFeatureManager(ABC):
 
     def load_transformers(self):
         """Loads transformers from pickle."""
-        self.transformer_dict = pickle.load(self.transformer_path)
+        with open(self.transformer_path, "rb") as pickle_file:
+            self.transformer_dict = pickle.load(pickle_file)
 
     def save_dataframe(self):
         """Saves the dataframe to disk."""
@@ -172,13 +173,17 @@ class BaseFeatureManager(ABC):
                 series, dtype=PANDAS_DTYPE_MAPPING[dtype]
             )
 
-    def compute_all_transforming_features(self, is_training=True):
+    def compute_all_transforming_features(
+        self, transforming_features: Union[List[str], None] = None, is_training=True
+    ):
         """Computes all transforming feature.
 
         Should be done occasionally. After the first time this method is called, it's
         expected that features are updated one by one or in a set of few features.
         """
-        for feature_name in self.config_helper.transforming_features:
+        if transforming_features is None:
+            transforming_features = self.config_helper.transforming_features
+        for feature_name in transforming_features:
             self.compute_feature(feature_name, is_training=is_training)
 
     def update_feature(self, feature_name: str):
@@ -197,6 +202,36 @@ class BaseFeatureManager(ABC):
         self.compute_all_transforming_features()
         self.save_dataframe()
         self.save_transformers()
+
+    def transform_new_samples(self, raw_data_samples, transforming_features):
+        self.set_raw_data(raw_data_samples)
+        self.initialize_dataframe()
+        self.load_transformers()
+        if transforming_features is None:
+            # If transforming features are not specified, get all transforming features.
+
+            transforming_features_and_dependencies = (
+                self.config_helper.transforming_features
+            )
+        else:
+            # Find all dependencies for the transforming features. The base features
+            # should be excluded since they are pre-computed in
+            # self.initialize_dataframe()
+            transforming_features_and_dependencies = [
+                feature
+                for feature in self.config_helper.get_dependencies_recursively(
+                    list(transforming_features)
+                )
+                if feature not in self.config_helper.base_features
+            ]
+        self.compute_all_transforming_features(
+            transforming_features_and_dependencies, is_training=False
+        )
+        return self.dataframe
+
+    @abstractmethod
+    def set_raw_data(self, raw_data_samples: Any):
+        NotImplementedError
 
     def extract_dataframe(
         self, features_to_select: List[str], filters: Optional[List[str]] = None
