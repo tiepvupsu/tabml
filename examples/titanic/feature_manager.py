@@ -186,9 +186,8 @@ def run():
 def inference():
     feature_config_path = "./configs/feature_config.pb"
     lgbm_config_path = "./configs/lgbm_config.pb"
-    # last_model_run_dir = ExperimentManger(lgbm_config_path).get_most_recent_run_dir()
-    # model_path = Path(last_model_run_dir) / "model_0"
-    model_path = "./experiments/lgbm_210828_173453/model_0"
+    last_model_run_dir = ExperimentManger(lgbm_config_path).get_most_recent_run_dir()
+    model_path = Path(last_model_run_dir) / "model_0"    
     model_inference = ModelInference(
         feature_config_path=feature_config_path,
         feature_manager_cls=FeatureManager,
