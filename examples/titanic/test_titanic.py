@@ -1,3 +1,7 @@
+from pathlib import Path
+
+from tabml.experiment_manager import ExperimentManger
+from tabml.inference import ModelInference
 from tabml.utils.utils import change_working_dir_pytest
 
 from . import feature_manager, pipelines
@@ -14,9 +18,16 @@ def test_full_pipeline():
 
 
 @change_working_dir_pytest
-def test_fit_example():
-    pb_config_path = "configs/feature_config.pb"
-    fm = feature_manager.FeatureManager(pb_config_path)
+def test_inference():
+    feature_config_path = "./configs/feature_config.pb"
+    lgbm_config_path = "./configs/lgbm_config.pb"
+    last_model_run_dir = ExperimentManger(lgbm_config_path).get_most_recent_run_dir()
+    model_path = Path(last_model_run_dir) / "model_0"
+    model_inference = ModelInference(
+        feature_manager_cls=feature_manager.FeatureManager,
+        feature_config_path=feature_config_path,
+        model_path=model_path,
+    )
     raw_data_samples = [
         {
             "PassengerId": 1,
@@ -44,16 +55,4 @@ def test_fit_example():
             "Embarked": "Q",
         },
     ]
-    transforming_features = [
-        "imputed_age",
-        "bucketized_age",
-        "min_max_scaled_age",
-        "title",
-        "coded_title",
-        "coded_sex",
-    ]
-    print(
-        fm.transform_new_samples(
-            raw_data_samples, transforming_features=transforming_features
-        )
-    )
+    model_inference.predict(raw_data_samples)
