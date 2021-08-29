@@ -5,7 +5,6 @@ from sklearn.preprocessing import MinMaxScaler
 
 from tabml import datasets
 from tabml.feature_manager import BaseFeatureManager, BaseTransformingFeature
-from tabml.inference import ModelInference
 
 
 class FeatureManager(BaseFeatureManager):

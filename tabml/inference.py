@@ -33,8 +33,8 @@ class ModelInference:
         The sample should be given in a form of a list of dictionaries whose keys are
         the raw features.
 
-        The feature manager transform the raw_data into a processed dataframe that is fed
-        into the model to make predictions.
+        The feature manager transform the raw_data into a processed dataframe that is
+        fed into the model to make predictions.
         """
 
         features_to_model = list(self.pipeline.config.data_loader.features_to_model)
