@@ -24,7 +24,7 @@ class _DummyFeatureManager(BaseFeatureManager):
 class _DummyFeatureManager2(BaseFeatureManager):
     """A dummy FeatureManager class to check to update and clean logics."""
 
-    def _compute_feature(self, feature_name: str):
+    def _compute_feature(self, feature_name: str, is_training: bool = True):
         print(feature_name)
 
     def initialize_dataframe(self):
