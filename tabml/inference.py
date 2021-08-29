@@ -26,6 +26,5 @@ class ModelInference:
         the raw features. The feature manager transform the raw_data into a processed
         dataframe that is fed into the model to make predictions.
         """
-        self.fm.get_raw_data_one_sample(raw_data)
         features = self.fm.transform_new_samples(raw_data, self.features_to_model)
         return self.pipeline.model_wrapper.predict(features[self.features_to_model])
