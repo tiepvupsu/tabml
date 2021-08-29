@@ -24,9 +24,8 @@ def test_inference():
     last_model_run_dir = ExperimentManger(lgbm_config_path).get_most_recent_run_dir()
     model_path = Path(last_model_run_dir) / "model_0"
     model_inference = ModelInference(
-        feature_config_path=feature_config_path,
         feature_manager_cls=feature_manager.FeatureManager,
-        pipeline_config_path=lgbm_config_path,
+        feature_config_path=feature_config_path,
         model_path=model_path,
     )
     raw_data_samples = [
