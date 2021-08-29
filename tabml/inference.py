@@ -19,8 +19,7 @@ class ModelInference:
         )
 
     def predict(self, raw_data: List[Dict[str, Any]]) -> List[Any]:
-        """
-        Makes prediction for new samples.
+        """Makes prediction for new samples.
 
         The sample should be given in a form of a list of dictionaries whose keys are
         the raw features. The feature manager transform the raw_data into a processed
