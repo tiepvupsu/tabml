@@ -19,6 +19,7 @@ setup(
         "kaggle>=1.5.6",
         "lightgbm>=2.3.1",
         "loguru>=0.5.1",
+        "mlflow>=1.20.1",
         "numpy>=1.18.5",
         "pandas>=1.3.1",
         "pandas-profiling>=2.9.0",

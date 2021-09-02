@@ -1,6 +1,8 @@
 from abc import ABC
 
-from tabml import experiment_manager
+import mlflow
+
+from tabml import experiment_manager, model_wrappers
 from tabml.data_loaders import BaseDataLoader
 from tabml.model_analysis import ModelAnalysis
 from tabml.trainers import BaseTrainer
@@ -41,7 +43,12 @@ class BasePipeline(ABC):
 
     def run(self):
         self.exp_manager.create_new_run_dir()
-        self.train()
+        # start mlflow auto log
+        model_wrappers.MLFLOW_AUTOLOG[self.model_wrapper.mlflow_model_type]
+        with mlflow.start_run():
+            mlflow.log_params(self.model_wrapper.params)
+            self.train()
+            self.analyze_model()
 
     def train(self):
         model_dir = self.exp_manager.run_dir

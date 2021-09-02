@@ -144,3 +144,6 @@ coverage.code-workspace
 **/experiments
 
 **/lightning_logs
+
+# mlflow
+**/mlruns
