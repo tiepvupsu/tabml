@@ -147,3 +147,5 @@ coverage.code-workspace
 
 # mlflow
 **/mlruns
+
+.isort.cfg
