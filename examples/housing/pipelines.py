@@ -17,7 +17,6 @@ def train_lgbm():
         path_to_config, custom_model_wrapper=CustomLgbmRegressorModelWrapperLog10
     )
     pipeline.run()
-    pipeline.analyze_model()
 
 
 if __name__ == "__main__":
