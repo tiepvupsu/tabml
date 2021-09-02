@@ -28,11 +28,15 @@ class BasePipeline(ABC):
             model_wrapper defined by users.
     """
 
-    def __init__(self, path_to_config: str, custom_model_wrapper=None):
+    def __init__(
+        self, path_to_config: str, custom_model_wrapper=None, custom_run_dir=""
+    ):
         logger.info("=" * 80)
         logger.info(f"Running pipeline with config {path_to_config}")
         logger.info("=" * 80)
-        self.exp_manager = experiment_manager.ExperimentManger(path_to_config)
+        self.exp_manager = experiment_manager.ExperimentManger(
+            path_to_config, custom_run_dir=custom_run_dir
+        )
         self.config = parse_pipeline_config_pb(path_to_config)
         self.data_loader = self._get_data_loader()
         assert self.data_loader.label_col is not None, "label_col must be specified"
