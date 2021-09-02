@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Iterable
+from typing import Any, Dict, Iterable, Union
 
 import mlflow
 from lightgbm import LGBMClassifier, LGBMRegressor
@@ -17,6 +17,7 @@ class BaseModelWrapper(ABC):
         self.config = config
         self.model = None
         self._feature_names = None
+        self.params: Union[Dict[str, Any], None] = None
 
     @abstractmethod
     def predict(self, data) -> Iterable:

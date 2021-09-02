@@ -46,6 +46,7 @@ class BasePipeline(ABC):
         # start mlflow auto log
         model_wrappers.MLFLOW_AUTOLOG[self.model_wrapper.mlflow_model_type]
         with mlflow.start_run():
+            mlflow.log_params(self.model_wrapper.params)
             self.train()
             self.analyze_model()
 
