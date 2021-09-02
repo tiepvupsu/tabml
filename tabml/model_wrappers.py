@@ -1,13 +1,18 @@
 from abc import ABC, abstractmethod
 from typing import Iterable
 
+import mlflow
 from lightgbm import LGBMClassifier, LGBMRegressor
 
 from tabml.utils import utils
 from tabml.utils.pb_helpers import pb_to_dict
 
+MLFLOW_AUTOLOG = {"lightgbm": mlflow.lightgbm.autolog()}
+
 
 class BaseModelWrapper(ABC):
+    mlflow_model_type = ""
+
     def __init__(self, config):
         self.config = config
         self.model = None
@@ -54,6 +59,8 @@ class BaseModelWrapper(ABC):
 
 
 class BaseLgbmModelWrapper(BaseModelWrapper):
+    mlflow_model_type = "lightgbm"
+
     def __init__(self, config):
         super().__init__(config)
         self.params = pb_to_dict(self.config.model_wrapper.lgbm_params)
