@@ -29,6 +29,7 @@ class ExperimentManger:
         path_to_config: str,
         should_create_new_run_dir: bool = True,
         exp_root_dir: str = "./experiments",
+        custom_run_dir="",
     ):
         """
         Args:
@@ -36,13 +37,18 @@ class ExperimentManger:
             should_create_new_run_dir: create new experiment subfolder (True) or not
                 (False). If not, set the experiment subfolder to the most recent run.
             run_prefix: prefix of the run name subfolder inside exp_root_dir
-            run_dir: run dir name (run_prefix + timestamp)
+            run_dir: run dir name (exp_root_dir/run_prefix + timestamp)
+            custom_run_dir: custom run dir that user can specify
         """
         self._path_to_config = path_to_config
         self._config = parse_pipeline_config_pb(self._path_to_config)
         self.exp_root_dir = exp_root_dir
         self.run_prefix = self._config.config_name + "_"
-        self.run_dir = self._get_run_dir(should_create_new_run_dir)
+        self.custom_run_dir = custom_run_dir
+        if not custom_run_dir:
+            self.run_dir = self._get_run_dir(should_create_new_run_dir)
+        else:
+            self.run_dir = custom_run_dir
 
     def _get_run_dir(self, should_create_new_run_dir):
         if not should_create_new_run_dir:
@@ -76,6 +82,8 @@ class ExperimentManger:
         Raises:
             IOError if there is no such folder
         """
+        if self.custom_run_dir:
+            ValueError("get_most_recent_run_dir does not support custom run dir")
         subfolders = sorted(
             [
                 sub
