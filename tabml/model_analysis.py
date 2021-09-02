@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Union
 
+import mlflow
 import pandas as pd
 
 from tabml.data_loaders import BaseDataLoader
@@ -141,7 +142,7 @@ class ModelAnalysis:
         overall_scores = self._get_metric_dict(feature_name, "OVERALL", df_with_pred)
         list_of_group_dicts.append(overall_scores)
         if self._show_overall_flag:
-            self._show_overall_scores(overall_scores, dataset_name)
+            self._show_and_log_overall_scores(overall_scores, dataset_name)
             self._show_overall_flag = False
 
         df_group = pd.DataFrame(list_of_group_dicts).sort_values(
@@ -179,7 +180,7 @@ class ModelAnalysis:
 
         return dirname / f"{col}.csv"
 
-    def _show_overall_scores(
+    def _show_and_log_overall_scores(
         self, overall_scores: Dict[str, Any], dataset_name: str
     ) -> None:
         logger.info("=" * 20 + f" OVERALL SCORES on {dataset_name} dataset " + "=" * 20)
@@ -188,6 +189,7 @@ class ModelAnalysis:
             if val == "OVERALL" or key == "sample_count":
                 continue
             logger.info("{:<20}: {}".format(key, val))
+            mlflow.log_metrics({key: val})
 
 
 def _get_metrics(metric_names: List[str]) -> List[BaseMetric]:
