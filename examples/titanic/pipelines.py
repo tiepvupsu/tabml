@@ -7,5 +7,11 @@ def train_lgbm():
     pipeline.run()
 
 
+def train_xgboost():
+    path_to_config = "configs/xgboost_config.pb"
+    pipeline = BasePipeline(path_to_config)
+    pipeline.run()
+
+
 if __name__ == "__main__":
     train_lgbm()
