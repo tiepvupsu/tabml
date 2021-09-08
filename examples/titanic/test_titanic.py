@@ -13,8 +13,13 @@ def test_run():
 
 
 @change_working_dir_pytest
-def test_full_pipeline():
+def test_full_pipeline_lgbm():
     pipelines.train_lgbm()
+
+
+@change_working_dir_pytest
+def test_full_pipeline_xgboost():
+    pipelines.train_xgboost()
 
 
 @change_working_dir_pytest
