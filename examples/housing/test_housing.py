@@ -16,3 +16,8 @@ def test_full_pipeline_lgbm():
 @change_working_dir_pytest
 def test_full_pipeline_xgboost():
     pipelines.train_xgboost()
+
+
+@change_working_dir_pytest
+def test_full_pipeline_catboost():
+    pipelines.train_catboost()
