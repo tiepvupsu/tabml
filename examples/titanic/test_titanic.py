@@ -23,6 +23,11 @@ def test_full_pipeline_xgboost():
 
 
 @change_working_dir_pytest
+def test_full_pipeline_catboost():
+    pipelines.train_catboost()
+
+
+@change_working_dir_pytest
 def test_inference():
     feature_config_path = "./configs/feature_config.pb"
     lgbm_config_path = "./configs/lgbm_config.pb"

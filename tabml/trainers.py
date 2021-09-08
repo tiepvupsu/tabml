@@ -80,3 +80,9 @@ class XGBoostTrainer(BaseBoostingTrainer):
             **pb_to_dict(self.config.trainer.xgboost_params),
         }
         return fit_params
+
+
+class CatBoostTrainer(BaseBoostingTrainer):
+    def _get_fit_params(self, train_data, val_data):
+        fit_params = {"eval_set": [val_data]}
+        return fit_params

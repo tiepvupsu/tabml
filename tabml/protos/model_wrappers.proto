@@ -45,11 +45,38 @@ message ModelWrapperXgboostParams {
     optional string eval_metric = 13;
 }
 
+// CatBoost parameters https://catboost.ai/docs/search/?query=max_ctr_complexity
+// Next id: 22
+message ModelWrapperCatboostParams {
+    optional int32 od_wait = 1;
+    optional int32 max_depth = 2;
+    optional int32 n_estimators = 3;
+    optional float learning_rate = 4;
+    optional int32 random_state = 5 [default = 42];
+    optional string objective = 6;
+    optional float subsample = 7;
+    optional float reg_lambda = 8;
+    optional int32 one_hot_max_size = 9;
+    optional int32 min_child_samples = 10;
+    optional int32 bagging_temperature = 11;
+    optional int32 border_count = 12;
+    optional int32 max_ctr_complexity = 13;
+    optional string od_type = 14;
+    optional int32 num_leaves = 15;
+    optional string bootstrap_type = 16;
+    optional float colsample_bylevel = 17;
+    optional float od_pval = 19;
+    optional string grow_policy = 20;
+    optional string eval_metric = 21;
+}
+
+
 message ModelWrapper {
     required string cls_name = 1;
 
     oneof params {
         ModelWrapperLgbmParams lgbm_params = 2;
         ModelWrapperXgboostParams xgboost_params = 3;
+        ModelWrapperCatboostParams catboost_params = 4;
     }
 }

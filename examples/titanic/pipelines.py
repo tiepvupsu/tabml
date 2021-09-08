@@ -13,5 +13,11 @@ def train_xgboost():
     pipeline.run()
 
 
+def train_catboost():
+    path_to_config = "configs/catboost_config.pb"
+    pipeline = BasePipeline(path_to_config)
+    pipeline.run()
+
+
 if __name__ == "__main__":
     train_lgbm()

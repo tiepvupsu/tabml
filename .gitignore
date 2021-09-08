@@ -147,3 +147,6 @@ coverage.code-workspace
 
 # mlflow
 **/mlruns
+
+# catboost
+**/catboost_info/
