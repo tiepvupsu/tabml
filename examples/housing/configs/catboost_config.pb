@@ -29,7 +29,7 @@ model_wrapper {
         learning_rate: 0.1
         n_estimators: 200
         objective: "RMSE"
-        eval_metric: "rmse"
+        eval_metric: "RMSE"
     }
 }
 trainer {
