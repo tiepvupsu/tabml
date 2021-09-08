@@ -48,7 +48,7 @@ def train_xgboost():
 
 
 def train_catboost():
-    path_to_config = "configs/xgboost_config.pb"
+    path_to_config = "configs/catboost_config.pb"
     pipeline = BasePipeline(
         path_to_config, custom_model_wrapper=CustomCatBoostRegressorModelWrapperLog10
     )
