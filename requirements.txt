@@ -1,4 +1,4 @@
-# catboost==0.24.1
+catboost==0.26.1
 flake8==3.9.0
 GitPython==3.1.13
 gputil==1.4.0
