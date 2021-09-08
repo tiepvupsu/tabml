@@ -28,7 +28,7 @@ message ModelWrapperLgbmParams {
 }
 
 // XGBoost parameters in https://xgboost.readthedocs.io/en/latest/parameter.html
-// Next id: 13
+// Next id: 14
 message ModelWrapperXgboostParams {
     optional bool use_gpu = 1;
     optional int32 max_depth = 2;
@@ -42,6 +42,7 @@ message ModelWrapperXgboostParams {
     optional float learning_rate = 10;
     optional float min_child_weight = 11;
     optional int32 seed = 12 [default = 42];
+    optional string eval_metric = 13;
 }
 
 message ModelWrapper {

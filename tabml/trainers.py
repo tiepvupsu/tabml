@@ -70,3 +70,13 @@ class LgbmTrainer(BaseBoostingTrainer):
             **pb_to_dict(self.config.trainer.lgbm_params),
         }
         return fit_params
+
+
+class XGBoostTrainer(BaseBoostingTrainer):
+    def _get_fit_params(self, train_data, val_data):
+        fit_params = {
+            "eval_set": [train_data, val_data],
+            "callbacks": [boosting_logger_eval(model="xgboost")],
+            **pb_to_dict(self.config.trainer.xgboost_params),
+        }
+        return fit_params

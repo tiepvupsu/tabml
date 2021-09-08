@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto2',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n!tabml/protos/model_wrappers.proto\x12\x0ctabml.protos\"\xcb\x03\n\x16ModelWrapperLgbmParams\x12\x15\n\rlearning_rate\x18\x01 \x01(\x02\x12\x14\n\x0cn_estimators\x18\x02 \x01(\x05\x12\x12\n\nnum_leaves\x18\x03 \x01(\x05\x12\x11\n\tmax_depth\x18\x04 \x01(\x05\x12\x1d\n\tobjective\x18\x05 \x01(\t:\nregression\x12\x18\n\x10\x63olsample_bytree\x18\x06 \x01(\x02\x12\x11\n\tsubsample\x18\x07 \x01(\x02\x12\x11\n\treg_alpha\x18\x08 \x01(\x02\x12\x16\n\x0emin_split_gain\x18\t \x01(\x02\x12\x12\n\nreg_lambda\x18\n \x01(\x02\x12\x18\n\x10min_child_weight\x18\x0b \x01(\x02\x12\x19\n\x11min_child_samples\x18\x0c \x01(\x05\x12\x18\n\x0crandom_state\x18\r \x01(\x05:\x02\x34\x32\x12\x16\n\x0esubsample_freq\x18\x0e \x01(\x05\x12\x19\n\x11subsample_for_bin\x18\x0f \x01(\x05\x12\x15\n\rboosting_type\x18\x10 \x01(\t\x12\x0e\n\x06metric\x18\x11 \x01(\t\x12\x18\n\x10scale_pos_weight\x18\x12 \x01(\x05\x12\x0f\n\x07max_bin\x18\x13 \x01(\x05\"\xa0\x02\n\x19ModelWrapperXgboostParams\x12\x0f\n\x07use_gpu\x18\x01 \x01(\x08\x12\x11\n\tmax_depth\x18\x02 \x01(\x05\x12\x14\n\x0cn_estimators\x18\x03 \x01(\x05\x12\r\n\x05gamma\x18\x04 \x01(\x02\x12#\n\tobjective\x18\x05 \x01(\t:\x10reg:squarederror\x12\x18\n\x10\x63olsample_bytree\x18\x06 \x01(\x02\x12\x11\n\tsubsample\x18\x07 \x01(\x02\x12\x11\n\treg_alpha\x18\x08 \x01(\x02\x12\x12\n\nreg_lambda\x18\t \x01(\x02\x12\x15\n\rlearning_rate\x18\n \x01(\x02\x12\x18\n\x10min_child_weight\x18\x0b \x01(\x02\x12\x10\n\x04seed\x18\x0c \x01(\x05:\x02\x34\x32\"\xaa\x01\n\x0cModelWrapper\x12\x10\n\x08\x63ls_name\x18\x01 \x02(\t\x12;\n\x0blgbm_params\x18\x02 \x01(\x0b\x32$.tabml.protos.ModelWrapperLgbmParamsH\x00\x12\x41\n\x0exgboost_params\x18\x03 \x01(\x0b\x32\'.tabml.protos.ModelWrapperXgboostParamsH\x00\x42\x08\n\x06params'
+  serialized_pb=b'\n!tabml/protos/model_wrappers.proto\x12\x0ctabml.protos\"\xcb\x03\n\x16ModelWrapperLgbmParams\x12\x15\n\rlearning_rate\x18\x01 \x01(\x02\x12\x14\n\x0cn_estimators\x18\x02 \x01(\x05\x12\x12\n\nnum_leaves\x18\x03 \x01(\x05\x12\x11\n\tmax_depth\x18\x04 \x01(\x05\x12\x1d\n\tobjective\x18\x05 \x01(\t:\nregression\x12\x18\n\x10\x63olsample_bytree\x18\x06 \x01(\x02\x12\x11\n\tsubsample\x18\x07 \x01(\x02\x12\x11\n\treg_alpha\x18\x08 \x01(\x02\x12\x16\n\x0emin_split_gain\x18\t \x01(\x02\x12\x12\n\nreg_lambda\x18\n \x01(\x02\x12\x18\n\x10min_child_weight\x18\x0b \x01(\x02\x12\x19\n\x11min_child_samples\x18\x0c \x01(\x05\x12\x18\n\x0crandom_state\x18\r \x01(\x05:\x02\x34\x32\x12\x16\n\x0esubsample_freq\x18\x0e \x01(\x05\x12\x19\n\x11subsample_for_bin\x18\x0f \x01(\x05\x12\x15\n\rboosting_type\x18\x10 \x01(\t\x12\x0e\n\x06metric\x18\x11 \x01(\t\x12\x18\n\x10scale_pos_weight\x18\x12 \x01(\x05\x12\x0f\n\x07max_bin\x18\x13 \x01(\x05\"\xb5\x02\n\x19ModelWrapperXgboostParams\x12\x0f\n\x07use_gpu\x18\x01 \x01(\x08\x12\x11\n\tmax_depth\x18\x02 \x01(\x05\x12\x14\n\x0cn_estimators\x18\x03 \x01(\x05\x12\r\n\x05gamma\x18\x04 \x01(\x02\x12#\n\tobjective\x18\x05 \x01(\t:\x10reg:squarederror\x12\x18\n\x10\x63olsample_bytree\x18\x06 \x01(\x02\x12\x11\n\tsubsample\x18\x07 \x01(\x02\x12\x11\n\treg_alpha\x18\x08 \x01(\x02\x12\x12\n\nreg_lambda\x18\t \x01(\x02\x12\x15\n\rlearning_rate\x18\n \x01(\x02\x12\x18\n\x10min_child_weight\x18\x0b \x01(\x02\x12\x10\n\x04seed\x18\x0c \x01(\x05:\x02\x34\x32\x12\x13\n\x0b\x65val_metric\x18\r \x01(\t\"\xaa\x01\n\x0cModelWrapper\x12\x10\n\x08\x63ls_name\x18\x01 \x02(\t\x12;\n\x0blgbm_params\x18\x02 \x01(\x0b\x32$.tabml.protos.ModelWrapperLgbmParamsH\x00\x12\x41\n\x0exgboost_params\x18\x03 \x01(\x0b\x32\'.tabml.protos.ModelWrapperXgboostParamsH\x00\x42\x08\n\x06params'
 )
 
 
@@ -275,6 +275,13 @@ _MODELWRAPPERXGBOOSTPARAMS = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='eval_metric', full_name='tabml.protos.ModelWrapperXgboostParams.eval_metric', index=12,
+      number=13, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -288,7 +295,7 @@ _MODELWRAPPERXGBOOSTPARAMS = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=514,
-  serialized_end=802,
+  serialized_end=823,
 )
 
 
@@ -338,8 +345,8 @@ _MODELWRAPPER = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=805,
-  serialized_end=975,
+  serialized_start=826,
+  serialized_end=996,
 )
 
 _MODELWRAPPER.fields_by_name['lgbm_params'].message_type = _MODELWRAPPERLGBMPARAMS

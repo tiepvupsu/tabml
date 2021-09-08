@@ -27,6 +27,7 @@ setup(
         "scikit-learn>=0.24.2",
         "scipy>=1.6.2",
         "termgraph>=0.4.2",
+        "xgboost>=1.4.2",
     ],
     classifiers=[
         "Development Status :: 3 - Alpha",

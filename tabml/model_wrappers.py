@@ -3,11 +3,15 @@ from typing import Any, Dict, Iterable, Union
 
 import mlflow
 from lightgbm import LGBMClassifier, LGBMRegressor
+from xgboost import XGBClassifier, XGBRegressor
 
 from tabml.utils import utils
 from tabml.utils.pb_helpers import pb_to_dict
 
-MLFLOW_AUTOLOG = {"lightgbm": mlflow.lightgbm.autolog()}
+MLFLOW_AUTOLOG = {
+    "lightgbm": mlflow.lightgbm.autolog(),
+    "xgboost": mlflow.xgboost.autolog(),
+}
 
 
 class BaseModelWrapper(ABC):
@@ -100,3 +104,41 @@ class LgbmClassifierModelWrapper(BaseLgbmModelWrapper):
 class LgbmRegressorModelWrapper(BaseLgbmModelWrapper):
     def build_model(self):
         return LGBMRegressor(**self.params)
+
+
+class BaseXGBoostModelWrapper(BaseModelWrapper):
+    mlflow_model_type = "xgboost"
+
+    def __init__(self, config):
+        super(BaseXGBoostModelWrapper, self).__init__(config)
+        self.params = pb_to_dict(self.config.model_wrapper.xgboost_params)
+        self.tree_method = "gpu_hist" if utils.is_gpu_available() else "auto"
+        self.model = self.build_model()
+
+    @abstractmethod
+    def build_model(self):
+        pass
+
+    def predict(self, data):
+        return self.model.predict(data)
+
+    def load_model(self, model_path: str):
+        self.model = utils.load_pickle(model_path)
+
+    def show_feature_importance(self, importance_type: str = "gain"):
+        utils.show_feature_importance(
+            self.model.get_booster().get_score(importance_type=importance_type)
+        )
+
+
+class XGBoostRegressorModelWrapper(BaseXGBoostModelWrapper):
+    def build_model(self):
+        return XGBRegressor(tree_method=self.tree_method, **self.params)
+
+
+class XGBoostClassifierModelWrapper(BaseXGBoostModelWrapper):
+    def build_model(self):
+        return XGBClassifier(tree_method=self.tree_method, **self.params)
+
+    def predict_proba(self, data) -> Iterable:
+        return self.model.predict_proba(data)[:, 1]
