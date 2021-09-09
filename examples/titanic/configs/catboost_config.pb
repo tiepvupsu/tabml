@@ -19,7 +19,7 @@ data_loader {
 }
 
 model_wrapper {
-  cls_name: "tabml.model_wrappers.XGBoostClassifierModelWrapper"
+  cls_name: "tabml.model_wrappers.CatBoostClassifierModelWrapper"
   xgboost_params {
     n_estimators: 100
     objective: "binary:logistic"
@@ -27,7 +27,7 @@ model_wrapper {
   }
 }
 trainer {
-  cls_name: "tabml.trainers.XGBoostTrainer"
+  cls_name: "tabml.trainers.CatBoostTrainer"
 }
 model_analysis {
   metrics: "accuracy_score"
