@@ -147,7 +147,7 @@ class XGBoostClassifierModelWrapper(BaseXGBoostModelWrapper):
 
 
 class BaseCatboostModelWrapper(BaseModelWrapper):
-    mlflow_model_type = "xgboost"
+    mlflow_model_type = "catboost"
 
     def __init__(self, config):
         super(BaseCatboostModelWrapper, self).__init__(config)
