@@ -22,7 +22,7 @@ class BaseModelWrapper(ABC):
     def __init__(self, config):
         self.config = config
         self.model = None
-        self._feature_names = None
+        self.feature_names = self.config.data_loader.features_to_model
         self.params: Union[Dict[str, Any], None] = None
 
     @abstractmethod
@@ -48,21 +48,6 @@ class BaseModelWrapper(ABC):
     @abstractmethod
     def show_feature_importance(self, importance_type: str = "gain") -> None:
         """Displays feature importance after training."""
-
-    @property
-    def feature_names(self):
-        assert (
-            self._feature_names is not None
-        ), "self._feature_names has not been set. Please set it first."
-        return self._feature_names
-
-    @feature_names.setter
-    def feature_names(self, names):
-        """Sets feature names during training. This should be set only once."""
-        assert (
-            self._feature_names is None
-        ), f"feature_names has been set before, feature_names = {self.feature_names}"
-        self._feature_names = names
 
 
 class BaseLgbmModelWrapper(BaseModelWrapper):
