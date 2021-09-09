@@ -52,8 +52,6 @@ class BaseBoostingTrainer(BaseTrainer):
         train_feature, train_label = self.data_loader.get_train_data_and_label()
         val_data = self.data_loader.get_val_data_and_label()
 
-        self.model_wrapper.feature_names = train_feature.columns
-
         fit_params = self._get_fit_params((train_feature, train_label), val_data)
 
         self.model_wrapper.model.fit(X=train_feature, y=train_label, **fit_params)
