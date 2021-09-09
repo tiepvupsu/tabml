@@ -146,11 +146,11 @@ class XGBoostClassifierModelWrapper(BaseXGBoostModelWrapper):
         return self.model.predict_proba(data)[:, 1]
 
 
-class BaseCatboostModelWrapper(BaseModelWrapper):
+class BaseCatBoostModelWrapper(BaseModelWrapper):
     mlflow_model_type = "catboost"
 
     def __init__(self, config):
-        super(BaseCatboostModelWrapper, self).__init__(config)
+        super(BaseCatBoostModelWrapper, self).__init__(config)
         self.params = pb_to_dict(self.config.model_wrapper.catboost_params)
         self.task_type = "GPU" if utils.is_gpu_available() else "CPU"
         self.model = self.build_model()
@@ -175,7 +175,7 @@ class BaseCatboostModelWrapper(BaseModelWrapper):
         utils.show_feature_importance(data)
 
 
-class CatBoostClassifierModelWrapper(BaseCatboostModelWrapper):
+class CatBoostClassifierModelWrapper(BaseCatBoostModelWrapper):
     def build_model(self):
         return CatBoostClassifier(**self.params)
 
@@ -183,6 +183,6 @@ class CatBoostClassifierModelWrapper(BaseCatboostModelWrapper):
         return self.model.predict_proba(data)[:, 1]
 
 
-class CatBoostRegressorModelWrapper(BaseCatboostModelWrapper):
+class CatBoostRegressorModelWrapper(BaseCatBoostModelWrapper):
     def build_model(self):
         return CatBoostRegressor(task_type=self.task_type, **self.params)
