@@ -7,9 +7,9 @@ data_loader {
 
     features_to_model: "scaled_housing_median_age"
     features_to_model: "median_income"
-    features_to_model: "scaled_clean_total_rooms"
-    features_to_model: "scaled_clean_total_bedrooms"
-    features_to_model: "scaled_clean_population"
+    features_to_model: "scaled_total_rooms"
+    features_to_model: "scaled_total_bedrooms"
+    features_to_model: "scaled_population"
     features_to_model: "bucketized_latitude"
     features_to_model: "bucketized_longitude"
     features_to_model: "hashed_bucketized_latitude_X_bucketized_longitude"
