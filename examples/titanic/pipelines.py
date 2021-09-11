@@ -1,22 +1,24 @@
 from tabml.pipelines import BasePipeline
 
 
-def train_lgbm():
-    path_to_config = "configs/lgbm_config.pb"
+def run(path_to_config: str):
     pipeline = BasePipeline(path_to_config)
     pipeline.run()
+
+
+def train_lgbm():
+    path_to_config = "configs/lgbm_config.pb"
+    run(path_to_config)
 
 
 def train_xgboost():
     path_to_config = "configs/xgboost_config.pb"
-    pipeline = BasePipeline(path_to_config)
-    pipeline.run()
+    run(path_to_config)
 
 
 def train_catboost():
     path_to_config = "configs/catboost_config.pb"
-    pipeline = BasePipeline(path_to_config)
-    pipeline.run()
+    run(path_to_config)
 
 
 if __name__ == "__main__":
