@@ -83,7 +83,7 @@ def _scale_clean_transform(df, input_columns):
 class FeatureScaledCleanTotalRooms(BaseHousingTransformingFeature):
     """Feature created by applying box plot to fix outliers then StandardScaler."""
 
-    name = "scaled_clean_total_rooms"
+    name = "scaled_total_rooms"
 
     def fit(self, df):
         self.transformer = StandardScaler()
@@ -95,7 +95,7 @@ class FeatureScaledCleanTotalRooms(BaseHousingTransformingFeature):
 
 
 class FeatureScaledCleanTotalBedrooms(BaseHousingTransformingFeature):
-    name = "scaled_clean_total_bedrooms"
+    name = "scaled_total_bedrooms"
 
     def fit(self, df):
         self.transformer = StandardScaler()
@@ -107,7 +107,7 @@ class FeatureScaledCleanTotalBedrooms(BaseHousingTransformingFeature):
 
 
 class FeatureScaledCleanPopulation(BaseHousingTransformingFeature):
-    name = "scaled_clean_population"
+    name = "scaled_population"
 
     def fit(self, df):
         self.transformer = StandardScaler()
@@ -119,7 +119,7 @@ class FeatureScaledCleanPopulation(BaseHousingTransformingFeature):
 
 
 class FeatureScaledCleanHouseholds(BaseHousingTransformingFeature):
-    name = "scaled_clean_households"
+    name = "scaled_households"
 
     def fit(self, df):
         self.transformer = StandardScaler()
@@ -131,7 +131,7 @@ class FeatureScaledCleanHouseholds(BaseHousingTransformingFeature):
 
 
 class FeatureScaledCleanMedianIncome(BaseHousingTransformingFeature):
-    name = "scaled_clean_median_income"
+    name = "scaled_median_income"
 
     def fit(self, df):
         self.transformer = StandardScaler()

@@ -74,7 +74,7 @@ transforming_features {
 }
 
 transforming_features {
-  name: "scaled_clean_total_rooms"
+  name: "scaled_total_rooms"
   index: 3
   dtype: FLOAT
   dependencies: "is_train"
@@ -82,7 +82,7 @@ transforming_features {
 }
 
 transforming_features {
-  name: "scaled_clean_population"
+  name: "scaled_population"
   index: 4
   dtype: FLOAT
   dependencies: "is_train"
@@ -90,7 +90,7 @@ transforming_features {
 }
 
 transforming_features {
-  name: "scaled_clean_total_bedrooms"
+  name: "scaled_total_bedrooms"
   index: 5
   dtype: FLOAT
   dependencies: "is_train"
@@ -98,7 +98,7 @@ transforming_features {
 }
 
 transforming_features {
-  name: "scaled_clean_households"
+  name: "scaled_households"
   index: 6
   dtype: FLOAT
   dependencies: "is_train"
@@ -106,7 +106,7 @@ transforming_features {
 }
 
 transforming_features {
-  name: "scaled_clean_median_income"
+  name: "scaled_median_income"
   index: 7
   dtype: FLOAT
   dependencies: "is_train"
