@@ -42,6 +42,7 @@ trainer {
     }
 }
 model_analysis {
+    training_size: 500
     metrics: "smape"
     metrics: "rmse"
     by_features: "ocean_proximity"
