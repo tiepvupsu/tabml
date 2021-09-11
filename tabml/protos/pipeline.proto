@@ -14,6 +14,11 @@ message ModelAnalysis {
     // transformation of the true label for training but need to evaluate on the
     // original label.
     optional string by_label = 3;
+
+    // To avoid expensive computations, e.g. computing SHAP values or inference,
+    // a subset of training data could be used instead. This field specifies size
+    // of that subset.
+    optional int32 training_size = 4;
 }
 
 message Saver {
