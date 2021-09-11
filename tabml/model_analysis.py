@@ -80,10 +80,10 @@ class ModelAnalysis:
         self.training_size = training_size
 
     def analyze(self):
-        self._analyze_one_dataset("train")
-        self._analyze_one_dataset("val")
+        self._analyze_metrics_one_dataset("train")
+        self._analyze_metrics_one_dataset("val")
 
-    def _analyze_one_dataset(self, dataset_name: str):
+    def _analyze_metrics_one_dataset(self, dataset_name: str):
         self._show_overall_flag = True
         dataset = self._get_dataset(dataset_name)
         preds = self._get_predictions(dataset)
