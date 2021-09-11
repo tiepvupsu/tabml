@@ -4,12 +4,25 @@
 [![codecov](https://codecov.io/gh/tiepvupsu/tabml/branch/master/graph/badge.svg?token=4JLG0YYUZU)](https://codecov.io/gh/tiepvupsu/tabml)
 
 # TabML: a Machine Learning pipeline for tabular data
+- [TabML: a Machine Learning pipeline for tabular data](#tabml-a-machine-learning-pipeline-for-tabular-data)
+  - [Introduction](#introduction)
+  - [Installation](#installation)
+  - [Main components](#main-components)
+  - [Examples](#examples)
+  - [Setup for development](#setup-for-development)
+    - [Add path to this repo](#add-path-to-this-repo)
+    - [Create the environment](#create-the-environment)
+    - [Install and build/update proto](#install-and-buildupdate-proto)
+    - [Check that everthing is working](#check-that-everthing-is-working)
 
-This is an active project that aims to create a general framework for working with tabular data.
+
+## Introduction
+
+This is an active project that aims to create a general machine learning framework for working with tabular data.
 
 Key features:
 
-* One of the most important tasks in working with tabular data is to hanlde feature extraction. TabML allow users to define multiple features isolatedly without worrying about other features. This helps reduce coding conflicts if your team have multiple members working on developing different features at the same time. In addition, if one feature needs to be updated, unrelated features could be untouched. In this way, the computating cost is relatively small (compared with running a pipeline to re-generate all other features).
+* One of the most important tasks in working with tabular data is to hanlde feature extraction. TabML allow users to define multiple features isolatedly without worrying about other features. This helps reduce coding conflicts if your team have multiple members simultaneously developing different features. In addition, if one feature needs to be updated, unrelated features could be untouched. In this way, the computating cost is relatively small (compared with running a pipeline to re-generate all other features).
 
 * Parameters are specified in a config file as a protobuf file. This config file is automatically saved into an experiment folder after each training for the reproducibility purpose.
 
