@@ -57,13 +57,13 @@ class FeatureIsTrain(BaseHousingTransformingFeature):
 class FeatureHousingMedianAge(BaseHousingTransformingFeature):
     name = "scaled_housing_median_age"
 
+    def fit(self, df):
+        self.transformer = StandardScaler()
+        train_data = df.query("is_train")[["housing_median_age"]]
+        self.transformer.fit(train_data)
+
     def transform(self, df):
-        return data_processing.fit_train_transform_all(
-            whole_df=df,
-            input_columns=["housing_median_age"],
-            training_filters=["is_train"],
-            transformer=StandardScaler(),
-        ).reshape(-1)
+        return self.transformer.transform(df[["housing_median_age"]]).reshape(-1)
 
 
 def _scale_clean_transform(df, input_columns):
@@ -83,38 +83,63 @@ def _scale_clean_transform(df, input_columns):
 class FeatureScaledCleanTotalRooms(BaseHousingTransformingFeature):
     """Feature created by applying box plot to fix outliers then StandardScaler."""
 
-    name = "scaled_clean_total_rooms"
+    name = "scaled_total_rooms"
+
+    def fit(self, df):
+        self.transformer = StandardScaler()
+        train_data = df.query("is_train")[["total_rooms"]]
+        self.transformer.fit(train_data)
 
     def transform(self, df):
-        return _scale_clean_transform(df, ["total_rooms"])
+        return self.transformer.transform(df[["total_rooms"]]).reshape(-1)
 
 
 class FeatureScaledCleanTotalBedrooms(BaseHousingTransformingFeature):
-    name = "scaled_clean_total_bedrooms"
+    name = "scaled_total_bedrooms"
+
+    def fit(self, df):
+        self.transformer = StandardScaler()
+        train_data = df.query("is_train")[["total_bedrooms"]]
+        self.transformer.fit(train_data)
 
     def transform(self, df):
-        return _scale_clean_transform(df, ["total_bedrooms"])
+        return self.transformer.transform(df[["total_bedrooms"]]).reshape(-1)
 
 
 class FeatureScaledCleanPopulation(BaseHousingTransformingFeature):
-    name = "scaled_clean_population"
+    name = "scaled_population"
+
+    def fit(self, df):
+        self.transformer = StandardScaler()
+        train_data = df.query("is_train")[["population"]]
+        self.transformer.fit(train_data)
 
     def transform(self, df):
-        return _scale_clean_transform(df, ["population"])
+        return self.transformer.transform(df[["population"]]).reshape(-1)
 
 
 class FeatureScaledCleanHouseholds(BaseHousingTransformingFeature):
-    name = "scaled_clean_households"
+    name = "scaled_households"
+
+    def fit(self, df):
+        self.transformer = StandardScaler()
+        train_data = df.query("is_train")[["households"]]
+        self.transformer.fit(train_data)
 
     def transform(self, df):
-        return _scale_clean_transform(df, ["households"])
+        return self.transformer.transform(df[["households"]]).reshape(-1)
 
 
 class FeatureScaledCleanMedianIncome(BaseHousingTransformingFeature):
-    name = "scaled_clean_median_income"
+    name = "scaled_median_income"
+
+    def fit(self, df):
+        self.transformer = StandardScaler()
+        train_data = df.query("is_train")[["median_income"]]
+        self.transformer.fit(train_data)
 
     def transform(self, df):
-        return _scale_clean_transform(df, ["median_income"])
+        return self.transformer.transform(df[["median_income"]]).reshape(-1)
 
 
 class FeatureLog10MedianHouseValue(BaseHousingTransformingFeature):
@@ -163,8 +188,13 @@ class FeatureHasdedBucketizedLatitudeXBucketizedLongitude(
 class FeatureEncodedOceanProximity(BaseHousingTransformingFeature):
     name = "encoded_ocean_proximity"
 
+    def fit(self, df):
+        # TODO: explicitly map raw values to coded labels
+        self.transformer = LabelEncoder()
+        self.transformer.fit(df["ocean_proximity"])
+
     def transform(self, df):
-        return LabelEncoder().fit_transform(df["ocean_proximity"])
+        return self.transformer.transform(df["ocean_proximity"])
 
 
 def run():
