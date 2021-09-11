@@ -7,31 +7,9 @@ from tabml.utils.utils import change_working_dir_pytest
 from . import feature_manager, pipelines
 
 
-@change_working_dir_pytest
-def test_run():
-    feature_manager.run()
-
-
-@change_working_dir_pytest
-def test_full_pipeline_lgbm():
-    pipelines.train_lgbm()
-
-
-@change_working_dir_pytest
-def test_full_pipeline_xgboost():
-    pipelines.train_xgboost()
-
-
-@change_working_dir_pytest
-def test_full_pipeline_catboost():
-    pipelines.train_catboost()
-
-
-@change_working_dir_pytest
-def test_inference():
+def _test_inference(config_path):
     feature_config_path = "./configs/feature_config.pb"
-    lgbm_config_path = "./configs/lgbm_config.pb"
-    last_model_run_dir = ExperimentManger(lgbm_config_path).get_most_recent_run_dir()
+    last_model_run_dir = ExperimentManger(config_path).get_most_recent_run_dir()
     model_path = Path(last_model_run_dir) / "model_0"
     model_inference = ModelInference(
         feature_manager_cls=feature_manager.FeatureManager,
@@ -66,3 +44,26 @@ def test_inference():
         },
     ]
     model_inference.predict(raw_data_samples)
+
+
+@change_working_dir_pytest
+def test_run():
+    feature_manager.run()
+
+
+@change_working_dir_pytest
+def test_full_pipeline_lgbm():
+    pipelines.train_lgbm()
+    _test_inference("./configs/lgbm_config.pb")
+
+
+@change_working_dir_pytest
+def test_full_pipeline_xgboost():
+    pipelines.train_xgboost()
+    _test_inference("./configs/xgboost_config.pb")
+
+
+@change_working_dir_pytest
+def test_full_pipeline_catboost():
+    pipelines.train_catboost()
+    _test_inference("./configs/catboost_config.pb")
