@@ -78,7 +78,7 @@ In most project, users only need to focus their efforts on designing features. T
 
 ### Add path to this repo
 
-Add the following lines to your shell config file (`~/.bashrc`, `~/.zshrc` or shell of
+Add the following lines to your shell config file (`~/.bashrc`, `~/.zshrc` or any shell config file of
 your choice):
 
 ```bash
