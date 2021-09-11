@@ -43,6 +43,8 @@ class ModelAnalysis:
         need_predict_proba:
             A bool value to tell if method self.model_wrapper.predict_proba is needed.
             Some metrics are computed based on probabilities.
+        training_size: int or None
+            Training sample size for the analysis.
     """
 
     def __init__(
@@ -55,6 +57,7 @@ class ModelAnalysis:
         label_to_analyze: str = "",
         pred_col: str = "prediction",
         pred_proba_col: str = "prediction_probability",
+        training_size: Union[int, None] = None,
     ):
 
         self.data_loader = data_loader
@@ -74,6 +77,7 @@ class ModelAnalysis:
         # True at initialization, then to False right after printing the first overall
         # scores.
         self._show_overall_flag = True
+        self.training_size = training_size
 
     def analyze(self):
         self._analyze_one_dataset("train")
@@ -94,10 +98,14 @@ class ModelAnalysis:
             + [self.label_to_analyze]
         )
         if dataset_name == "train":
-            return self.data_loader.feature_manager.extract_dataframe(
+            df = self.data_loader.feature_manager.extract_dataframe(
                 features_to_select=all_features,
                 filters=self.data_loader.config.data_loader.train_filters,
             )
+            if self.training_size:
+                return df.sample(n=min(self.training_size, len(df)))
+            return df
+
         if dataset_name == "val":
             return self.data_loader.feature_manager.extract_dataframe(
                 features_to_select=all_features,
