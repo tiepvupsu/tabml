@@ -63,12 +63,14 @@ In SERVING step, raw data is fed into the *fitted* FeatureManager to get the tra
 
 ## Examples
 
-Please check the `examples` folder for several example projects. For each project:
+Please check the [`examples`](https://github.com/tiepvupsu/tabml/tree/master/examples) folder for several example projects. For each project:
 
 ```
 python feature_manager.py  # to generate features
 python pipelines.py  # to train the model
 ```
+
+In most project, users only need to focus their efforts on designing features. The feature dependecy is defined in a feature config protobuf and the feature implementation is stored in `feature_manager.py`.
 
 ## Setup for development
 
