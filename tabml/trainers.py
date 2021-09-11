@@ -55,7 +55,6 @@ class BaseBoostingTrainer(BaseTrainer):
         fit_params = self._get_fit_params((train_feature, train_label), val_data)
 
         self.model_wrapper.model.fit(X=train_feature, y=train_label, **fit_params)
-        self.model_wrapper.show_feature_importance()
         save_as_pickle(self.model_wrapper.model, model_dir, self.save_model_name)
 
 
