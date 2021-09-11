@@ -45,10 +45,6 @@ class BaseModelWrapper(ABC):
     def load_model(self, model_path: str):
         raise NotImplementedError
 
-    @abstractmethod
-    def show_feature_importance(self, importance_type: str = "gain") -> None:
-        """Displays feature importance after training."""
-
 
 class BaseLgbmModelWrapper(BaseModelWrapper):
     mlflow_model_type = "lightgbm"
@@ -67,17 +63,6 @@ class BaseLgbmModelWrapper(BaseModelWrapper):
 
     def load_model(self, model_path: str):
         self.model = utils.load_pickle(model_path)
-
-    def show_feature_importance(self, importance_type: str = "gain") -> None:
-        importances = self.model.booster_.feature_importance(
-            importance_type=importance_type
-        )
-        assert len(self.feature_names) == len(importances), (
-            "feature_names and importances have different lengths "
-            f"({len(self.feature_names)} != {len(importances)})"
-        )
-        data = {self.feature_names[i]: importances[i] for i in range(len(importances))}
-        utils.show_feature_importance(data)
 
 
 class LgbmClassifierModelWrapper(BaseLgbmModelWrapper):
@@ -112,11 +97,6 @@ class BaseXGBoostModelWrapper(BaseModelWrapper):
     def load_model(self, model_path: str):
         self.model = utils.load_pickle(model_path)
 
-    def show_feature_importance(self, importance_type: str = "gain"):
-        utils.show_feature_importance(
-            self.model.get_booster().get_score(importance_type=importance_type)
-        )
-
 
 class XGBoostRegressorModelWrapper(BaseXGBoostModelWrapper):
     def build_model(self):
@@ -149,15 +129,6 @@ class BaseCatBoostModelWrapper(BaseModelWrapper):
 
     def load_model(self, model_path: str):
         self.model = utils.load_pickle(model_path)
-
-    def show_feature_importance(self, importance_type: str = "gain") -> None:
-        data = {
-            feature: importance
-            for (feature, importance) in zip(
-                self.feature_names, self.model.get_feature_importance()
-            )
-        }
-        utils.show_feature_importance(data)
 
 
 class CatBoostClassifierModelWrapper(BaseCatBoostModelWrapper):
