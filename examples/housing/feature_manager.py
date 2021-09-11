@@ -188,8 +188,13 @@ class FeatureHasdedBucketizedLatitudeXBucketizedLongitude(
 class FeatureEncodedOceanProximity(BaseHousingTransformingFeature):
     name = "encoded_ocean_proximity"
 
+    def fit(self, df):
+        # TODO: explicitly map raw values to coded labels
+        self.transformer = LabelEncoder()
+        self.transformer.fit(df["ocean_proximity"])
+
     def transform(self, df):
-        return LabelEncoder().fit_transform(df["ocean_proximity"])
+        return self.transformer.transform(df["ocean_proximity"])
 
 
 def run():
