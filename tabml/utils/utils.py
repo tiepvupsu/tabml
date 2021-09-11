@@ -53,13 +53,6 @@ def check_uniqueness(items: Collection) -> None:
     assert not duplicates, f"There are duplicate objects in the list: {duplicates}."
 
 
-def get_git_root():
-    """Gets the root path of the current git repo."""
-    git_repo = git.Repo(Path.cwd(), search_parent_directories=True)
-    git_root = git_repo.git.rev_parse("--show-toplevel")
-    return git_root
-
-
 def show_feature_importance(data: typing.Dict[str, float]) -> None:
     """
     Shows feature importance in terminal.
