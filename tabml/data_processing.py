@@ -121,37 +121,6 @@ class CategoryEncoder:
         return cls(vocab_map)
 
 
-def fit_train_transform_all(
-    whole_df: pd.DataFrame,
-    input_columns: List[str],
-    training_filters: List[str],
-    transformer,
-):
-    """Fits transformer on training data and use it to transform all data.
-
-    This is essentially helpful when we want to apply feature transformer only to
-    training data to avoid data leakage.
-
-    Args:
-        whole_df:
-            The whole dataframe, including all data and neccessary columns for filtering
-            training data.
-        input_columns:
-            A list of column names used to fit the transformer
-        training_filters:
-            A list of filters used to extract training data
-        transformer:
-            A sklearn-like transformer which has .fit() and transform() methods.
-
-    Returns:
-        Transformed array of all data.
-    """
-    all_data = whole_df[input_columns]
-    train_data = whole_df.query(" and ".join(training_filters))[input_columns]
-    transformer.fit(X=train_data)
-    return transformer.transform(all_data)
-
-
 def cross_columns(df: pd.DataFrame, cols: List[str]) -> pd.Series:
     """Crosses multiple columns to create a new column.
 
