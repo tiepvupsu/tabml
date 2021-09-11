@@ -70,6 +70,8 @@ python feature_manager.py  # to generate features
 python pipelines.py  # to train the model
 ```
 
+You can change some parameters in the config file, run `python pipelines.py` again then `mlflow ui` to see information about each run.
+
 In most project, users only need to focus their efforts on designing features. The feature dependecy is defined in a feature config protobuf and the feature implementation is stored in `feature_manager.py`.
 
 ## Setup for development
