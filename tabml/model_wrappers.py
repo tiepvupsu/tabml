@@ -22,7 +22,7 @@ class BaseModelWrapper(ABC):
     def __init__(self, config):
         self.config = config
         self.model = None
-        self.feature_names = self.config.data_loader.features_to_model
+        self.feature_names = list(self.config.data_loader.features_to_model)
         self.params: Union[Dict[str, Any], None] = None
 
     @abstractmethod
