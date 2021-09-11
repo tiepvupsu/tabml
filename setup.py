@@ -15,7 +15,6 @@ setup(
     keywords=["Machine Learning", "Tabular"],
     install_requires=[
         "catboost>=0.26.1",
-        "GitPython>=3.1.13",
         "GPUtil>=1.4.0",
         "kaggle>=1.5.6",
         "lightgbm>=2.3.1",
