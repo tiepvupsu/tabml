@@ -9,7 +9,6 @@ from collections import Counter
 from pathlib import Path
 from typing import Any, Collection
 
-import git
 import GPUtil
 
 from tabml.utils.logger import logger
