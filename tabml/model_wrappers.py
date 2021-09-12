@@ -121,7 +121,7 @@ class BaseXGBoostModelWrapper(BaseBoostingModelWrapper):
 
     def __init__(self, config):
         super(BaseXGBoostModelWrapper, self).__init__(config)
-        self.params = pb_to_dict(self.config.model_wrapper.xgboost_params)
+        self.params = pb_to_dict(self.config.model_wrapper.xgboost_model_params)
         self.tree_method = "gpu_hist" if utils.is_gpu_available() else "auto"
         self.model = self.build_model()
 
@@ -139,7 +139,7 @@ class BaseXGBoostModelWrapper(BaseBoostingModelWrapper):
         fit_params = {
             "eval_set": [train_data, val_data],
             "callbacks": [boosting_logger_eval(model="xgboost")],
-            **pb_to_dict(self.config.trainer.xgboost_params),
+            **pb_to_dict(self.config.model_wrapper.xgboost_fit_params),
         }
         return fit_params
 
@@ -162,7 +162,7 @@ class BaseCatBoostModelWrapper(BaseBoostingModelWrapper):
 
     def __init__(self, config):
         super(BaseCatBoostModelWrapper, self).__init__(config)
-        self.params = pb_to_dict(self.config.model_wrapper.catboost_params)
+        self.params = pb_to_dict(self.config.model_wrapper.catboost_model_params)
         self.task_type = "GPU" if utils.is_gpu_available() else "CPU"
         self.model = self.build_model()
 
@@ -178,6 +178,7 @@ class BaseCatBoostModelWrapper(BaseBoostingModelWrapper):
 
     def _get_fit_params(self, train_data, val_data):
         fit_params = {"eval_set": [val_data]}
+
         return fit_params
 
 
