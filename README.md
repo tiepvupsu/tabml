@@ -54,11 +54,9 @@ In TRAINING step,
 
 2. The **DataLoader** loads training and validation data for model training and analysis. In a typical project, tabml already takes care of this class, users only need to specify configuration in the pipeline config file ([example](https://github.com/tiepvupsu/tabml/blob/95da6aa7f8947329487ff70f189ce213469ebbf1/examples/titanic/configs/lgbm_config.pb#L2-L19)). In that file, features and label used for training need to be specified. In addition, a set of boolean features are used as conditions for selecting training and validation data. Only rows in the dataset that meet all training/validation conditions are selected.
 
-3. The **ModelWrapper** class defines the model and some methods for loading the model and making predictions.
+3. The **ModelWrapper** class defines the model, how to train it and other methods for loading the model and making predictions.
 
-4. The **Trainer** class plays the role of training and saving the model.
-
-5. The **ModelAnalysis** analyzes the model on different metrics at user-defined dimensions. Analyzing metrics at different slices of data could determine if the trained model is biased to some feature value or any slice of data that model performance could be improved.
+4. The **ModelAnalysis** analyzes the model on different metrics at user-defined dimensions. Analyzing metrics at different slices of data could determine if the trained model is biased to some feature value or any slice of data that model performance could be improved.
 
 In SERVING step, raw data is fed into the *fitted* FeatureManager to get the transfomed features that the trained model could use. The model is then making predictions for the transformed features.
 
