@@ -35,9 +35,6 @@ message LgbmFitParams{
     repeated string eval_metric = 4;
 }
 
-
-
-
 // XGBoost parameters in https://xgboost.readthedocs.io/en/latest/parameter.html
 // Next id: 14
 message XgboostModelParams {
@@ -86,14 +83,14 @@ message CatboostModelParams {
     optional string eval_metric = 21;
 }
 
-
+// TODO: add CatBoostFitParams
 
 message ModelWrapper {
     required string cls_name = 1;
 
     oneof model_params {
         LgbmModelParams lgbm_model_params = 2;
-        XgboostModelParams xgboost_model_parmas = 3;
+        XgboostModelParams xgboost_model_params = 3;
         CatboostModelParams catboost_model_params = 4;
     }
 
