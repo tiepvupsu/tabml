@@ -5,7 +5,6 @@ import mlflow
 from tabml import experiment_manager, model_wrappers
 from tabml.data_loaders import BaseDataLoader
 from tabml.model_analysis import ModelAnalysis
-from tabml.trainers import BaseTrainer
 from tabml.utils import factory
 from tabml.utils.logger import logger
 from tabml.utils.pb_helpers import parse_pipeline_config_pb
@@ -41,7 +40,7 @@ class BasePipeline(ABC):
         self.data_loader = self._get_data_loader()
         assert self.data_loader.label_col is not None, "label_col must be specified"
         self._get_model_wrapper(custom_model_wrapper)
-        self.trainer = self._get_trainer()
+        # self.trainer = self._get_trainer()
 
         logger.add(self.exp_manager.get_log_path())
 
@@ -59,7 +58,7 @@ class BasePipeline(ABC):
     def train(self):
         model_dir = self.exp_manager.run_dir
         logger.info("Start training the model.")
-        self.trainer.train(model_dir)
+        self.model_wrapper.fit(self.data_loader, model_dir)
 
     def _get_data_loader(self) -> BaseDataLoader:
         return factory.create(self.config.data_loader.cls_name)(self.config)
@@ -72,10 +71,10 @@ class BasePipeline(ABC):
                 self.config
             )
 
-    def _get_trainer(self) -> BaseTrainer:
-        return factory.create(self.config.trainer.cls_name)(
-            self.model_wrapper, self.data_loader, self.config
-        )
+    # def _get_trainer(self) -> BaseTrainer:
+    #     return factory.create(self.config.trainer.cls_name)(
+    #         self.model_wrapper, self.data_loader, self.config
+    #     )
 
     def analyze_model(self) -> None:
         """Analyze the model on the validation dataset.

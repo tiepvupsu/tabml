@@ -1,13 +1,16 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Iterable, Union
+from typing import Any, Dict, Iterable, Tuple, Union
 
 import mlflow
 from catboost import CatBoostClassifier, CatBoostRegressor
 from lightgbm import LGBMClassifier, LGBMRegressor
 from xgboost import XGBClassifier, XGBRegressor
 
+from tabml.data_loaders import BaseDataLoader
 from tabml.utils import utils
+from tabml.utils.logger import boosting_logger_eval
 from tabml.utils.pb_helpers import pb_to_dict
+from tabml.utils.utils import save_as_pickle
 
 MLFLOW_AUTOLOG = {
     "lightgbm": mlflow.lightgbm.autolog(),
@@ -24,6 +27,9 @@ class BaseModelWrapper(ABC):
         self.model = None
         self.feature_names = list(self.config.data_loader.features_to_model)
         self.params: Union[Dict[str, Any], None] = None
+
+    def fit(self, data_loader: BaseDataLoader, model_dir: str):
+        pass
 
     @abstractmethod
     def predict(self, data) -> Iterable:
@@ -43,7 +49,33 @@ class BaseModelWrapper(ABC):
         raise NotImplementedError
 
 
-class BaseLgbmModelWrapper(BaseModelWrapper):
+class BaseBoostingModelWrapper(BaseModelWrapper):
+    """A common model wrapper for boosting models.
+
+    Boosting models: LightGBM, XGBoost, CatBoost."""
+
+    def __init__(self, config):
+        super().__init__(config)
+        self.save_model_name = "model_0"
+
+    @abstractmethod
+    def _get_fit_params(self, train_data: Tuple, val_data: Tuple) -> Dict:
+        raise NotImplementedError
+
+    def fit(self, data_loader: BaseDataLoader, model_dir: str):
+        assert (
+            data_loader.label_col is not None
+        ), "data_loader.label_col must be declared in BaseDataLoader subclasses."
+        train_feature, train_label = data_loader.get_train_data_and_label()
+        val_data = data_loader.get_val_data_and_label()
+
+        fit_params = self._get_fit_params((train_feature, train_label), val_data)
+
+        self.model.fit(X=train_feature, y=train_label, **fit_params)
+        save_as_pickle(self.model, model_dir, self.save_model_name)
+
+
+class BaseLgbmModelWrapper(BaseBoostingModelWrapper):
     mlflow_model_type = "lightgbm"
 
     def __init__(self, config):
@@ -61,6 +93,15 @@ class BaseLgbmModelWrapper(BaseModelWrapper):
     def load_model(self, model_path: str):
         self.model = utils.load_pickle(model_path)
 
+    def _get_fit_params(self, train_data: Tuple, val_data: Tuple) -> Dict:
+        fit_params = {
+            "eval_set": [train_data, val_data],
+            "eval_names": ["train", "val"],
+            "callbacks": [boosting_logger_eval(model="lgbm")],
+            **pb_to_dict(self.config.trainer.lgbm_params),
+        }
+        return fit_params
+
 
 class LgbmClassifierModelWrapper(BaseLgbmModelWrapper):
     def build_model(self):
@@ -75,7 +116,7 @@ class LgbmRegressorModelWrapper(BaseLgbmModelWrapper):
         return LGBMRegressor(**self.params)
 
 
-class BaseXGBoostModelWrapper(BaseModelWrapper):
+class BaseXGBoostModelWrapper(BaseBoostingModelWrapper):
     mlflow_model_type = "xgboost"
 
     def __init__(self, config):
@@ -94,6 +135,14 @@ class BaseXGBoostModelWrapper(BaseModelWrapper):
     def load_model(self, model_path: str):
         self.model = utils.load_pickle(model_path)
 
+    def _get_fit_params(self, train_data, val_data):
+        fit_params = {
+            "eval_set": [train_data, val_data],
+            "callbacks": [boosting_logger_eval(model="xgboost")],
+            **pb_to_dict(self.config.trainer.xgboost_params),
+        }
+        return fit_params
+
 
 class XGBoostRegressorModelWrapper(BaseXGBoostModelWrapper):
     def build_model(self):
@@ -108,7 +157,7 @@ class XGBoostClassifierModelWrapper(BaseXGBoostModelWrapper):
         return self.model.predict_proba(data)[:, 1]
 
 
-class BaseCatBoostModelWrapper(BaseModelWrapper):
+class BaseCatBoostModelWrapper(BaseBoostingModelWrapper):
     mlflow_model_type = "catboost"
 
     def __init__(self, config):
@@ -126,6 +175,10 @@ class BaseCatBoostModelWrapper(BaseModelWrapper):
 
     def load_model(self, model_path: str):
         self.model = utils.load_pickle(model_path)
+
+    def _get_fit_params(self, train_data, val_data):
+        fit_params = {"eval_set": [val_data]}
+        return fit_params
 
 
 class CatBoostClassifierModelWrapper(BaseCatBoostModelWrapper):
