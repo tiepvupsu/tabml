@@ -11,7 +11,7 @@ from . import feature_manager, pipelines
 def _test_inference(
     config_path, test_custom_pipeline_config_path=False, transformer_path=None
 ):
-    feature_config_path = "./configs/feature_config.pb"
+    feature_config_path = "./configs/feature_config.yaml"
     last_model_run_dir = ExperimentManger(config_path).get_most_recent_run_dir()
     model_path = Path(last_model_run_dir) / "model_0"
     pipeline_config_path = config_path if test_custom_pipeline_config_path else None

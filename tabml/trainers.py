@@ -4,8 +4,8 @@ from typing import Dict, Tuple
 import pandas as pd
 
 from tabml import data_loaders, model_wrappers
+from tabml.utils.config_helpers import pb_to_dict
 from tabml.utils.logger import boosting_logger_eval
-from tabml.utils.pb_helpers import pb_to_dict
 from tabml.utils.utils import save_as_pickle
 
 

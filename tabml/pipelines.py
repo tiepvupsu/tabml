@@ -7,8 +7,8 @@ from tabml.data_loaders import BaseDataLoader
 from tabml.model_analysis import ModelAnalysis
 from tabml.trainers import BaseTrainer
 from tabml.utils import factory
+from tabml.utils.config_helpers import parse_pipeline_config
 from tabml.utils.logger import logger
-from tabml.utils.pb_helpers import parse_pipeline_config_pb
 
 
 class BasePipeline(ABC):
@@ -37,7 +37,7 @@ class BasePipeline(ABC):
         self.exp_manager = experiment_manager.ExperimentManger(
             path_to_config, custom_run_dir=custom_run_dir
         )
-        self.config = parse_pipeline_config_pb(path_to_config)
+        self.config = parse_pipeline_config(path_to_config)
         self.data_loader = self._get_data_loader()
         assert self.data_loader.label_col is not None, "label_col must be specified"
         self._get_model_wrapper(custom_model_wrapper)

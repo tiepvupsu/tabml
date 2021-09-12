@@ -14,6 +14,7 @@ setup(
     download_url="https://github.com/tiepvupsu/tabml/archive/refs/tags/v0_1_10.tar.gz",
     keywords=["Machine Learning", "Tabular"],
     install_requires=[
+        "attrdict>=2.0.1",
         "catboost>=0.26.1",
         "GPUtil>=1.4.0",
         "kaggle>=1.5.6",
@@ -24,6 +25,7 @@ setup(
         "pandas>=1.3.1",
         "pandas-profiling>=2.9.0",
         "protobuf>=3.13.0",
+        "pyyaml>=5.4.1",
         "scikit-learn>=0.24.2",
         "scipy>=1.6.2",
         "shap>=0.39.0",

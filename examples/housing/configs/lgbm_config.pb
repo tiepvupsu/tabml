@@ -3,7 +3,7 @@
 config_name: "lgbm"
 data_loader {
     cls_name: "tabml.data_loaders.BaseDataLoader"
-    feature_manager_config_path: "configs/feature_config.pb"
+    feature_manager_config_path: "configs/feature_config.yaml"
 
     features_to_model: "scaled_housing_median_age"
     features_to_model: "median_income"

@@ -7,7 +7,7 @@ from lightgbm import LGBMClassifier, LGBMRegressor
 from xgboost import XGBClassifier, XGBRegressor
 
 from tabml.utils import utils
-from tabml.utils.pb_helpers import pb_to_dict
+from tabml.utils.config_helpers import pb_to_dict
 
 MLFLOW_AUTOLOG = {
     "lightgbm": mlflow.lightgbm.autolog(),
@@ -102,9 +102,7 @@ class XGBoostRegressorModelWrapper(BaseXGBoostModelWrapper):
 
 class XGBoostClassifierModelWrapper(BaseXGBoostModelWrapper):
     def build_model(self):
-        return XGBClassifier(
-            tree_method=self.tree_method, **self.params, use_label_encoder=False
-        )
+        return XGBClassifier(tree_method=self.tree_method, **self.params)
 
     def predict_proba(self, data) -> Iterable:
         return self.model.predict_proba(data)[:, 1]
