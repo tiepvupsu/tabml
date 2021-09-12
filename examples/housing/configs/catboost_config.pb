@@ -24,16 +24,13 @@ data_loader {
     submission_filters: "not is_train"
 }
 model_wrapper {
-    # use a custom lgbm model_wrapper
-    catboost_params {
+    # use a custom catboost model_wrapper
+    catboost_model_params {
         learning_rate: 0.1
         n_estimators: 200
         objective: "RMSE"
         eval_metric: "RMSE"
     }
-}
-trainer {
-    cls_name: "tabml.trainers.CatBoostTrainer"
 }
 model_analysis {
     training_size: 500
