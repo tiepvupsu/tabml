@@ -20,10 +20,11 @@ data_loader {
 
 model_wrapper {
   cls_name: "tabml.model_wrappers.LgbmClassifierModelWrapper"
-  lgbm_params {learning_rate: 0.01}
-}
-trainer {
-  cls_name: "tabml.trainers.LgbmTrainer"
+  lgbm_model_params {learning_rate: 0.01}
+  lgbm_fit_params {
+    categorical_feature: "coded_pclass"
+    categorical_feature: "coded_title"
+  }
 }
 model_analysis {
   metrics: "accuracy_score"
