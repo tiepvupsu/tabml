@@ -46,7 +46,7 @@ pip install tabml
 
 ## Main components
 
-![components](https://user-images.githubusercontent.com/2201237/132614816-c5fb0840-441f-42db-8c5b-0306aef16b3a.png)
+![components](flow.png)
 
 In TRAINING step,
 
