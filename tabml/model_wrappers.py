@@ -27,16 +27,13 @@ class BaseModelWrapper(ABC):
 
     @abstractmethod
     def predict(self, data) -> Iterable:
-        """Predicts data inputs.
-
-        data should be the remaining part of dataset without the label column.
-        """
+        """Predicts data inputs."""
         raise NotImplementedError
 
     def predict_proba(self, data) -> Iterable:
         """Predicts probability of data inputs.
 
-        Only appropriate with binary classification problems, the second value in
+        Only applied to binary classification problems, the second value in
         probability (prob of positive) is chosen.
         """
         raise NotImplementedError
