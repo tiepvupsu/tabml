@@ -19,148 +19,148 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto2',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n!tabml/protos/model_wrappers.proto\x12\x0ctabml.protos\"\xcb\x03\n\x16ModelWrapperLgbmParams\x12\x15\n\rlearning_rate\x18\x01 \x01(\x02\x12\x14\n\x0cn_estimators\x18\x02 \x01(\x05\x12\x12\n\nnum_leaves\x18\x03 \x01(\x05\x12\x11\n\tmax_depth\x18\x04 \x01(\x05\x12\x1d\n\tobjective\x18\x05 \x01(\t:\nregression\x12\x18\n\x10\x63olsample_bytree\x18\x06 \x01(\x02\x12\x11\n\tsubsample\x18\x07 \x01(\x02\x12\x11\n\treg_alpha\x18\x08 \x01(\x02\x12\x16\n\x0emin_split_gain\x18\t \x01(\x02\x12\x12\n\nreg_lambda\x18\n \x01(\x02\x12\x18\n\x10min_child_weight\x18\x0b \x01(\x02\x12\x19\n\x11min_child_samples\x18\x0c \x01(\x05\x12\x18\n\x0crandom_state\x18\r \x01(\x05:\x02\x34\x32\x12\x16\n\x0esubsample_freq\x18\x0e \x01(\x05\x12\x19\n\x11subsample_for_bin\x18\x0f \x01(\x05\x12\x15\n\rboosting_type\x18\x10 \x01(\t\x12\x0e\n\x06metric\x18\x11 \x01(\t\x12\x18\n\x10scale_pos_weight\x18\x12 \x01(\x05\x12\x0f\n\x07max_bin\x18\x13 \x01(\x05\"\xb5\x02\n\x19ModelWrapperXgboostParams\x12\x0f\n\x07use_gpu\x18\x01 \x01(\x08\x12\x11\n\tmax_depth\x18\x02 \x01(\x05\x12\x14\n\x0cn_estimators\x18\x03 \x01(\x05\x12\r\n\x05gamma\x18\x04 \x01(\x02\x12#\n\tobjective\x18\x05 \x01(\t:\x10reg:squarederror\x12\x18\n\x10\x63olsample_bytree\x18\x06 \x01(\x02\x12\x11\n\tsubsample\x18\x07 \x01(\x02\x12\x11\n\treg_alpha\x18\x08 \x01(\x02\x12\x12\n\nreg_lambda\x18\t \x01(\x02\x12\x15\n\rlearning_rate\x18\n \x01(\x02\x12\x18\n\x10min_child_weight\x18\x0b \x01(\x02\x12\x10\n\x04seed\x18\x0c \x01(\x05:\x02\x34\x32\x12\x13\n\x0b\x65val_metric\x18\r \x01(\t\"\xd8\x03\n\x1aModelWrapperCatboostParams\x12\x0f\n\x07od_wait\x18\x01 \x01(\x05\x12\x11\n\tmax_depth\x18\x02 \x01(\x05\x12\x14\n\x0cn_estimators\x18\x03 \x01(\x05\x12\x15\n\rlearning_rate\x18\x04 \x01(\x02\x12\x18\n\x0crandom_state\x18\x05 \x01(\x05:\x02\x34\x32\x12\x11\n\tobjective\x18\x06 \x01(\t\x12\x11\n\tsubsample\x18\x07 \x01(\x02\x12\x12\n\nreg_lambda\x18\x08 \x01(\x02\x12\x18\n\x10one_hot_max_size\x18\t \x01(\x05\x12\x19\n\x11min_child_samples\x18\n \x01(\x05\x12\x1b\n\x13\x62\x61gging_temperature\x18\x0b \x01(\x05\x12\x14\n\x0c\x62order_count\x18\x0c \x01(\x05\x12\x1a\n\x12max_ctr_complexity\x18\r \x01(\x05\x12\x0f\n\x07od_type\x18\x0e \x01(\t\x12\x12\n\nnum_leaves\x18\x0f \x01(\x05\x12\x16\n\x0e\x62ootstrap_type\x18\x10 \x01(\t\x12\x19\n\x11\x63olsample_bylevel\x18\x11 \x01(\x02\x12\x0f\n\x07od_pval\x18\x13 \x01(\x02\x12\x13\n\x0bgrow_policy\x18\x14 \x01(\t\x12\x13\n\x0b\x65val_metric\x18\x15 \x01(\t\"\xef\x01\n\x0cModelWrapper\x12\x10\n\x08\x63ls_name\x18\x01 \x02(\t\x12;\n\x0blgbm_params\x18\x02 \x01(\x0b\x32$.tabml.protos.ModelWrapperLgbmParamsH\x00\x12\x41\n\x0exgboost_params\x18\x03 \x01(\x0b\x32\'.tabml.protos.ModelWrapperXgboostParamsH\x00\x12\x43\n\x0f\x63\x61tboost_params\x18\x04 \x01(\x0b\x32(.tabml.protos.ModelWrapperCatboostParamsH\x00\x42\x08\n\x06params'
+  serialized_pb=b'\n!tabml/protos/model_wrappers.proto\x12\x0ctabml.protos\"\xc4\x03\n\x0fLgbmModelParams\x12\x15\n\rlearning_rate\x18\x01 \x01(\x02\x12\x14\n\x0cn_estimators\x18\x02 \x01(\x05\x12\x12\n\nnum_leaves\x18\x03 \x01(\x05\x12\x11\n\tmax_depth\x18\x04 \x01(\x05\x12\x1d\n\tobjective\x18\x05 \x01(\t:\nregression\x12\x18\n\x10\x63olsample_bytree\x18\x06 \x01(\x02\x12\x11\n\tsubsample\x18\x07 \x01(\x02\x12\x11\n\treg_alpha\x18\x08 \x01(\x02\x12\x16\n\x0emin_split_gain\x18\t \x01(\x02\x12\x12\n\nreg_lambda\x18\n \x01(\x02\x12\x18\n\x10min_child_weight\x18\x0b \x01(\x02\x12\x19\n\x11min_child_samples\x18\x0c \x01(\x05\x12\x18\n\x0crandom_state\x18\r \x01(\x05:\x02\x34\x32\x12\x16\n\x0esubsample_freq\x18\x0e \x01(\x05\x12\x19\n\x11subsample_for_bin\x18\x0f \x01(\x05\x12\x15\n\rboosting_type\x18\x10 \x01(\t\x12\x0e\n\x06metric\x18\x11 \x01(\t\x12\x18\n\x10scale_pos_weight\x18\x12 \x01(\x05\x12\x0f\n\x07max_bin\x18\x13 \x01(\x05\"q\n\rLgbmFitParams\x12\x0f\n\x07verbose\x18\x01 \x01(\x08\x12\x1d\n\x15\x65\x61rly_stopping_rounds\x18\x02 \x01(\x05\x12\x1b\n\x13\x63\x61tegorical_feature\x18\x03 \x03(\t\x12\x13\n\x0b\x65val_metric\x18\x04 \x03(\t\"\xae\x02\n\x12XgboostModelParams\x12\x0f\n\x07use_gpu\x18\x01 \x01(\x08\x12\x11\n\tmax_depth\x18\x02 \x01(\x05\x12\x14\n\x0cn_estimators\x18\x03 \x01(\x05\x12\r\n\x05gamma\x18\x04 \x01(\x02\x12#\n\tobjective\x18\x05 \x01(\t:\x10reg:squarederror\x12\x18\n\x10\x63olsample_bytree\x18\x06 \x01(\x02\x12\x11\n\tsubsample\x18\x07 \x01(\x02\x12\x11\n\treg_alpha\x18\x08 \x01(\x02\x12\x12\n\nreg_lambda\x18\t \x01(\x02\x12\x15\n\rlearning_rate\x18\n \x01(\x02\x12\x18\n\x10min_child_weight\x18\x0b \x01(\x02\x12\x10\n\x04seed\x18\x0c \x01(\x05:\x02\x34\x32\x12\x13\n\x0b\x65val_metric\x18\r \x01(\t\"B\n\x10XgboostFitParams\x12\x0f\n\x07verbose\x18\x01 \x01(\x08\x12\x1d\n\x15\x65\x61rly_stopping_rounds\x18\x02 \x01(\x05\"\xd1\x03\n\x13\x43\x61tboostModelParams\x12\x0f\n\x07od_wait\x18\x01 \x01(\x05\x12\x11\n\tmax_depth\x18\x02 \x01(\x05\x12\x14\n\x0cn_estimators\x18\x03 \x01(\x05\x12\x15\n\rlearning_rate\x18\x04 \x01(\x02\x12\x18\n\x0crandom_state\x18\x05 \x01(\x05:\x02\x34\x32\x12\x11\n\tobjective\x18\x06 \x01(\t\x12\x11\n\tsubsample\x18\x07 \x01(\x02\x12\x12\n\nreg_lambda\x18\x08 \x01(\x02\x12\x18\n\x10one_hot_max_size\x18\t \x01(\x05\x12\x19\n\x11min_child_samples\x18\n \x01(\x05\x12\x1b\n\x13\x62\x61gging_temperature\x18\x0b \x01(\x05\x12\x14\n\x0c\x62order_count\x18\x0c \x01(\x05\x12\x1a\n\x12max_ctr_complexity\x18\r \x01(\x05\x12\x0f\n\x07od_type\x18\x0e \x01(\t\x12\x12\n\nnum_leaves\x18\x0f \x01(\x05\x12\x16\n\x0e\x62ootstrap_type\x18\x10 \x01(\t\x12\x19\n\x11\x63olsample_bylevel\x18\x11 \x01(\x02\x12\x0f\n\x07od_pval\x18\x13 \x01(\x02\x12\x13\n\x0bgrow_policy\x18\x14 \x01(\t\x12\x13\n\x0b\x65val_metric\x18\x15 \x01(\t\"\xf6\x02\n\x0cModelWrapper\x12\x10\n\x08\x63ls_name\x18\x01 \x02(\t\x12:\n\x11lgbm_model_params\x18\x02 \x01(\x0b\x32\x1d.tabml.protos.LgbmModelParamsH\x00\x12@\n\x14xgboost_model_parmas\x18\x03 \x01(\x0b\x32 .tabml.protos.XgboostModelParamsH\x00\x12\x42\n\x15\x63\x61tboost_model_params\x18\x04 \x01(\x0b\x32!.tabml.protos.CatboostModelParamsH\x00\x12\x36\n\x0flgbm_fit_params\x18\x05 \x01(\x0b\x32\x1b.tabml.protos.LgbmFitParamsH\x01\x12<\n\x12xgboost_fit_params\x18\x06 \x01(\x0b\x32\x1e.tabml.protos.XgboostFitParamsH\x01\x42\x0e\n\x0cmodel_paramsB\x0c\n\nfit_params'
 )
 
 
 
 
-_MODELWRAPPERLGBMPARAMS = _descriptor.Descriptor(
-  name='ModelWrapperLgbmParams',
-  full_name='tabml.protos.ModelWrapperLgbmParams',
+_LGBMMODELPARAMS = _descriptor.Descriptor(
+  name='LgbmModelParams',
+  full_name='tabml.protos.LgbmModelParams',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='learning_rate', full_name='tabml.protos.ModelWrapperLgbmParams.learning_rate', index=0,
+      name='learning_rate', full_name='tabml.protos.LgbmModelParams.learning_rate', index=0,
       number=1, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='n_estimators', full_name='tabml.protos.ModelWrapperLgbmParams.n_estimators', index=1,
+      name='n_estimators', full_name='tabml.protos.LgbmModelParams.n_estimators', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='num_leaves', full_name='tabml.protos.ModelWrapperLgbmParams.num_leaves', index=2,
+      name='num_leaves', full_name='tabml.protos.LgbmModelParams.num_leaves', index=2,
       number=3, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='max_depth', full_name='tabml.protos.ModelWrapperLgbmParams.max_depth', index=3,
+      name='max_depth', full_name='tabml.protos.LgbmModelParams.max_depth', index=3,
       number=4, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='objective', full_name='tabml.protos.ModelWrapperLgbmParams.objective', index=4,
+      name='objective', full_name='tabml.protos.LgbmModelParams.objective', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=True, default_value=b"regression".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='colsample_bytree', full_name='tabml.protos.ModelWrapperLgbmParams.colsample_bytree', index=5,
+      name='colsample_bytree', full_name='tabml.protos.LgbmModelParams.colsample_bytree', index=5,
       number=6, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='subsample', full_name='tabml.protos.ModelWrapperLgbmParams.subsample', index=6,
+      name='subsample', full_name='tabml.protos.LgbmModelParams.subsample', index=6,
       number=7, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='reg_alpha', full_name='tabml.protos.ModelWrapperLgbmParams.reg_alpha', index=7,
+      name='reg_alpha', full_name='tabml.protos.LgbmModelParams.reg_alpha', index=7,
       number=8, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='min_split_gain', full_name='tabml.protos.ModelWrapperLgbmParams.min_split_gain', index=8,
+      name='min_split_gain', full_name='tabml.protos.LgbmModelParams.min_split_gain', index=8,
       number=9, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='reg_lambda', full_name='tabml.protos.ModelWrapperLgbmParams.reg_lambda', index=9,
+      name='reg_lambda', full_name='tabml.protos.LgbmModelParams.reg_lambda', index=9,
       number=10, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='min_child_weight', full_name='tabml.protos.ModelWrapperLgbmParams.min_child_weight', index=10,
+      name='min_child_weight', full_name='tabml.protos.LgbmModelParams.min_child_weight', index=10,
       number=11, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='min_child_samples', full_name='tabml.protos.ModelWrapperLgbmParams.min_child_samples', index=11,
+      name='min_child_samples', full_name='tabml.protos.LgbmModelParams.min_child_samples', index=11,
       number=12, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='random_state', full_name='tabml.protos.ModelWrapperLgbmParams.random_state', index=12,
+      name='random_state', full_name='tabml.protos.LgbmModelParams.random_state', index=12,
       number=13, type=5, cpp_type=1, label=1,
       has_default_value=True, default_value=42,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='subsample_freq', full_name='tabml.protos.ModelWrapperLgbmParams.subsample_freq', index=13,
+      name='subsample_freq', full_name='tabml.protos.LgbmModelParams.subsample_freq', index=13,
       number=14, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='subsample_for_bin', full_name='tabml.protos.ModelWrapperLgbmParams.subsample_for_bin', index=14,
+      name='subsample_for_bin', full_name='tabml.protos.LgbmModelParams.subsample_for_bin', index=14,
       number=15, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='boosting_type', full_name='tabml.protos.ModelWrapperLgbmParams.boosting_type', index=15,
+      name='boosting_type', full_name='tabml.protos.LgbmModelParams.boosting_type', index=15,
       number=16, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='metric', full_name='tabml.protos.ModelWrapperLgbmParams.metric', index=16,
+      name='metric', full_name='tabml.protos.LgbmModelParams.metric', index=16,
       number=17, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='scale_pos_weight', full_name='tabml.protos.ModelWrapperLgbmParams.scale_pos_weight', index=17,
+      name='scale_pos_weight', full_name='tabml.protos.LgbmModelParams.scale_pos_weight', index=17,
       number=18, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='max_bin', full_name='tabml.protos.ModelWrapperLgbmParams.max_bin', index=18,
+      name='max_bin', full_name='tabml.protos.LgbmModelParams.max_bin', index=18,
       number=19, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -179,104 +179,157 @@ _MODELWRAPPERLGBMPARAMS = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=52,
-  serialized_end=511,
+  serialized_end=504,
 )
 
 
-_MODELWRAPPERXGBOOSTPARAMS = _descriptor.Descriptor(
-  name='ModelWrapperXgboostParams',
-  full_name='tabml.protos.ModelWrapperXgboostParams',
+_LGBMFITPARAMS = _descriptor.Descriptor(
+  name='LgbmFitParams',
+  full_name='tabml.protos.LgbmFitParams',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='use_gpu', full_name='tabml.protos.ModelWrapperXgboostParams.use_gpu', index=0,
+      name='verbose', full_name='tabml.protos.LgbmFitParams.verbose', index=0,
       number=1, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='max_depth', full_name='tabml.protos.ModelWrapperXgboostParams.max_depth', index=1,
+      name='early_stopping_rounds', full_name='tabml.protos.LgbmFitParams.early_stopping_rounds', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='n_estimators', full_name='tabml.protos.ModelWrapperXgboostParams.n_estimators', index=2,
+      name='categorical_feature', full_name='tabml.protos.LgbmFitParams.categorical_feature', index=2,
+      number=3, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='eval_metric', full_name='tabml.protos.LgbmFitParams.eval_metric', index=3,
+      number=4, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=506,
+  serialized_end=619,
+)
+
+
+_XGBOOSTMODELPARAMS = _descriptor.Descriptor(
+  name='XgboostModelParams',
+  full_name='tabml.protos.XgboostModelParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='use_gpu', full_name='tabml.protos.XgboostModelParams.use_gpu', index=0,
+      number=1, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='max_depth', full_name='tabml.protos.XgboostModelParams.max_depth', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='n_estimators', full_name='tabml.protos.XgboostModelParams.n_estimators', index=2,
       number=3, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='gamma', full_name='tabml.protos.ModelWrapperXgboostParams.gamma', index=3,
+      name='gamma', full_name='tabml.protos.XgboostModelParams.gamma', index=3,
       number=4, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='objective', full_name='tabml.protos.ModelWrapperXgboostParams.objective', index=4,
+      name='objective', full_name='tabml.protos.XgboostModelParams.objective', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=True, default_value=b"reg:squarederror".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='colsample_bytree', full_name='tabml.protos.ModelWrapperXgboostParams.colsample_bytree', index=5,
+      name='colsample_bytree', full_name='tabml.protos.XgboostModelParams.colsample_bytree', index=5,
       number=6, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='subsample', full_name='tabml.protos.ModelWrapperXgboostParams.subsample', index=6,
+      name='subsample', full_name='tabml.protos.XgboostModelParams.subsample', index=6,
       number=7, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='reg_alpha', full_name='tabml.protos.ModelWrapperXgboostParams.reg_alpha', index=7,
+      name='reg_alpha', full_name='tabml.protos.XgboostModelParams.reg_alpha', index=7,
       number=8, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='reg_lambda', full_name='tabml.protos.ModelWrapperXgboostParams.reg_lambda', index=8,
+      name='reg_lambda', full_name='tabml.protos.XgboostModelParams.reg_lambda', index=8,
       number=9, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='learning_rate', full_name='tabml.protos.ModelWrapperXgboostParams.learning_rate', index=9,
+      name='learning_rate', full_name='tabml.protos.XgboostModelParams.learning_rate', index=9,
       number=10, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='min_child_weight', full_name='tabml.protos.ModelWrapperXgboostParams.min_child_weight', index=10,
+      name='min_child_weight', full_name='tabml.protos.XgboostModelParams.min_child_weight', index=10,
       number=11, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='seed', full_name='tabml.protos.ModelWrapperXgboostParams.seed', index=11,
+      name='seed', full_name='tabml.protos.XgboostModelParams.seed', index=11,
       number=12, type=5, cpp_type=1, label=1,
       has_default_value=True, default_value=42,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='eval_metric', full_name='tabml.protos.ModelWrapperXgboostParams.eval_metric', index=12,
+      name='eval_metric', full_name='tabml.protos.XgboostModelParams.eval_metric', index=12,
       number=13, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -294,154 +347,193 @@ _MODELWRAPPERXGBOOSTPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=514,
-  serialized_end=823,
+  serialized_start=622,
+  serialized_end=924,
 )
 
 
-_MODELWRAPPERCATBOOSTPARAMS = _descriptor.Descriptor(
-  name='ModelWrapperCatboostParams',
-  full_name='tabml.protos.ModelWrapperCatboostParams',
+_XGBOOSTFITPARAMS = _descriptor.Descriptor(
+  name='XgboostFitParams',
+  full_name='tabml.protos.XgboostFitParams',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='od_wait', full_name='tabml.protos.ModelWrapperCatboostParams.od_wait', index=0,
+      name='verbose', full_name='tabml.protos.XgboostFitParams.verbose', index=0,
+      number=1, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='early_stopping_rounds', full_name='tabml.protos.XgboostFitParams.early_stopping_rounds', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=926,
+  serialized_end=992,
+)
+
+
+_CATBOOSTMODELPARAMS = _descriptor.Descriptor(
+  name='CatboostModelParams',
+  full_name='tabml.protos.CatboostModelParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='od_wait', full_name='tabml.protos.CatboostModelParams.od_wait', index=0,
       number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='max_depth', full_name='tabml.protos.ModelWrapperCatboostParams.max_depth', index=1,
+      name='max_depth', full_name='tabml.protos.CatboostModelParams.max_depth', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='n_estimators', full_name='tabml.protos.ModelWrapperCatboostParams.n_estimators', index=2,
+      name='n_estimators', full_name='tabml.protos.CatboostModelParams.n_estimators', index=2,
       number=3, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='learning_rate', full_name='tabml.protos.ModelWrapperCatboostParams.learning_rate', index=3,
+      name='learning_rate', full_name='tabml.protos.CatboostModelParams.learning_rate', index=3,
       number=4, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='random_state', full_name='tabml.protos.ModelWrapperCatboostParams.random_state', index=4,
+      name='random_state', full_name='tabml.protos.CatboostModelParams.random_state', index=4,
       number=5, type=5, cpp_type=1, label=1,
       has_default_value=True, default_value=42,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='objective', full_name='tabml.protos.ModelWrapperCatboostParams.objective', index=5,
+      name='objective', full_name='tabml.protos.CatboostModelParams.objective', index=5,
       number=6, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='subsample', full_name='tabml.protos.ModelWrapperCatboostParams.subsample', index=6,
+      name='subsample', full_name='tabml.protos.CatboostModelParams.subsample', index=6,
       number=7, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='reg_lambda', full_name='tabml.protos.ModelWrapperCatboostParams.reg_lambda', index=7,
+      name='reg_lambda', full_name='tabml.protos.CatboostModelParams.reg_lambda', index=7,
       number=8, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='one_hot_max_size', full_name='tabml.protos.ModelWrapperCatboostParams.one_hot_max_size', index=8,
+      name='one_hot_max_size', full_name='tabml.protos.CatboostModelParams.one_hot_max_size', index=8,
       number=9, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='min_child_samples', full_name='tabml.protos.ModelWrapperCatboostParams.min_child_samples', index=9,
+      name='min_child_samples', full_name='tabml.protos.CatboostModelParams.min_child_samples', index=9,
       number=10, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='bagging_temperature', full_name='tabml.protos.ModelWrapperCatboostParams.bagging_temperature', index=10,
+      name='bagging_temperature', full_name='tabml.protos.CatboostModelParams.bagging_temperature', index=10,
       number=11, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='border_count', full_name='tabml.protos.ModelWrapperCatboostParams.border_count', index=11,
+      name='border_count', full_name='tabml.protos.CatboostModelParams.border_count', index=11,
       number=12, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='max_ctr_complexity', full_name='tabml.protos.ModelWrapperCatboostParams.max_ctr_complexity', index=12,
+      name='max_ctr_complexity', full_name='tabml.protos.CatboostModelParams.max_ctr_complexity', index=12,
       number=13, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='od_type', full_name='tabml.protos.ModelWrapperCatboostParams.od_type', index=13,
+      name='od_type', full_name='tabml.protos.CatboostModelParams.od_type', index=13,
       number=14, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='num_leaves', full_name='tabml.protos.ModelWrapperCatboostParams.num_leaves', index=14,
+      name='num_leaves', full_name='tabml.protos.CatboostModelParams.num_leaves', index=14,
       number=15, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='bootstrap_type', full_name='tabml.protos.ModelWrapperCatboostParams.bootstrap_type', index=15,
+      name='bootstrap_type', full_name='tabml.protos.CatboostModelParams.bootstrap_type', index=15,
       number=16, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='colsample_bylevel', full_name='tabml.protos.ModelWrapperCatboostParams.colsample_bylevel', index=16,
+      name='colsample_bylevel', full_name='tabml.protos.CatboostModelParams.colsample_bylevel', index=16,
       number=17, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='od_pval', full_name='tabml.protos.ModelWrapperCatboostParams.od_pval', index=17,
+      name='od_pval', full_name='tabml.protos.CatboostModelParams.od_pval', index=17,
       number=19, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='grow_policy', full_name='tabml.protos.ModelWrapperCatboostParams.grow_policy', index=18,
+      name='grow_policy', full_name='tabml.protos.CatboostModelParams.grow_policy', index=18,
       number=20, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='eval_metric', full_name='tabml.protos.ModelWrapperCatboostParams.eval_metric', index=19,
+      name='eval_metric', full_name='tabml.protos.CatboostModelParams.eval_metric', index=19,
       number=21, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -459,8 +551,8 @@ _MODELWRAPPERCATBOOSTPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=826,
-  serialized_end=1298,
+  serialized_start=995,
+  serialized_end=1460,
 )
 
 
@@ -480,22 +572,36 @@ _MODELWRAPPER = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='lgbm_params', full_name='tabml.protos.ModelWrapper.lgbm_params', index=1,
+      name='lgbm_model_params', full_name='tabml.protos.ModelWrapper.lgbm_model_params', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='xgboost_params', full_name='tabml.protos.ModelWrapper.xgboost_params', index=2,
+      name='xgboost_model_parmas', full_name='tabml.protos.ModelWrapper.xgboost_model_parmas', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='catboost_params', full_name='tabml.protos.ModelWrapper.catboost_params', index=3,
+      name='catboost_model_params', full_name='tabml.protos.ModelWrapper.catboost_model_params', index=3,
       number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='lgbm_fit_params', full_name='tabml.protos.ModelWrapper.lgbm_fit_params', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='xgboost_fit_params', full_name='tabml.protos.ModelWrapper.xgboost_fit_params', index=5,
+      number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -512,53 +618,82 @@ _MODELWRAPPER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
     _descriptor.OneofDescriptor(
-      name='params', full_name='tabml.protos.ModelWrapper.params',
+      name='model_params', full_name='tabml.protos.ModelWrapper.model_params',
       index=0, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
+    _descriptor.OneofDescriptor(
+      name='fit_params', full_name='tabml.protos.ModelWrapper.fit_params',
+      index=1, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
   ],
-  serialized_start=1301,
-  serialized_end=1540,
+  serialized_start=1463,
+  serialized_end=1837,
 )
 
-_MODELWRAPPER.fields_by_name['lgbm_params'].message_type = _MODELWRAPPERLGBMPARAMS
-_MODELWRAPPER.fields_by_name['xgboost_params'].message_type = _MODELWRAPPERXGBOOSTPARAMS
-_MODELWRAPPER.fields_by_name['catboost_params'].message_type = _MODELWRAPPERCATBOOSTPARAMS
-_MODELWRAPPER.oneofs_by_name['params'].fields.append(
-  _MODELWRAPPER.fields_by_name['lgbm_params'])
-_MODELWRAPPER.fields_by_name['lgbm_params'].containing_oneof = _MODELWRAPPER.oneofs_by_name['params']
-_MODELWRAPPER.oneofs_by_name['params'].fields.append(
-  _MODELWRAPPER.fields_by_name['xgboost_params'])
-_MODELWRAPPER.fields_by_name['xgboost_params'].containing_oneof = _MODELWRAPPER.oneofs_by_name['params']
-_MODELWRAPPER.oneofs_by_name['params'].fields.append(
-  _MODELWRAPPER.fields_by_name['catboost_params'])
-_MODELWRAPPER.fields_by_name['catboost_params'].containing_oneof = _MODELWRAPPER.oneofs_by_name['params']
-DESCRIPTOR.message_types_by_name['ModelWrapperLgbmParams'] = _MODELWRAPPERLGBMPARAMS
-DESCRIPTOR.message_types_by_name['ModelWrapperXgboostParams'] = _MODELWRAPPERXGBOOSTPARAMS
-DESCRIPTOR.message_types_by_name['ModelWrapperCatboostParams'] = _MODELWRAPPERCATBOOSTPARAMS
+_MODELWRAPPER.fields_by_name['lgbm_model_params'].message_type = _LGBMMODELPARAMS
+_MODELWRAPPER.fields_by_name['xgboost_model_parmas'].message_type = _XGBOOSTMODELPARAMS
+_MODELWRAPPER.fields_by_name['catboost_model_params'].message_type = _CATBOOSTMODELPARAMS
+_MODELWRAPPER.fields_by_name['lgbm_fit_params'].message_type = _LGBMFITPARAMS
+_MODELWRAPPER.fields_by_name['xgboost_fit_params'].message_type = _XGBOOSTFITPARAMS
+_MODELWRAPPER.oneofs_by_name['model_params'].fields.append(
+  _MODELWRAPPER.fields_by_name['lgbm_model_params'])
+_MODELWRAPPER.fields_by_name['lgbm_model_params'].containing_oneof = _MODELWRAPPER.oneofs_by_name['model_params']
+_MODELWRAPPER.oneofs_by_name['model_params'].fields.append(
+  _MODELWRAPPER.fields_by_name['xgboost_model_parmas'])
+_MODELWRAPPER.fields_by_name['xgboost_model_parmas'].containing_oneof = _MODELWRAPPER.oneofs_by_name['model_params']
+_MODELWRAPPER.oneofs_by_name['model_params'].fields.append(
+  _MODELWRAPPER.fields_by_name['catboost_model_params'])
+_MODELWRAPPER.fields_by_name['catboost_model_params'].containing_oneof = _MODELWRAPPER.oneofs_by_name['model_params']
+_MODELWRAPPER.oneofs_by_name['fit_params'].fields.append(
+  _MODELWRAPPER.fields_by_name['lgbm_fit_params'])
+_MODELWRAPPER.fields_by_name['lgbm_fit_params'].containing_oneof = _MODELWRAPPER.oneofs_by_name['fit_params']
+_MODELWRAPPER.oneofs_by_name['fit_params'].fields.append(
+  _MODELWRAPPER.fields_by_name['xgboost_fit_params'])
+_MODELWRAPPER.fields_by_name['xgboost_fit_params'].containing_oneof = _MODELWRAPPER.oneofs_by_name['fit_params']
+DESCRIPTOR.message_types_by_name['LgbmModelParams'] = _LGBMMODELPARAMS
+DESCRIPTOR.message_types_by_name['LgbmFitParams'] = _LGBMFITPARAMS
+DESCRIPTOR.message_types_by_name['XgboostModelParams'] = _XGBOOSTMODELPARAMS
+DESCRIPTOR.message_types_by_name['XgboostFitParams'] = _XGBOOSTFITPARAMS
+DESCRIPTOR.message_types_by_name['CatboostModelParams'] = _CATBOOSTMODELPARAMS
 DESCRIPTOR.message_types_by_name['ModelWrapper'] = _MODELWRAPPER
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-ModelWrapperLgbmParams = _reflection.GeneratedProtocolMessageType('ModelWrapperLgbmParams', (_message.Message,), {
-  'DESCRIPTOR' : _MODELWRAPPERLGBMPARAMS,
+LgbmModelParams = _reflection.GeneratedProtocolMessageType('LgbmModelParams', (_message.Message,), {
+  'DESCRIPTOR' : _LGBMMODELPARAMS,
   '__module__' : 'tabml.protos.model_wrappers_pb2'
-  # @@protoc_insertion_point(class_scope:tabml.protos.ModelWrapperLgbmParams)
+  # @@protoc_insertion_point(class_scope:tabml.protos.LgbmModelParams)
   })
-_sym_db.RegisterMessage(ModelWrapperLgbmParams)
+_sym_db.RegisterMessage(LgbmModelParams)
 
-ModelWrapperXgboostParams = _reflection.GeneratedProtocolMessageType('ModelWrapperXgboostParams', (_message.Message,), {
-  'DESCRIPTOR' : _MODELWRAPPERXGBOOSTPARAMS,
+LgbmFitParams = _reflection.GeneratedProtocolMessageType('LgbmFitParams', (_message.Message,), {
+  'DESCRIPTOR' : _LGBMFITPARAMS,
   '__module__' : 'tabml.protos.model_wrappers_pb2'
-  # @@protoc_insertion_point(class_scope:tabml.protos.ModelWrapperXgboostParams)
+  # @@protoc_insertion_point(class_scope:tabml.protos.LgbmFitParams)
   })
-_sym_db.RegisterMessage(ModelWrapperXgboostParams)
+_sym_db.RegisterMessage(LgbmFitParams)
 
-ModelWrapperCatboostParams = _reflection.GeneratedProtocolMessageType('ModelWrapperCatboostParams', (_message.Message,), {
-  'DESCRIPTOR' : _MODELWRAPPERCATBOOSTPARAMS,
+XgboostModelParams = _reflection.GeneratedProtocolMessageType('XgboostModelParams', (_message.Message,), {
+  'DESCRIPTOR' : _XGBOOSTMODELPARAMS,
   '__module__' : 'tabml.protos.model_wrappers_pb2'
-  # @@protoc_insertion_point(class_scope:tabml.protos.ModelWrapperCatboostParams)
+  # @@protoc_insertion_point(class_scope:tabml.protos.XgboostModelParams)
   })
-_sym_db.RegisterMessage(ModelWrapperCatboostParams)
+_sym_db.RegisterMessage(XgboostModelParams)
+
+XgboostFitParams = _reflection.GeneratedProtocolMessageType('XgboostFitParams', (_message.Message,), {
+  'DESCRIPTOR' : _XGBOOSTFITPARAMS,
+  '__module__' : 'tabml.protos.model_wrappers_pb2'
+  # @@protoc_insertion_point(class_scope:tabml.protos.XgboostFitParams)
+  })
+_sym_db.RegisterMessage(XgboostFitParams)
+
+CatboostModelParams = _reflection.GeneratedProtocolMessageType('CatboostModelParams', (_message.Message,), {
+  'DESCRIPTOR' : _CATBOOSTMODELPARAMS,
+  '__module__' : 'tabml.protos.model_wrappers_pb2'
+  # @@protoc_insertion_point(class_scope:tabml.protos.CatboostModelParams)
+  })
+_sym_db.RegisterMessage(CatboostModelParams)
 
 ModelWrapper = _reflection.GeneratedProtocolMessageType('ModelWrapper', (_message.Message,), {
   'DESCRIPTOR' : _MODELWRAPPER,

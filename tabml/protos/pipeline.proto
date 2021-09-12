@@ -3,7 +3,6 @@ syntax = "proto2";
 package tabml.protos;
 
 import "tabml/protos/model_wrappers.proto";
-import "tabml/protos/trainers.proto";
 import "tabml/protos/data_loaders.proto";
 
 message ModelAnalysis {
@@ -30,7 +29,6 @@ message Config {
     required string config_name = 7;
     required DataLoader data_loader = 1;
     required ModelWrapper model_wrapper = 2;
-    required Trainer trainer = 3;
     optional ModelAnalysis model_analysis = 8;
     optional Saver saver = 5;
 }

@@ -80,7 +80,7 @@ class BaseLgbmModelWrapper(BaseBoostingModelWrapper):
 
     def __init__(self, config):
         super().__init__(config)
-        self.params = pb_to_dict(self.config.model_wrapper.lgbm_params)
+        self.params = pb_to_dict(self.config.model_wrapper.lgbm_model_params)
         self.model = self.build_model()
 
     @abstractmethod
@@ -98,7 +98,7 @@ class BaseLgbmModelWrapper(BaseBoostingModelWrapper):
             "eval_set": [train_data, val_data],
             "eval_names": ["train", "val"],
             "callbacks": [boosting_logger_eval(model="lgbm")],
-            **pb_to_dict(self.config.trainer.lgbm_params),
+            **pb_to_dict(self.config.model_wrapper.lgbm_fit_params),
         }
         return fit_params
 
