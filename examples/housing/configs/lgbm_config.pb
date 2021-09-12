@@ -24,16 +24,12 @@ data_loader {
     submission_filters: "not is_train"
 }
 model_wrapper {
-    # use a custom lgbm model_wrapper
-    lgbm_params {
+    lgbm_model_params {
         learning_rate: 0.1
         n_estimators: 200
         objective: "rmse"
     }
-}
-trainer {
-    cls_name: "tabml.trainers.LgbmTrainer"
-    lgbm_params {
+    lgbm_fit_params {
         categorical_feature: "encoded_ocean_proximity"
         categorical_feature: "hashed_bucketized_latitude_X_bucketized_longitude"
         categorical_feature: "bucketized_latitude"

@@ -104,7 +104,7 @@ class BaseFeatureManager(ABC):
         self.dataframe = pd.read_csv(
             self.dataset_path,
             dtype={
-                feature: PANDAS_DTYPE_MAPPING[metadata.dtype]
+                feature: metadata.dtype
                 for feature, metadata in self.feature_metadata.items()
                 if metadata.dtype != "DATETIME"
             },
@@ -168,9 +168,7 @@ class BaseFeatureManager(ABC):
         if dtype == "DATETIME":
             self.dataframe.loc[:, feature_name] = pd.to_datetime(series)
         else:
-            self.dataframe.loc[:, feature_name] = pd.Series(
-                series, dtype=PANDAS_DTYPE_MAPPING[dtype]
-            )
+            self.dataframe.loc[:, feature_name] = pd.Series(series, dtype=dtype)
 
     def compute_all_transforming_features(
         self, transforming_features: Union[List[str], None] = None, is_training=True

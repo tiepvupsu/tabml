@@ -20,6 +20,7 @@ class TestBaseDataLoader:
         dataset_name: "dummy"
         base_features:
           - name: "a"
+<<<<<<< HEAD
             dtype: INT32
         transforming_features:
           - name: "b"
@@ -34,6 +35,22 @@ class TestBaseDataLoader:
           - name: "is_validation"
             index: 4
             dtype: BOOL
+=======
+            dtype: int
+        transforming_features:
+          - name: "b"
+            index: 1
+            dtype: int
+          - name: "label"
+            index: 2
+            dtype: int
+          - name: "is_train"
+            index: 3
+            dtype: bool
+          - name: "is_validation"
+            index: 4
+            dtype: bool
+>>>>>>> 30da986 (WIP: merge model_wrappers and trainers)
         """
         fm_pb_path = tmp_path / "feature_config.yaml"
         write_str_to_file(fm_pb_str, fm_pb_path)
@@ -49,7 +66,7 @@ class TestBaseDataLoader:
                 "is_validation": [False, True, False, False, True],
             }
         )
-        dataset_path = BaseFeatureManager(fm_pb_path).get_dataset_path()
+        dataset_path = BaseFeatureManager(str(fm_pb_path)).get_dataset_path()
         Path(dataset_path).parent.mkdir(parents=True)
         df.to_csv(dataset_path, index=False)
 
