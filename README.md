@@ -1,9 +1,10 @@
+# TabML: a Machine Learning pipeline for tabular data
+
 [![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)
 [![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380/)
 [![tests](https://github.com/tiepvupsu/tabml/actions/workflows/python-package.yml/badge.svg)](https://github.com/tiepvupsu/tabml/actions/workflows/python-package.yml)
 [![codecov](https://codecov.io/gh/tiepvupsu/tabml/branch/master/graph/badge.svg?token=4JLG0YYUZU)](https://codecov.io/gh/tiepvupsu/tabml)
 
-# TabML: a Machine Learning pipeline for tabular data
 - [TabML: a Machine Learning pipeline for tabular data](#tabml-a-machine-learning-pipeline-for-tabular-data)
   - [Introduction](#introduction)
   - [Installation](#installation)
@@ -15,37 +16,37 @@
     - [Install and build/update proto](#install-and-buildupdate-proto)
     - [Check that everthing is working](#check-that-everthing-is-working)
 
-
 ## Introduction
 
 This is an active project that aims to create a general machine learning framework for working with tabular data.
 
 Key features:
 
-* One of the most important tasks in working with tabular data is to hanlde feature extraction. TabML allow users to define multiple features isolatedly without worrying about other features. This helps reduce coding conflicts if your team have multiple members simultaneously developing different features. In addition, if one feature needs to be updated, unrelated features could be untouched. In this way, the computating cost is relatively small (compared with running a pipeline to re-generate all other features).
+- One of the most important tasks in working with tabular data is to hanlde feature extraction. TabML allow users to define multiple features isolatedly without worrying about other features. This helps reduce coding conflicts if your team have multiple members simultaneously developing different features. In addition, if one feature needs to be updated, unrelated features could be untouched. In this way, the computating cost is relatively small (compared with running a pipeline to re-generate all other features).
 
-* Parameters are specified in a config file as a protobuf file. This config file is automatically saved into an experiment folder after each training for the reproducibility purpose.
+-Parameters are specified in a config file as a protobuf file. This config file is automatically saved into an experiment folder after each training for the reproducibility purpose.
 
-* TabML is integreated with [MLflow](https://mlflow.org/) which allows users to keep track all model parameters and metrics.
+- TabML is integreated with [MLflow](https://mlflow.org/) which allows users to keep track all model parameters and metrics.
 
-* Support multiple ML packages for tabular data:
-  * [x] [LightGBM](https://lightgbm.readthedocs.io/en/latest/)
-  * [x] [XGBoost](https://xgboost.readthedocs.io/en/latest/)
-  * [x] [CatBoost](https://catboost.ai/)
-  * [ ] Scikit-learn
-  * [ ] Keras
-  * [ ] Pytorch
-  * [ ] TabNet
-  * [ ] ...
+- Support multiple ML packages for tabular data:
+  - [x] [LightGBM](https://lightgbm.readthedocs.io/en/latest/)
+  - [x] [XGBoost](https://xgboost.readthedocs.io/en/latest/)
+  - [x] [CatBoost](https://catboost.ai/)
+  - [ ] Scikit-learn
+  - [ ] Keras
+  - [ ] Pytorch
+  - [ ] TabNet
+  - [ ] ...
 
 ## Installation
 
-```
+```shell
 pip install tabml
 ```
 
 ## Main components
-![](https://user-images.githubusercontent.com/2201237/132614816-c5fb0840-441f-42db-8c5b-0306aef16b3a.png)
+
+![components](https://user-images.githubusercontent.com/2201237/132614816-c5fb0840-441f-42db-8c5b-0306aef16b3a.png)
 
 In TRAINING step,
 
@@ -65,7 +66,7 @@ In SERVING step, raw data is fed into the *fitted* FeatureManager to get the tra
 
 Please check the [`examples`](https://github.com/tiepvupsu/tabml/tree/master/examples) folder for several example projects. For each project:
 
-```
+```bash
 python feature_manager.py  # to generate features
 python pipelines.py  # to train the model
 ```
@@ -81,14 +82,14 @@ In most project, users only need to focus their efforts on designing features. T
 Add the following lines to your shell config file (`~/.bashrc`, `~/.zshrc` or any shell config file of
 your choice):
 
-```bash
+```shell
 export TABML=<local_path_to_this_git_repo>
 alias 2tabml='cd $TABML; source bashrc; source tabml_env/bin/activate; python3 setup.py install'
 ```
 
 ### Create the environment
 
-```bash
+```shell
 cd $TABML
 python3 -m venv tabml_env
 source tabml_env/bin/activate
@@ -97,7 +98,8 @@ pip3 install -r requirements.txt
 
 Setup [pre-commit](https://pre-commit.com/) to auto format code when creating a git
 commit:
-```
+
+```shell
 pre-commit install
 ```
 
@@ -105,7 +107,7 @@ pre-commit install
 
 Note: do this only if you update protos.
 
-```
+```shell
 apt install -y protobuf-compiler
 tabml_build_proto
 ```
@@ -114,7 +116,7 @@ tabml_build_proto
 
 by running test
 
-```
+```shell
 2tabml
 python3 -m pytest ./tests ./examples
 ```
