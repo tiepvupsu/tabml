@@ -20,7 +20,7 @@ data_loader {
 
 model_wrapper {
   cls_name: "tabml.model_wrappers.CatBoostClassifierModelWrapper"
-  xgboost_model_params {
+  catboost_model_params {
     n_estimators: 100
     objective: "binary:logistic"
     eval_metric: "auc"
