@@ -16,6 +16,8 @@ MLFLOW_AUTOLOG = {
     "lightgbm": mlflow.lightgbm.autolog(),
     "xgboost": mlflow.xgboost.autolog(),
     "catboost": None,
+    "sklearn": mlflow.sklearn.autolog(),
+    "unknown": None,
 }
 
 
@@ -196,20 +198,26 @@ class CatBoostRegressorModelWrapper(BaseCatBoostModelWrapper):
 
 
 class NewBaseModelWrapper:
+    mlflow_model_type = "todo_setme"
+
     def __init__(
-        self, model_cls: Any, model_params: Dict[str, Any], fit_params: Dict[str, Any]
+        self,
+        model_cls: Any,
+        model_params: Dict[str, Any] = {},
+        fit_params: Dict[str, Any] = {},
+        mlflow_model_type: str = "unknown",
     ):
         self.model_params = model_params
         self.fit_params = fit_params
-        self.model = model_cls(*model_params)
+        self.model = model_cls(**model_params)
         self.save_model_name = "model_0"
+        self.mlflow_model_type = mlflow_model_type
 
     def fit(self, data_loader: BaseDataLoader, model_dir: str):
         assert (
             data_loader.label_col is not None
         ), "data_loader.label_col must be declared in BaseDataLoader subclasses."
         train_feature, train_label = data_loader.get_train_data_and_label()
-        # val_data = data_loader.get_val_data_and_label()
 
         self.model.fit(X=train_feature, y=train_label, **self.fit_params)
         save_as_pickle(self.model, model_dir, self.save_model_name)

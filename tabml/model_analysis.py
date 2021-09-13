@@ -91,7 +91,7 @@ class ModelAnalysis:
         """Explains model using SHAP https://github.com/slundberg/shap."""
         # show shap feature importance
         explainer = shap.Explainer(self.model_wrapper.model)
-        train_feature = self._get_dataset("train")[self.model_wrapper.feature_names]
+        train_feature = self._get_dataset("train")[self.data_loader.features]
         shap_values = explainer(train_feature)
 
         def _get_shape_values_one_sample(shape_values, index: int):
@@ -170,7 +170,10 @@ class ModelAnalysis:
         if self.need_predict:
             df[self.pred_col] = preds[self.pred_col]
         if self.need_predict_proba:
-            df[self.pred_proba_col] = preds[self.pred_proba_col]
+            pred_array = preds[self.pred_proba_col]
+            if len(pred_array.shape) == 2:
+                pred_array = pred_array[:, 1]  # 2nd prod if binary classification
+            df[self.pred_proba_col] = pred_array
         df.to_csv(self._get_df_pred_csv_path(), index=False)
         return df
 

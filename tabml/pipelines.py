@@ -48,7 +48,8 @@ class BasePipeline(ABC):
         model_wrappers.MLFLOW_AUTOLOG[model_type]
         with mlflow.start_run():
             mlflow.log_param("model_type", model_type)
-            mlflow.log_params(self.model_wrapper.params)
+            mlflow.log_params(self.model_wrapper.model_params)
+            mlflow.log_params(self.model_wrapper.fit_params)
             self.train()
             self.analyze_model()
 
@@ -62,7 +63,7 @@ class BasePipeline(ABC):
 
     def _get_model_wrapper(self, custom_model_wrapper):
         if custom_model_wrapper:
-            self.model_wrapper = custom_model_wrapper(self.config)
+            self.model_wrapper = custom_model_wrapper  # (self.config)
         else:
             self.model_wrapper = factory.create(self.config.model_wrapper.cls_name)(
                 self.config
