@@ -1,17 +1,24 @@
 """Utilities that support making inference."""
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 
 from tabml.experiment_manager import ExperimentManger
 from tabml.pipelines import BasePipeline
 
 
 class ModelInference:
-    def __init__(self, feature_manager_cls, feature_config_path: str, model_path: str):
+    def __init__(
+        self,
+        feature_manager_cls,
+        feature_config_path: str,
+        model_path: str,
+        pipeline_config_path: Union[str, None] = None,
+    ):
         self.fm = feature_manager_cls(feature_config_path)
-        pipeline_config_path = ExperimentManger.get_config_path_from_model_path(
-            model_path
-        )
+        if pipeline_config_path is None:
+            pipeline_config_path = ExperimentManger.get_config_path_from_model_path(
+                model_path
+            )
         self.pipeline = BasePipeline(pipeline_config_path)
         self.pipeline.model_wrapper.load_model(model_path)
         self.features_to_model = list(
