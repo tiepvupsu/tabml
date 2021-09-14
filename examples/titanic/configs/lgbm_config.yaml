@@ -1,0 +1,40 @@
+config_name: "lgbm"
+
+data_loader:
+  cls_name: tabml.data_loaders.BaseDataLoader
+  feature_manager_config_path: configs/feature_config.pb
+
+  features_to_model:
+    - coded_sex
+    - imputed_age
+    - bucketized_age
+    - min_max_scaled_age
+    - coded_pclass
+    - coded_title
+
+  label_col: survived
+
+  train_filters:
+    - is_train
+
+  validation_filters:
+    - not is_train
+    - passenger_id <= 891
+    - passenger_id > 891
+
+model_wrapper:
+  cls_name: tabml.model_wrappers.LgbmClassifierModelWrapper
+  lgbm_params:
+    learning_rate: 0.01
+
+trainer:
+  cls_name: tabml.trainers.LgbmTrainer
+
+model_analysis:
+  metrics:
+    - accuracy_score
+    - roc_auc
+    - max_f1
+  by_features:
+    - sex
+    - pclass
