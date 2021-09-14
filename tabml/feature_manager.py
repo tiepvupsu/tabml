@@ -52,7 +52,7 @@ class BaseFeatureManager(ABC):
             pickle path to save transformers.
     """
 
-    def __init__(self, pb_config_path: str):
+    def __init__(self, pb_config_path: str, transformer_path: Union[str, None] = None):
         self.config_helper = FeatureConfigHelper(pb_config_path)
         self.raw_data_dir = self.config_helper.raw_data_dir
         self.dataset_name = self.config_helper.dataset_name
@@ -63,7 +63,7 @@ class BaseFeatureManager(ABC):
         self.dataframe: pd.DataFrame = pd.DataFrame()
         self.transforming_class_by_feature_name: Dict[str, Any] = {}
         self.transformer_dict: Dict[str, Any] = {}
-        self.transformer_path = self.get_transformer_path()
+        self.transformer_path = transformer_path or self.get_transformer_path()
 
     def get_dataset_path(self):
         return Path(self.raw_data_dir) / "features" / f"{self.dataset_name}.csv"

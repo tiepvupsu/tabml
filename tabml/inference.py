@@ -15,8 +15,11 @@ class ModelInference:
         model_path: str,
         pipeline_config_path: Union[str, None] = None,
         custom_model_wrapper=None,
+        transformer_path=None,
     ):
-        self.fm = feature_manager_cls(feature_config_path)
+        self.fm = feature_manager_cls(
+            feature_config_path, transformer_path=transformer_path
+        )
         if pipeline_config_path is None:
             pipeline_config_path = ExperimentManger.get_config_path_from_model_path(
                 model_path
