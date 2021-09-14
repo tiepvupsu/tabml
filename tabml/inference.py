@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Union
 
 from tabml.experiment_manager import ExperimentManger
 from tabml.utils import factory
-from tabml.utils.config_helpers import parse_pipeline_config_pb
+from tabml.utils.config_helpers import parse_pipeline_config
 
 
 class ModelInference:
@@ -24,7 +24,7 @@ class ModelInference:
             pipeline_config_path = ExperimentManger.get_config_path_from_model_path(
                 model_path
             )
-        self.config = parse_pipeline_config_pb(pipeline_config_path)
+        self.config = parse_pipeline_config(pipeline_config_path)
         if custom_model_wrapper:
             self.model_wrapper = custom_model_wrapper(self.config)
         else:
