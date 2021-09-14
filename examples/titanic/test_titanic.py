@@ -7,7 +7,9 @@ from tabml.utils.utils import change_working_dir_pytest
 from . import feature_manager, pipelines
 
 
-def _test_inference(config_path, test_custom_pipeline_config_path=False):
+def _test_inference(
+    config_path, test_custom_pipeline_config_path=False, transformer_path=None
+):
     feature_config_path = "./configs/feature_config.pb"
     last_model_run_dir = ExperimentManger(config_path).get_most_recent_run_dir()
     model_path = Path(last_model_run_dir) / "model_0"
@@ -17,6 +19,7 @@ def _test_inference(config_path, test_custom_pipeline_config_path=False):
         feature_config_path=feature_config_path,
         model_path=model_path,
         pipeline_config_path=pipeline_config_path,
+        transformer_path=transformer_path,
     )
     raw_data_samples = [
         {
@@ -71,3 +74,10 @@ def test_full_pipeline_catboost():
     _test_inference(
         "./configs/catboost_config.pb", test_custom_pipeline_config_path=True
     )
+
+
+@change_working_dir_pytest
+def test_custom_transformer_path(tmp_path):
+    transformer_path = tmp_path / "transformer.pickle"
+    feature_manager.run(transformer_path)
+    _test_inference("./configs/lgbm_config.pb")
