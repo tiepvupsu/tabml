@@ -1,3 +1,4 @@
+import tempfile
 from pathlib import Path
 
 from tabml.experiment_manager import ExperimentManger
@@ -77,7 +78,8 @@ def test_full_pipeline_catboost():
 
 
 @change_working_dir_pytest
-def test_custom_transformer_path(tmp_path):
-    transformer_path = tmp_path / "transformer.pickle"
-    feature_manager.run(transformer_path)
-    _test_inference("./configs/lgbm_config.pb")
+def test_custom_transformer_path():
+    with tempfile.NamedTemporaryFile() as temp:
+        transformer_path = temp.name
+        feature_manager.run(transformer_path)
+        _test_inference("./configs/lgbm_config.pb", transformer_path=transformer_path)
