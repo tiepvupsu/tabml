@@ -24,11 +24,13 @@ data_loader:
 
 model_wrapper:
   cls_name: tabml.model_wrappers.LgbmClassifierModelWrapper
-  lgbm_params:
+  model_params:
     learning_rate: 0.01
-
-trainer:
-  cls_name: tabml.trainers.LgbmTrainer
+  fit_params:
+    categorical_features:
+      - coded_sex
+      - coded_pclass
+      - code_title
 
 model_analysis:
   metrics:
