@@ -13,8 +13,8 @@ DATA_URL = (
 
 
 class FeatureManager(BaseFeatureManager):
-    def __init__(self, pb_config_path):
-        super().__init__(pb_config_path)
+    def __init__(self, pb_config_path, transformer_path=None):
+        super().__init__(pb_config_path, transformer_path=transformer_path)
 
     def _get_base_transforming_class(self):
         return BaseHousingTransformingFeature
