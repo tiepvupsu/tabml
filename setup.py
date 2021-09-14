@@ -5,7 +5,7 @@ import setuptools
 setup(
     name="tabml",
     packages=setuptools.find_packages(),
-    version="0.1.10",
+    version="0.1.11",
     license="apache-2.0",
     description="A package for machine learning with tabular data",
     author="Tiep Vu",
