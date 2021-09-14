@@ -172,9 +172,9 @@ class FeatureMinMaxScaledAge(BaseTitanicTransformingFeature):
         return self.transformer.transform(df[["imputed_age"]]).reshape(-1)
 
 
-def run():
+def run(transformer_path=None):
     pb_config_path = "configs/feature_config.pb"
-    fm = FeatureManager(pb_config_path)
+    fm = FeatureManager(pb_config_path, transformer_path)
     fm.run_all()
 
 
