@@ -1,3 +1,4 @@
+attrdict==2.0.1
 catboost==0.26.1
 flake8==3.9.0
 gputil==1.4.0
