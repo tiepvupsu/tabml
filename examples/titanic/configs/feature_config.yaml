@@ -1,0 +1,89 @@
+raw_data_dir: data
+dataset_name: sample
+base_features:
+  - name: passenger_id
+    dtype: int32
+
+  - name: sibsp
+    dtype: int32
+
+  - name: parch
+    dtype: int32
+
+  - name: fare
+    dtype: float32
+
+  - name: age
+    dtype: float32
+
+
+transforming_features:
+  - name: is_train
+    index: 1
+    dependencies:
+     - passenger_id
+    dtype: bool
+
+  - name: imputed_age
+    index: 2
+    dtype: float32
+    dependencies:
+      - age
+      - is_train
+
+  - name: bucketized_age
+    index: 3
+    dtype: float32
+    dependencies:
+      - imputed_age
+
+  - name: survived
+    dtype: float32
+    index: 5
+
+  - name: sex
+    dtype: str
+    index: 6
+
+  - name: coded_sex
+    index: 7
+    dependencies:
+      - sex
+    dtype: int32
+
+  - name: pclass
+    index: 8
+    dtype: float32
+
+  - name: coded_pclass
+    index: 9
+    dtype: int32
+    dependencies:
+      - pclass
+
+  - name: embarked
+    index: 10
+    dtype: str
+
+  - name: coded_embarked
+    index: 11
+    dtype: int32
+    dependencies:
+      - embarked
+
+  - name: title
+    index: 12
+    dtype: str
+
+  - name: coded_title
+    index: 13
+    dtype: int32
+    dependencies:
+      - title
+
+  - name: min_max_scaled_age
+    index: 14
+    dtype: float32
+    dependencies:
+      - imputed_age
+      - is_train

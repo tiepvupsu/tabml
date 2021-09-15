@@ -173,7 +173,7 @@ class FeatureMinMaxScaledAge(BaseTitanicTransformingFeature):
 
 
 def run(transformer_path=None):
-    pb_config_path = "configs/feature_config.pb"
+    pb_config_path = "configs/feature_config.yaml"
     fm = FeatureManager(pb_config_path, transformer_path)
     fm.run_all()
 
