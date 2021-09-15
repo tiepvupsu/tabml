@@ -6,8 +6,8 @@ from tabml import experiment_manager, model_wrappers
 from tabml.data_loaders import BaseDataLoader
 from tabml.model_analysis import ModelAnalysis
 from tabml.utils import factory
+from tabml.utils.config_helpers import parse_pipeline_config_pb
 from tabml.utils.logger import logger
-from tabml.utils.pb_helpers import parse_pipeline_config_pb
 
 
 class BasePipeline(ABC):

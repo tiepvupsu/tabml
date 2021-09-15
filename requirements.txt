@@ -1,3 +1,4 @@
+attrdict==2.0.1
 catboost==0.26.1
 flake8==3.9.0
 gputil==1.4.0
@@ -13,6 +14,7 @@ pandas-profiling==2.9.0
 pre-commit==2.2.0
 protobuf==3.13.0
 pytest==5.3.5
+pyyaml==5.4.1
 qcore==0.5.1
 scikit-learn==0.24.2
 # scikit-optimize==0.7.4
