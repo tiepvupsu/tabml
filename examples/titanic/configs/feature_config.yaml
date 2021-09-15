@@ -37,13 +37,13 @@ transforming_features:
     dependencies:
       - imputed_age
 
-  - name: sex
-    dtype: str
-    index: 4
-
   - name: survived
     dtype: float32
     index: 5
+
+  - name: sex
+    dtype: str
+    index: 6
 
   - name: coded_sex
     index: 7
