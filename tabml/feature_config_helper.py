@@ -59,7 +59,7 @@ class FeatureConfigHelper:
     def _validate_indexes(self):
         """Checks if indexes are positive and monotonically increasing."""
         indexes = [
-            transforming_feature.index
+            int(transforming_feature.index)
             for transforming_feature in self._config.transforming_features
         ]
         if not (
@@ -81,7 +81,7 @@ class FeatureConfigHelper:
         # initialize from base_features then gradually adding transforming_feature
         features_so_far = self.base_features.copy()
         for feature in self._config.transforming_features:
-            for dependency in feature.dependencies:
+            for dependency in feature.get("dependencies", []):
                 assert (
                     dependency in features_so_far
                 ), "Feature {} depends on feature {} that is undefined.".format(
@@ -98,9 +98,9 @@ class FeatureConfigHelper:
             self.feature_metadata[feature.name] = _Feature(
                 index=feature.index,
                 dtype=feature.dtype,
-                dependencies=feature.dependencies,
+                dependencies=feature.get("dependencies", []),
             )
-            for dependency in feature.dependencies:
+            for dependency in feature.get("dependencies", []):
                 self.feature_metadata[dependency].dependents.append(feature.name)
 
     def sort_features(self, feature_names: List[str]) -> List[str]:
