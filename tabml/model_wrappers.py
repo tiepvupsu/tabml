@@ -102,7 +102,9 @@ class XGBoostRegressorModelWrapper(BaseXGBoostModelWrapper):
 
 class XGBoostClassifierModelWrapper(BaseXGBoostModelWrapper):
     def build_model(self):
-        return XGBClassifier(tree_method=self.tree_method, **self.params)
+        return XGBClassifier(
+            tree_method=self.tree_method, **self.params, use_label_encoder=False
+        )
 
     def predict_proba(self, data) -> Iterable:
         return self.model.predict_proba(data)[:, 1]
