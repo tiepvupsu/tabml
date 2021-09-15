@@ -1,89 +1,89 @@
 raw_data_dir: data
 dataset_name: sample
 base_features:
-  - feature: passenger_id
-    dtype: INT32
+  - name: passenger_id
+    dtype: int32
 
-  - feature: sibsp
-    dtype: INT32
+  - name: sibsp
+    dtype: int32
 
-  - feature: parch
-    dtype: INT32
+  - name: parch
+    dtype: int32
 
-  - feature: fare
-    dtype: FLOAT
+  - name: fare
+    dtype: float32
 
-  - feature: age
-    dtype: FLOAT
+  - name: age
+    dtype: float32
 
 
 transforming_features:
-  - feature: is_train
+  - name: is_train
     index: 1
     dependencies:
      - passenger_id
-    dtype: BOOL
+    dtype: bool
 
-  - feature: imputed_age
+  - name: imputed_age
     index: 2
-    dtype: FLOAT
+    dtype: float32
     dependencies:
       - age
       - is_train
 
-  - feature: bucketized_age
+  - name: bucketized_age
     index: 3
-    dtype: FLOAT
+    dtype: float32
     dependencies:
       - imputed_age
 
-  - feature: survived
+  - name: sex
+    dtype: str
+    index: 4
+
+  - name: survived
+    dtype: float32
     index: 5
-    dtype: FLOAT
 
-  - index: 6
-    feature: sex
-    dtype: STRING
-
-  - feature: coded_sex
+  - name: coded_sex
     index: 7
     dependencies:
       - sex
-    dtype: INT32
+    dtype: int32
 
-  - feature: pclass
+  - name: pclass
     index: 8
-    dtype: FLOAT
+    dtype: float32
 
-  - feature: coded_pclass
+  - name: coded_pclass
     index: 9
+    dtype: int32
     dependencies:
       - pclass
-    dtype: INT32
 
-  - feature: embarked
+  - name: embarked
     index: 10
-    dtype: STRING
+    dtype: str
 
-  - feature: coded_embarked
+  - name: coded_embarked
     index: 11
-    dtype: INT32
+    dtype: int32
     dependencies:
       - embarked
 
-  - feature: title
+  - name: title
     index: 12
-    dtype: STRING
+    dtype: str
 
-  - feature: coded_title
+  - name: coded_title
     index: 13
-    dtype: INT32
+    dtype: int32
     dependencies:
       - title
 
-  - feature: min_max_scaled_age
+  - name: min_max_scaled_age
     index: 14
-    dtype: FLOAT
+    dtype: float32
     dependencies:
       - imputed_age
       - is_train
