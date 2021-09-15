@@ -24,7 +24,7 @@ class TestBaseDataLoader:
         transforming_features {{name: "is_train" index: 3 dtype: BOOL}}
         transforming_features {{name: "is_validation" index: 4 dtype: BOOL}}
         """
-        fm_pb_path = tmp_path / "feature_config.pb"
+        fm_pb_path = tmp_path / "feature_config.yaml"
         write_str_to_file(fm_pb_str, fm_pb_path)
 
         # create fake data
