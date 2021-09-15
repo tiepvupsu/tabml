@@ -100,14 +100,14 @@ class BaseFeatureManager(ABC):
         parse_dates = [
             feature
             for feature, metadata in self.feature_metadata.items()
-            if metadata.dtype == feature_manager_pb2.DATETIME
+            if metadata.dtype == "datetime"
         ]
         self.dataframe = pd.read_csv(
             self.dataset_path,
             dtype={
                 feature: metadata.dtype
                 for feature, metadata in self.feature_metadata.items()
-                if metadata.dtype != feature_manager_pb2.DATETIME
+                if metadata.dtype != "datetime"
             },
             parse_dates=parse_dates,
         )
@@ -166,7 +166,7 @@ class BaseFeatureManager(ABC):
         if is_training:
             self.transformer_dict[feature_name] = transformer_object.transformer
         dtype = self.feature_metadata[feature_name].dtype
-        if dtype == feature_manager_pb2.DATETIME:
+        if dtype == "datetime":
             self.dataframe.loc[:, feature_name] = pd.to_datetime(series)
         else:
             self.dataframe.loc[:, feature_name] = pd.Series(series, dtype=dtype)
