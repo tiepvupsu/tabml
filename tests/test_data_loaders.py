@@ -6,7 +6,7 @@ import pytest
 
 from tabml.data_loaders import BaseDataLoader
 from tabml.feature_manager import BaseFeatureManager
-from tabml.utils.pb_helpers import parse_pipeline_config_pb
+from tabml.utils.config_helpers import parse_pipeline_config_pb
 from tabml.utils.utils import write_str_to_file
 
 
@@ -18,13 +18,24 @@ class TestBaseDataLoader:
         fm_pb_str = f"""
         raw_data_dir: "{dataset_dir}"
         dataset_name: "dummy"
-        base_features {{name: "a" dtype: INT32}}
-        transforming_features {{name: "b" index: 1 dtype: INT32}}
-        transforming_features {{name: "label" index: 2 dtype: INT32}}
-        transforming_features {{name: "is_train" index: 3 dtype: BOOL}}
-        transforming_features {{name: "is_validation" index: 4 dtype: BOOL}}
+        base_features:
+          - name: "a"
+            dtype: INT32
+        transforming_features:
+          - name: "b"
+            index: 1
+            dtype: INT32
+          - name: "label"
+            index: 2
+            dtype: INT32
+          - name: "is_train"
+            index: 3
+            dtype: BOOL
+          - name: "is_validation"
+            index: 4
+            dtype: BOOL
         """
-        fm_pb_path = tmp_path / "feature_config.pb"
+        fm_pb_path = tmp_path / "feature_config.yaml"
         write_str_to_file(fm_pb_str, fm_pb_path)
 
         # create fake data

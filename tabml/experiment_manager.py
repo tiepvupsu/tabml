@@ -4,7 +4,7 @@ import re
 import shutil
 from pathlib import Path
 
-from tabml.utils.pb_helpers import parse_pipeline_config_pb
+from tabml.utils.config_helpers import parse_pipeline_config
 
 
 class ExperimentManger:
@@ -41,7 +41,7 @@ class ExperimentManger:
             custom_run_dir: custom run dir that user can specify
         """
         self._path_to_config = path_to_config
-        self._config = parse_pipeline_config_pb(self._path_to_config)
+        self._config = parse_pipeline_config(self._path_to_config)
         self.exp_root_dir = exp_root_dir
         self.run_prefix = self._config.config_name + "_"
         self.custom_run_dir = custom_run_dir

@@ -7,7 +7,7 @@ from lightgbm import LGBMClassifier, LGBMRegressor
 from xgboost import XGBClassifier, XGBRegressor
 
 from tabml.utils import utils
-from tabml.utils.pb_helpers import pb_to_dict
+from tabml.utils.config_helpers import pb_to_dict
 
 MLFLOW_AUTOLOG = {
     "lightgbm": mlflow.lightgbm.autolog(),

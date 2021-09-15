@@ -78,52 +78,45 @@ class FeatureD2(_DummyBaseTransformingFeature):
 class TestBaseFeatureManager:
     @pytest.fixture(autouse=True)
     def setup_class(cls, tmp_path):
-        pb_str = """
-            raw_data_dir: "dummy"
-            dataset_name: "dummy"
-            base_features {
-              name: "a"
-              dtype: INT32
-            }
-            base_features {
-              name: "d1"
-              dtype: DATETIME
-            }
-            transforming_features {
-              index: 1
-              name: "b"
-              dependencies: "a"
-              dtype: INT32
-            }
-            transforming_features {
-              index: 2
-              name: "c"
-              dependencies: "b"
-              dtype: INT32
-            }
-            transforming_features {
-              index: 3
-              name: "d"
-              dependencies: "a"
-              dtype: INT32
-            }
-            transforming_features {
-              index: 4
-              name: "e"
-              dependencies: "c"
-              dtype: INT32
-            }
-            transforming_features {
-              index: 5
-              name: "d2"
-              dependencies: "d1"
-              dtype: DATETIME
-            }
+        yaml_str = """
+            raw_data_dir: dummy
+            dataset_name: dummy
+            base_features:
+              - name: a
+                dtype: INT32
+              - name: d1
+                dtype: DATETIME
+            transforming_features:
+              - name: b
+                index: 1
+                dependencies:
+                  - a
+                dtype: INT32
+              - name: c
+                index: 2
+                dependencies:
+                  - b
+                dtype: INT32
+              - name: d
+                index: 3
+                dependencies:
+                  - a
+                dtype: INT32
+              - name: e
+                index: 4
+                dependencies:
+                  - c
+                dtype: INT32
+              - name: d2
+                index: 5
+                dependencies:
+                  - d1
+                dtype: DATETIME
         """
-        pb_config_path = tmp_path / "tmp.pb"
-        write_str_to_file(pb_str, pb_config_path)
-        cls.fm = _DummyFeatureManager(pb_config_path)
-        cls.fm2 = _DummyFeatureManager2(pb_config_path)
+        yaml_config_path = str(tmp_path / "tmp.yaml")
+        write_str_to_file(yaml_str, yaml_config_path)
+        cls.fm = _DummyFeatureManager(yaml_config_path)
+        cls.fm2 = _DummyFeatureManager2(yaml_config_path)
         cls.fm.initialize_dataframe()
         cls.fm2.initialize_dataframe()
 

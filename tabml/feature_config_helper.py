@@ -1,12 +1,12 @@
 import copy
 from typing import Dict, List, Union
 
-from tabml.utils.pb_helpers import parse_feature_config_pb
+from tabml.utils.config_helpers import parse_feature_config
 from tabml.utils.utils import check_uniqueness
 
 
 class _Feature:
-    def __init__(self, index: int, dtype: int, dependencies: Union[List, None] = None):
+    def __init__(self, index: int, dtype: str, dependencies: Union[List, None] = None):
         self.index = index
         self.dependents: List[str] = []
         self.dtype = dtype
@@ -37,8 +37,8 @@ class FeatureConfigHelper:
             This is useful when finding all dependents of one feature.
     """
 
-    def __init__(self, pb_config_path: str):
-        self._config = parse_feature_config_pb(pb_config_path)
+    def __init__(self, config_path: str):
+        self._config = parse_feature_config(config_path)
         self.raw_data_dir = self._config.raw_data_dir
         self.dataset_name = self._config.dataset_name
         self.base_features = [feature.name for feature in self._config.base_features]
@@ -59,7 +59,8 @@ class FeatureConfigHelper:
     def _validate_indexes(self):
         """Checks if indexes are positive and monotonically increasing."""
         indexes = [
-            transforming_feature.index
+            # TODO: why we need int() here? Does yaml parse this incorrectly?
+            int(transforming_feature.index)
             for transforming_feature in self._config.transforming_features
         ]
         if not (
@@ -81,7 +82,7 @@ class FeatureConfigHelper:
         # initialize from base_features then gradually adding transforming_feature
         features_so_far = self.base_features.copy()
         for feature in self._config.transforming_features:
-            for dependency in feature.dependencies:
+            for dependency in feature.get("dependencies", []):
                 assert (
                     dependency in features_so_far
                 ), "Feature {} depends on feature {} that is undefined.".format(
@@ -98,13 +99,14 @@ class FeatureConfigHelper:
             self.feature_metadata[feature.name] = _Feature(
                 index=feature.index,
                 dtype=feature.dtype,
-                dependencies=feature.dependencies,
+                dependencies=feature.get("dependencies", []),
             )
-            for dependency in feature.dependencies:
+            for dependency in feature.get("dependencies", []):
                 self.feature_metadata[dependency].dependents.append(feature.name)
 
     def sort_features(self, feature_names: List[str]) -> List[str]:
-        return sorted(feature_names, key=lambda x: self.feature_metadata[x].index)
+        # TODO: fix parsing index as int in yaml
+        return sorted(feature_names, key=lambda x: int(self.feature_metadata[x].index))
 
     def find_dependencies(self, feature_name: str) -> List[str]:
         # NOTE: repeated fields in proto are NOT parsed to python lists but
@@ -192,16 +194,11 @@ class FeatureConfigHelper:
         all_relevant_features = self.get_dependencies_recursively(
             features=selected_features
         )
-        new_pb = copy.deepcopy(self._config)
-        # we can't deriectly assign a list to a protobuf repeated field
-        # https://tinyurl.com/y4m86cc4
-        del new_pb.transforming_features[:]
-        new_pb.transforming_features.extend(
-            [
-                transforming_feature
-                for transforming_feature in self._config.transforming_features
-                if transforming_feature.name in all_relevant_features
-            ]
-        )
+        new_config = copy.deepcopy(self._config)
+        new_config.transforming_features = [
+            transforming_feature
+            for transforming_feature in self._config.transforming_features
+            if transforming_feature.name in all_relevant_features
+        ]
 
-        return new_pb
+        return new_config
