@@ -52,8 +52,8 @@ class BaseFeatureManager(ABC):
             pickle path to save transformers.
     """
 
-    def __init__(self, pb_config_path: str, transformer_path: Union[str, None] = None):
-        self.config_helper = FeatureConfigHelper(pb_config_path)
+    def __init__(self, config_path: str, transformer_path: Union[str, None] = None):
+        self.config_helper = FeatureConfigHelper(config_path)
         self.raw_data_dir = self.config_helper.raw_data_dir
         self.dataset_name = self.config_helper.dataset_name
         self.feature_metadata = self.config_helper.feature_metadata

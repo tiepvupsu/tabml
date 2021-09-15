@@ -1,7 +1,7 @@
 import copy
 from typing import Dict, List, Union
 
-from tabml.utils.config_helpers import parse_feature_config_pb
+from tabml.utils.config_helpers import parse_feature_config
 from tabml.utils.utils import check_uniqueness
 
 
@@ -37,8 +37,8 @@ class FeatureConfigHelper:
             This is useful when finding all dependents of one feature.
     """
 
-    def __init__(self, pb_config_path: str):
-        self._config = parse_feature_config_pb(pb_config_path)
+    def __init__(self, config_path: str):
+        self._config = parse_feature_config(config_path)
         self.raw_data_dir = self._config.raw_data_dir
         self.dataset_name = self._config.dataset_name
         self.base_features = [feature.name for feature in self._config.base_features]
