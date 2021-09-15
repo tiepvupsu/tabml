@@ -18,11 +18,22 @@ class TestBaseDataLoader:
         fm_pb_str = f"""
         raw_data_dir: "{dataset_dir}"
         dataset_name: "dummy"
-        base_features {{name: "a" dtype: INT32}}
-        transforming_features {{name: "b" index: 1 dtype: INT32}}
-        transforming_features {{name: "label" index: 2 dtype: INT32}}
-        transforming_features {{name: "is_train" index: 3 dtype: BOOL}}
-        transforming_features {{name: "is_validation" index: 4 dtype: BOOL}}
+        base_features:
+          - name: "a"
+            dtype: int
+        transforming_features:
+          - name: "b"
+            index: 1
+            dtype: int
+          - name: "label"
+            index: 2
+            dtype: int
+          - name: "is_train"
+            index: 3
+            dtype: bool
+          - name: "is_validation"
+            index: 4
+            dtype: bool
         """
         fm_pb_path = tmp_path / "feature_config.yaml"
         write_str_to_file(fm_pb_str, fm_pb_path)
@@ -38,7 +49,7 @@ class TestBaseDataLoader:
                 "is_validation": [False, True, False, False, True],
             }
         )
-        dataset_path = BaseFeatureManager(fm_pb_path).get_dataset_path()
+        dataset_path = BaseFeatureManager(str(fm_pb_path)).get_dataset_path()
         Path(dataset_path).parent.mkdir(parents=True)
         df.to_csv(dataset_path, index=False)
 
