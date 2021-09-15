@@ -6,20 +6,8 @@ from typing import Any, Dict, List, Optional, Union
 import pandas as pd
 
 from tabml.feature_config_helper import FeatureConfigHelper
-from tabml.protos import feature_manager_pb2
 from tabml.utils.logger import logger
 from tabml.utils.utils import check_uniqueness
-
-PANDAS_DTYPE_MAPPING = {
-    feature_manager_pb2.BOOL: "bool",
-    feature_manager_pb2.INT32: "int32",
-    feature_manager_pb2.INT64: "int64",
-    feature_manager_pb2.STRING: "str",
-    feature_manager_pb2.FLOAT: "float32",
-    feature_manager_pb2.DOUBLE: "float64",
-    # DATETIME will be converted to datetime parse_date https://tinyurl.com/y4waw6np
-    feature_manager_pb2.DATETIME: "datetime64[ns]",
-}
 
 
 class BaseFeatureManager(ABC):
@@ -52,8 +40,8 @@ class BaseFeatureManager(ABC):
             pickle path to save transformers.
     """
 
-    def __init__(self, pb_config_path: str, transformer_path: Union[str, None] = None):
-        self.config_helper = FeatureConfigHelper(pb_config_path)
+    def __init__(self, config_path: str, transformer_path: Union[str, None] = None):
+        self.config_helper = FeatureConfigHelper(config_path)
         self.raw_data_dir = self.config_helper.raw_data_dir
         self.dataset_name = self.config_helper.dataset_name
         self.feature_metadata = self.config_helper.feature_metadata
@@ -100,14 +88,14 @@ class BaseFeatureManager(ABC):
         parse_dates = [
             feature
             for feature, metadata in self.feature_metadata.items()
-            if metadata.dtype == feature_manager_pb2.DATETIME
+            if metadata.dtype == "datetime"
         ]
         self.dataframe = pd.read_csv(
             self.dataset_path,
             dtype={
-                feature: PANDAS_DTYPE_MAPPING[metadata.dtype]
+                feature: metadata.dtype
                 for feature, metadata in self.feature_metadata.items()
-                if metadata.dtype != feature_manager_pb2.DATETIME
+                if metadata.dtype != "datetime"
             },
             parse_dates=parse_dates,
         )
@@ -166,12 +154,10 @@ class BaseFeatureManager(ABC):
         if is_training:
             self.transformer_dict[feature_name] = transformer_object.transformer
         dtype = self.feature_metadata[feature_name].dtype
-        if dtype == feature_manager_pb2.DATETIME:
+        if dtype == "datetime":
             self.dataframe.loc[:, feature_name] = pd.to_datetime(series)
         else:
-            self.dataframe.loc[:, feature_name] = pd.Series(
-                series, dtype=PANDAS_DTYPE_MAPPING[dtype]
-            )
+            self.dataframe.loc[:, feature_name] = pd.Series(series, dtype=dtype)
 
     def compute_all_transforming_features(
         self, transforming_features: Union[List[str], None] = None, is_training=True
