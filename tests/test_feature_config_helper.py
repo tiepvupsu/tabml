@@ -165,7 +165,7 @@ class TestFeatureConfigHelper:
                 dependencies:
                   - "c"
         """
-        new_config_path = tmp_path / "new_tmp.yaml"
+        new_config_path = str(tmp_path / "new_tmp.yaml")
         write_str_to_file(expected_str, new_config_path)
         new_config = self.fm_helper.extract_config(selected_features=subset_features)
         assert_eq(parse_feature_config(new_config_path), new_config)
@@ -184,7 +184,7 @@ class TestFeatureConfigHelper:
                 dependencies:
                   - "a"
         """
-        new_config_path = tmp_path / "new_tmp.yaml"
+        new_config_path = str(tmp_path / "new_tmp.yaml")
         write_str_to_file(expected_str, new_config_path)
         new_config = self.fm_helper.extract_config(selected_features=subset_features)
         assert_eq(parse_feature_config(new_config_path), new_config)
