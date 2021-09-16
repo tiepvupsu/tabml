@@ -13,11 +13,11 @@ class TestExperimentManager:
         pb_str = """
             config_name: "dummy"
         """
-        self.pb_config_path = str(tmp_path / "pipeline_config.pb")
+        self.pb_config_path = tmp_path / "pipeline_config.pb"
         write_str_to_file(pb_str, self.pb_config_path)
 
     def test_not_create_new_run_dir(self, tmp_path):
-        exp_root_dir = str(Path(tmp_path) / "exp")
+        exp_root_dir = Path(tmp_path) / "exp"
         exp_manager = experiment_manager.ExperimentManger(
             self.pb_config_path, exp_root_dir=exp_root_dir
         )
@@ -29,7 +29,7 @@ class TestExperimentManager:
         )
 
     def test_not_creat_run_dir_not_exist(self, tmp_path):
-        exp_root_dir = str(Path(tmp_path) / "exp2")
+        exp_root_dir = Path(tmp_path) / "exp2"
         Path(exp_root_dir).mkdir(parents=True)
 
         with AssertRaises(IOError) as assert_raises:
