@@ -49,7 +49,7 @@ class TestBaseDataLoader:
                 "is_validation": [False, True, False, False, True],
             }
         )
-        dataset_path = BaseFeatureManager(str(fm_pb_path)).get_dataset_path()
+        dataset_path = BaseFeatureManager(fm_pb_path).get_dataset_path()
         Path(dataset_path).parent.mkdir(parents=True)
         df.to_csv(dataset_path, index=False)
 
