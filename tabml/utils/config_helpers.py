@@ -18,20 +18,17 @@ def pb_to_dict(config):
 def parse_config_yaml(yaml_path: str):
     with open(yaml_path) as f:
         config = yaml.load(f, Loader=yaml.BaseLoader)  # config is dict
-        return AttrDict(config)
+        config = AttrDict(config)
+        config._setattr("_sequence_type", list)
+        return config
 
 
 def parse_feature_config(config_path: str):
-    ext = config_path.split(".")[-1]
-    assert ext in (
-        "yaml",
-        "yml",
-    ), f"feature_path {config_path} extension not supported."
     return parse_config_yaml(config_path)
 
 
 def parse_pipeline_config(pipeline_path: str):
-    ext = pipeline_path.split(".")[-1]
+    ext = str(pipeline_path).split(".")[-1]
     assert ext in (
         "pb",
         "yaml",

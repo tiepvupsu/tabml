@@ -14,23 +14,27 @@ class TestFeatureConfigHelper:
             dataset_name: "dummy"
             base_features:
               - name: "a"
-                dtype: STRING
+                dtype: str
             transforming_features:
               - name: "b"
                 index: 1
+                dtype: str
                 dependencies:
                   - "a"
               - name: "c"
                 index: 2
+                dtype: str
                 dependencies:
                   - "a"
                   - "b"
               - name: "d"
                 index: 3
+                dtype: str
                 dependencies:
                   - "a"
               - name: "e"
                 index: 4
+                dtype: str
                 dependencies:
                   - "c"
         """
@@ -49,10 +53,12 @@ class TestFeatureConfigHelper:
             transforming_features:
               - name: "weekday"
                 index: 1
+                dtype: int32
                 dependencies:
                   - "TIME"
               - name: "hour"
                 index: 1
+                dtype: int32
                 dependencies:
                   - "TIME"
         """
@@ -76,14 +82,16 @@ class TestFeatureConfigHelper:
             dataset_name: "dummy"
             base_features:
               - name: "TIME"
-                dtype: DATETIME
+                dtype: datetime
             transforming_features:
               - name: "weekday"
                 index: 1
+                dtype: str
                 dependencies:
                 - "TIME"
               - name: "weekday"
                 index: 2
+                dtype: str
         """
         config_path = tmp_path / "tmp.pb"
         write_str_to_file(config_str, config_path)
@@ -104,10 +112,11 @@ class TestFeatureConfigHelper:
             dataset_name: "dummy"
             base_features:
               - name: "TIME"
-                dtype: DATETIME
+                dtype: datetime
             transforming_features:
               - name: "weekday"
                 index: 1
+                dtype: str
                 dependencies:
                   - "date"
         """
@@ -149,19 +158,22 @@ class TestFeatureConfigHelper:
             dataset_name: "dummy"
             base_features:
               - name: "a"
-                dtype: STRING
+                dtype: str
             transforming_features:
               - name: "b"
                 index: 1
+                dtype: str
                 dependencies:
                   - "a"
               - name: "c"
                 index: 2
+                dtype: str
                 dependencies:
                   - "a"
                   - "b"
               - name: "e"
                 index: 4
+                dtype: str
                 dependencies:
                   - "c"
         """
@@ -177,10 +189,11 @@ class TestFeatureConfigHelper:
             dataset_name: "dummy"
             base_features:
               - name: "a"
-                dtype: STRING
+                dtype: str
             transforming_features:
               - name: "d"
                 index: 3
+                dtype: str
                 dependencies:
                   - "a"
         """
