@@ -193,16 +193,11 @@ class FeatureConfigHelper:
         all_relevant_features = self.get_dependencies_recursively(
             features=selected_features
         )
-        new_pb = copy.deepcopy(self._config)
-        # we can't deriectly assign a list to a protobuf repeated field
-        # https://tinyurl.com/y4m86cc4
-        del new_pb.transforming_features[:]
-        new_pb.transforming_features.extend(
-            [
-                transforming_feature
-                for transforming_feature in self._config.transforming_features
-                if transforming_feature.name in all_relevant_features
-            ]
-        )
+        new_config = copy.deepcopy(self._config)
+        new_config.transforming_features = [
+            transforming_feature
+            for transforming_feature in self._config.transforming_features
+            if transforming_feature.name in all_relevant_features
+        ]
 
-        return new_pb
+        return new_config
