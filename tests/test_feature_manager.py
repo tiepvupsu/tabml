@@ -83,61 +83,35 @@ class TestBaseFeatureManager:
             dataset_name: dummy
             base_features:
               - name: a
-<<<<<<< HEAD
                 dtype: INT32
               - name: d1
                 dtype: DATETIME
-=======
-                dtype: int32
-              - name: d1
-                dtype: datetime
->>>>>>> 30da986 (WIP: merge model_wrappers and trainers)
             transforming_features:
               - name: b
                 index: 1
                 dependencies:
                   - a
-<<<<<<< HEAD
                 dtype: INT32
-=======
-                dtype: int32
->>>>>>> 30da986 (WIP: merge model_wrappers and trainers)
               - name: c
                 index: 2
                 dependencies:
                   - b
-<<<<<<< HEAD
                 dtype: INT32
-=======
-                dtype: int32
->>>>>>> 30da986 (WIP: merge model_wrappers and trainers)
               - name: d
                 index: 3
                 dependencies:
                   - a
-<<<<<<< HEAD
                 dtype: INT32
-=======
-                dtype: int32
->>>>>>> 30da986 (WIP: merge model_wrappers and trainers)
               - name: e
                 index: 4
                 dependencies:
                   - c
-<<<<<<< HEAD
                 dtype: INT32
-=======
-                dtype: int32
->>>>>>> 30da986 (WIP: merge model_wrappers and trainers)
               - name: d2
                 index: 5
                 dependencies:
                   - d1
-<<<<<<< HEAD
                 dtype: DATETIME
-=======
-                dtype: datetime
->>>>>>> 30da986 (WIP: merge model_wrappers and trainers)
         """
         yaml_config_path = str(tmp_path / "tmp.yaml")
         write_str_to_file(yaml_str, yaml_config_path)
