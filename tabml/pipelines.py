@@ -88,12 +88,12 @@ class BasePipeline(ABC):
         if self.config.model_analysis.training_size == 0:
             training_size = None
         else:
-            training_size = self.config.model_analysis.training_size
+            training_size = int(self.config.model_analysis.training_size)
         ModelAnalysis(
             data_loader=self.data_loader,
             model_wrapper=self.model_wrapper,
             features_to_analyze=self.config.model_analysis.by_features,
-            label_to_analyze=self.config.model_analysis.by_label,
+            label_to_analyze=self.config.model_analysis.get("by_label", None),
             metric_names=self.config.model_analysis.metrics,
             output_dir=self.exp_manager.get_model_analysis_dir(),
             training_size=training_size,

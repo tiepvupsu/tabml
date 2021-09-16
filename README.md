@@ -122,3 +122,12 @@ python3 -m pytest ./tests ./examples
 ---
 
 If you find a bug or want to request a feature, feel free to create an issue. Any Pull Request would be much appreciated.
+
+TODO:
+
+- [ ] titanic lgbm config
+- [ ] titanic xgboost and catboost config
+- [ ] housing all configs
+- [ ] remove proto file
+- [ ] update readme
+- [ ] Remove this TODO list

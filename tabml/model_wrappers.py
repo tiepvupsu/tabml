@@ -71,6 +71,7 @@ class BaseBoostingModelWrapper(BaseModelWrapper):
 
         fit_params = self._get_fit_params((train_feature, train_label), val_data)
 
+        # breakpoint()
         self.model.fit(X=train_feature, y=train_label, **fit_params)
         save_as_pickle(self.model, model_dir, self.save_model_name)
 
@@ -80,7 +81,8 @@ class BaseLgbmModelWrapper(BaseBoostingModelWrapper):
 
     def __init__(self, config):
         super().__init__(config)
-        self.params = pb_to_dict(self.config.model_wrapper.lgbm_model_params)
+        # self.params = pb_to_dict(self.config.model_wrapper.model_params)
+        self.params = self.config.model_wrapper.model_params
         self.model = self.build_model()
 
     @abstractmethod
@@ -98,7 +100,8 @@ class BaseLgbmModelWrapper(BaseBoostingModelWrapper):
             "eval_set": [train_data, val_data],
             "eval_names": ["train", "val"],
             "callbacks": [boosting_logger_eval(model="lgbm")],
-            **pb_to_dict(self.config.model_wrapper.lgbm_fit_params),
+            **self.config.model_wrapper.fit_params,
+            # **pb_to_dict(self.config.model_wrapper.fit_params),
         }
         return fit_params
 

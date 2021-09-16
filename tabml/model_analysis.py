@@ -140,7 +140,7 @@ class ModelAnalysis:
                 filters=self.data_loader.config.data_loader.train_filters,
             )
             if self.training_size:
-                return df.sample(n=min(self.training_size, len(df)))
+                return df.sample(n=min(int(self.training_size), len(df)))
             return df
 
         if dataset_name == "val":

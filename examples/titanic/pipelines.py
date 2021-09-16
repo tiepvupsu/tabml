@@ -7,7 +7,7 @@ def run(path_to_config: str):
 
 
 def train_lgbm():
-    path_to_config = "configs/lgbm_config.pb"
+    path_to_config = "configs/lgbm_config.yaml"
     run(path_to_config)
 
 
