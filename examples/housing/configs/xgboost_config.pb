@@ -24,16 +24,13 @@ data_loader {
     submission_filters: "not is_train"
 }
 model_wrapper {
-    # use a custom lgbm model_wrapper
-    xgboost_params {
+    # use a custom xgboost model_wrapper
+    xgboost_model_params {
         learning_rate: 0.1
         n_estimators: 200
         objective: "reg:squarederror"
         eval_metric: "rmse"
     }
-}
-trainer {
-    cls_name: "tabml.trainers.XGBoostTrainer"
 }
 model_analysis {
     training_size: 500

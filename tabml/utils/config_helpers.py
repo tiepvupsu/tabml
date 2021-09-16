@@ -1,3 +1,6 @@
+import typing
+from pathlib import Path
+
 import yaml
 from attrdict import AttrDict
 from google.protobuf import json_format, text_format
@@ -27,8 +30,8 @@ def parse_feature_config(config_path: str):
     return parse_config_yaml(config_path)
 
 
-def parse_pipeline_config(pipeline_path: str):
-    ext = str(pipeline_path).split(".")[-1]
+def parse_pipeline_config(pipeline_path: typing.Union[str, Path]):
+    ext = _get_file_extension(pipeline_path)
     assert ext in (
         "pb",
         "yaml",
@@ -40,3 +43,11 @@ def parse_pipeline_config(pipeline_path: str):
         return parse_config_yaml(pipeline_path)
     else:
         ValueError(f"pipeline_path {pipeline_path} extension not supported.")
+
+
+def _get_file_extension(path: typing.Union[str, Path]) -> str:
+    if isinstance(path, str):
+        return path.split(".")[-1]
+    if isinstance(path, Path):
+        return path.suffix[1:]  # do not inclue .
+    ValueError(f"Invalid input type {type(path)}")
