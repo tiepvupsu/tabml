@@ -12,12 +12,12 @@ def train_lgbm():
 
 
 def train_xgboost():
-    path_to_config = "configs/xgboost_config.pb"
+    path_to_config = "configs/xgboost_config.yaml"
     run(path_to_config)
 
 
 def train_catboost():
-    path_to_config = "configs/catboost_config.pb"
+    path_to_config = "configs/catboost_config.yaml"
     run(path_to_config)
 
 
