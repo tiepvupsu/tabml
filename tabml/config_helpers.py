@@ -6,6 +6,7 @@ from attrdict import AttrDict
 from google.protobuf import json_format, text_format
 
 from tabml.protos import pipeline_pb2
+from tabml.schemas import feature_config
 
 
 def parse_pipeline_config_pb(pipeline_pbtxt_path: str):
@@ -21,9 +22,7 @@ def pb_to_dict(config):
 def parse_config_yaml(yaml_path: str):
     with open(yaml_path) as f:
         config = yaml.load(f, Loader=yaml.BaseLoader)  # config is dict
-        config = AttrDict(config)
-        config._setattr("_sequence_type", list)
-        return config
+        return feature_config.FeatureConfig(**config)
 
 
 def parse_feature_config(config_path: str):
