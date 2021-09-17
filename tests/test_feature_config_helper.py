@@ -9,7 +9,7 @@ from tabml.utils.utils import write_str_to_file
 class TestFeatureConfigHelper:
     @pytest.fixture(autouse=True)
     def setup_class(cls, tmp_path):
-        feature_config_STRING = """
+        feature_config_str = """
             raw_data_dir: "dummy"
             dataset_name: "dummy"
             base_features:
@@ -38,8 +38,8 @@ class TestFeatureConfigHelper:
                 dependencies:
                   - "c"
         """
-        config_path = tmp_path / "feature_config_STRING.yaml"
-        write_str_to_file(feature_config_STRING, config_path)
+        config_path = tmp_path / "feature_config_str.yaml"
+        write_str_to_file(feature_config_str, config_path)
         cls.fm_helper = feature_config_helper.FeatureConfigHelper(config_path)
 
     def test_raise_value_error_with_invalid_indexes(self, tmp_path):
