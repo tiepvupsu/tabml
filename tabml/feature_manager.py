@@ -6,19 +6,19 @@ from typing import Any, Dict, List, Optional, Union
 import pandas as pd
 
 from tabml.feature_config_helper import FeatureConfigHelper
-from tabml.protos import feature_manager_pb2
+from tabml.schemas.feature_config import DType
 from tabml.utils.logger import logger
 from tabml.utils.utils import check_uniqueness
 
 PANDAS_DTYPE_MAPPING = {
-    feature_manager_pb2.BOOL: "bool",
-    feature_manager_pb2.INT32: "int32",
-    feature_manager_pb2.INT64: "int64",
-    feature_manager_pb2.STRING: "str",
-    feature_manager_pb2.FLOAT: "float32",
-    feature_manager_pb2.DOUBLE: "float64",
+    DType.BOOL: "bool",
+    DType.INT32: "int32",
+    DType.INT64: "int64",
+    DType.STRING: "str",
+    DType.FLOAT: "float32",
+    DType.DOUBLE: "float64",
     # DATETIME will be converted to datetime parse_date https://tinyurl.com/y4waw6np
-    feature_manager_pb2.DATETIME: "datetime64[ns]",
+    DType.DATETIME: "datetime64[ns]",
 }
 
 
@@ -52,8 +52,8 @@ class BaseFeatureManager(ABC):
             pickle path to save transformers.
     """
 
-    def __init__(self, pb_config_path: str, transformer_path: Union[str, None] = None):
-        self.config_helper = FeatureConfigHelper(pb_config_path)
+    def __init__(self, config_path: str, transformer_path: Union[str, None] = None):
+        self.config_helper = FeatureConfigHelper(config_path)
         self.raw_data_dir = self.config_helper.raw_data_dir
         self.dataset_name = self.config_helper.dataset_name
         self.feature_metadata = self.config_helper.feature_metadata
@@ -100,14 +100,14 @@ class BaseFeatureManager(ABC):
         parse_dates = [
             feature
             for feature, metadata in self.feature_metadata.items()
-            if metadata.dtype == feature_manager_pb2.DATETIME
+            if metadata.dtype == DType.DATETIME
         ]
         self.dataframe = pd.read_csv(
             self.dataset_path,
             dtype={
                 feature: PANDAS_DTYPE_MAPPING[metadata.dtype]
                 for feature, metadata in self.feature_metadata.items()
-                if metadata.dtype != feature_manager_pb2.DATETIME
+                if metadata.dtype != DType.DATETIME
             },
             parse_dates=parse_dates,
         )
@@ -166,7 +166,7 @@ class BaseFeatureManager(ABC):
         if is_training:
             self.transformer_dict[feature_name] = transformer_object.transformer
         dtype = self.feature_metadata[feature_name].dtype
-        if dtype == feature_manager_pb2.DATETIME:
+        if dtype == DType.DATETIME:
             self.dataframe.loc[:, feature_name] = pd.to_datetime(series)
         else:
             self.dataframe.loc[:, feature_name] = pd.Series(
@@ -193,8 +193,8 @@ class BaseFeatureManager(ABC):
         """
         features_to_compute = [feature_name]
         features_to_compute.extend(self.config_helper.find_dependents(feature_name))
-        for feature_name in features_to_compute:
-            self._compute_feature(feature_name)
+        for _feature_name in features_to_compute:
+            self._compute_feature(_feature_name)
 
     def run_all(self):
         self.load_raw_data()

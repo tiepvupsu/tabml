@@ -1,0 +1,108 @@
+raw_data_dir: "data"
+dataset_name: "processed"
+
+base_features:
+  - name: "house_id"
+    dtype: INT32
+  - name: "median_house_value"
+    dtype: FLOAT
+  - name: "housing_median_age"
+    dtype: FLOAT
+  - name: "total_rooms"
+    dtype: FLOAT
+  - name: "population"
+    dtype: FLOAT
+  - name: "total_bedrooms"
+    dtype: FLOAT
+  - name: "households"
+    dtype: FLOAT
+  - name: "median_income"
+    dtype: FLOAT
+  - name: "ocean_proximity"
+    dtype: STRING
+  - name: "longitude"
+    dtype: FLOAT
+  - name: "latitude"
+    dtype: FLOAT
+
+transforming_features:
+  - name: "is_train"
+    index: 1
+    dtype: BOOL
+    dependencies:
+      - "house_id"
+
+  - name: "scaled_housing_median_age"
+    index: 2
+    dtype: FLOAT
+    dependencies:
+      - "is_train"
+      - "housing_median_age"
+  - name: "scaled_total_rooms"
+    index: 3
+    dtype: FLOAT
+    dependencies:
+      - "is_train"
+      - "total_rooms"
+  - name: "scaled_population"
+    index: 4
+    dtype: FLOAT
+    dependencies:
+      - "is_train"
+      - "population"
+  - name: "scaled_total_bedrooms"
+    index: 5
+    dtype: FLOAT
+    dependencies:
+      - "is_train"
+      - "total_bedrooms"
+
+  - name: "scaled_households"
+    index: 6
+    dtype: FLOAT
+    dependencies:
+      -  "is_train"
+      - "households"
+
+  - name: "scaled_median_income"
+    index: 7
+    dtype: FLOAT
+    dependencies:
+      - "is_train"
+      - "median_income"
+
+  - name: "log10_median_house_value"
+    dtype: FLOAT
+    index: 8
+    dependencies:
+      - "median_house_value"
+
+  - name: "bucketized_longitude"
+    index: 9
+    dtype: INT32
+    dependencies:
+      -  "longitude"
+
+  - name: "bucketized_latitude"
+    index: 10
+    dtype: INT32
+    dependencies:
+      - "latitude"
+  - name: "bucketized_latitude_X_bucketized_longitude"
+    index: 11
+    dtype: STRING
+    dependencies:
+      -  "bucketized_latitude"
+      - "bucketized_longitude"
+
+  - name: "hashed_bucketized_latitude_X_bucketized_longitude"
+    index: 12
+    dtype: INT32
+    dependencies:
+      - "bucketized_latitude_X_bucketized_longitude"
+
+  - name: "encoded_ocean_proximity"
+    index:  13
+    dtype: INT32
+    dependencies:
+      - "ocean_proximity"

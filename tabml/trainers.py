@@ -5,7 +5,6 @@ import pandas as pd
 
 from tabml import data_loaders, model_wrappers
 from tabml.utils.logger import boosting_logger_eval
-from tabml.utils.pb_helpers import pb_to_dict
 from tabml.utils.utils import save_as_pickle
 
 
@@ -64,7 +63,7 @@ class LgbmTrainer(BaseBoostingTrainer):
             "eval_set": [train_data, val_data],
             "eval_names": ["train", "val"],
             "callbacks": [boosting_logger_eval(model="lgbm")],
-            **pb_to_dict(self.config.trainer.lgbm_params),
+            **self.config.trainer.lgbm_params,
         }
         return fit_params
 
@@ -74,7 +73,7 @@ class XGBoostTrainer(BaseBoostingTrainer):
         fit_params = {
             "eval_set": [train_data, val_data],
             "callbacks": [boosting_logger_eval(model="xgboost")],
-            **pb_to_dict(self.config.trainer.xgboost_params),
+            **self.config.trainer.xgboost_params,
         }
         return fit_params
 

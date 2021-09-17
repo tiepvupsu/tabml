@@ -11,7 +11,19 @@ class TestExperimentManager:
     @pytest.fixture(autouse=True)
     def setup_class(self, tmp_path):
         pb_str = """
-            config_name: "dummy"
+            config_name: "foo"
+            data_loader:
+              cls_name: "bar"
+              feature_manager_config_path: "rab"
+              features_to_model: ["c"]
+              label_col: "d"
+              train_filters: []
+              validation_filters: []
+            model_wrapper:
+              cls_name: "bobar"
+            model_analysis:
+              metrics: ["a"]
+              by_features: ["b"]
         """
         self.pb_config_path = tmp_path / "pipeline_config.pb"
         write_str_to_file(pb_str, self.pb_config_path)

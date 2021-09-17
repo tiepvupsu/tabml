@@ -32,7 +32,7 @@ class CustomCatBoostRegressorModelWrapperLog10(
 
 
 def train_lgbm():
-    path_to_config = "configs/lgbm_config.pb"
+    path_to_config = "configs/lgbm_config.yaml"
     pipeline = BasePipeline(
         path_to_config, custom_model_wrapper=CustomLgbmRegressorModelWrapperLog10
     )
@@ -40,7 +40,7 @@ def train_lgbm():
 
 
 def train_xgboost():
-    path_to_config = "configs/xgboost_config.pb"
+    path_to_config = "configs/xgboost_config.yaml"
     pipeline = BasePipeline(
         path_to_config, custom_model_wrapper=CustomXGBoostRegressorModelWrapperLog10
     )
@@ -48,7 +48,7 @@ def train_xgboost():
 
 
 def train_catboost():
-    path_to_config = "configs/catboost_config.pb"
+    path_to_config = "configs/catboost_config.yaml"
     pipeline = BasePipeline(
         path_to_config, custom_model_wrapper=CustomCatBoostRegressorModelWrapperLog10
     )
