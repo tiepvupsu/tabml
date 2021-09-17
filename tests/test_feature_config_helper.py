@@ -9,61 +9,61 @@ from tabml.utils.utils import write_str_to_file
 class TestFeatureConfigHelper:
     @pytest.fixture(autouse=True)
     def setup_class(cls, tmp_path):
-        feature_config_str = """
+        feature_config_STRING = """
             raw_data_dir: "dummy"
             dataset_name: "dummy"
             base_features:
               - name: "a"
-                dtype: str
+                dtype: STRING
             transforming_features:
               - name: "b"
                 index: 1
-                dtype: str
+                dtype: STRING
                 dependencies:
                   - "a"
               - name: "c"
                 index: 2
-                dtype: str
+                dtype: STRING
                 dependencies:
                   - "a"
                   - "b"
               - name: "d"
                 index: 3
-                dtype: str
+                dtype: STRING
                 dependencies:
                   - "a"
               - name: "e"
                 index: 4
-                dtype: str
+                dtype: STRING
                 dependencies:
                   - "c"
         """
-        config_path = tmp_path / "feature_config_str.yaml"
-        write_str_to_file(feature_config_str, config_path)
+        config_path = tmp_path / "feature_config_STRING.yaml"
+        write_str_to_file(feature_config_STRING, config_path)
         cls.fm_helper = feature_config_helper.FeatureConfigHelper(config_path)
 
     def test_raise_value_error_with_invalid_indexes(self, tmp_path):
-        invalid_index_str = """
+        invalid_index_STRING = """
             # invalid config with indexes are not continuous
             raw_data_dir: "dummy"
             dataset_name: "dummy"
             base_features:
               - name: "TIME"
-                dtype: "datatime"
+                dtype: "DATETIME"
             transforming_features:
               - name: "weekday"
                 index: 1
-                dtype: int32
+                dtype: INT32
                 dependencies:
                   - "TIME"
               - name: "hour"
                 index: 1
-                dtype: int32
+                dtype: INT32
                 dependencies:
                   - "TIME"
         """
         config_path = tmp_path / "tmp.yaml"
-        write_str_to_file(invalid_index_str, config_path)
+        write_str_to_file(invalid_index_STRING, config_path)
         with AssertRaises(ValueError) as assert_raises:
             feature_config_helper.FeatureConfigHelper(config_path)
 
@@ -77,24 +77,24 @@ class TestFeatureConfigHelper:
         )
 
     def test_raise_assertion_error_with_duplicate_features(self, tmp_path):
-        config_str = """
+        config_STRING = """
             raw_data_dir: "dummy"
             dataset_name: "dummy"
             base_features:
               - name: "TIME"
-                dtype: datetime
+                dtype: DATETIME
             transforming_features:
               - name: "weekday"
                 index: 1
-                dtype: str
+                dtype: STRING
                 dependencies:
                 - "TIME"
               - name: "weekday"
                 index: 2
-                dtype: str
+                dtype: STRING
         """
         config_path = tmp_path / "tmp.pb"
-        write_str_to_file(config_str, config_path)
+        write_str_to_file(config_STRING, config_path)
         with AssertRaises(AssertionError) as assert_raises:
             feature_config_helper.FeatureConfigHelper(config_path)
 
@@ -107,21 +107,21 @@ class TestFeatureConfigHelper:
         )
 
     def test_raise_value_error_with_invalid_dependencies(self, tmp_path):
-        invalid_dependency_str = """
+        invalid_dependency_STRING = """
             raw_data_dir: "dummy"
             dataset_name: "dummy"
             base_features:
               - name: "TIME"
-                dtype: datetime
+                dtype: DATETIME
             transforming_features:
               - name: "weekday"
                 index: 1
-                dtype: str
+                dtype: STRING
                 dependencies:
                   - "date"
         """
         config_path = tmp_path / "tmp.pb"
-        write_str_to_file(invalid_dependency_str, config_path)
+        write_str_to_file(invalid_dependency_STRING, config_path)
         with AssertRaises(AssertionError) as assert_raises:
             feature_config_helper.FeatureConfigHelper(config_path)
 
@@ -153,52 +153,52 @@ class TestFeatureConfigHelper:
 
     def test_extract_config_1(self, tmp_path):
         subset_features = ["e"]
-        expected_str = """
+        expected_STRING = """
             raw_data_dir: "dummy"
             dataset_name: "dummy"
             base_features:
               - name: "a"
-                dtype: str
+                dtype: STRING
             transforming_features:
               - name: "b"
                 index: 1
-                dtype: str
+                dtype: STRING
                 dependencies:
                   - "a"
               - name: "c"
                 index: 2
-                dtype: str
+                dtype: STRING
                 dependencies:
                   - "a"
                   - "b"
               - name: "e"
                 index: 4
-                dtype: str
+                dtype: STRING
                 dependencies:
                   - "c"
         """
         new_config_path = str(tmp_path / "new_tmp.yaml")
-        write_str_to_file(expected_str, new_config_path)
+        write_str_to_file(expected_STRING, new_config_path)
         new_config = self.fm_helper.extract_config(selected_features=subset_features)
         assert_eq(parse_feature_config(new_config_path), new_config)
 
     def test_extract_config_2(self, tmp_path):
         subset_features = ["d"]
-        expected_str = """
+        expected_STRING = """
             raw_data_dir: "dummy"
             dataset_name: "dummy"
             base_features:
               - name: "a"
-                dtype: str
+                dtype: STRING
             transforming_features:
               - name: "d"
                 index: 3
-                dtype: str
+                dtype: STRING
                 dependencies:
                   - "a"
         """
         new_config_path = str(tmp_path / "new_tmp.yaml")
-        write_str_to_file(expected_str, new_config_path)
+        write_str_to_file(expected_STRING, new_config_path)
         new_config = self.fm_helper.extract_config(selected_features=subset_features)
         assert_eq(parse_feature_config(new_config_path), new_config)
 
