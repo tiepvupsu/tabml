@@ -6,18 +6,19 @@ from typing import Any, Dict, List, Optional, Union
 import pandas as pd
 
 from tabml.feature_config_helper import FeatureConfigHelper
+from tabml.schemas.feature_config import DType
 from tabml.utils.logger import logger
 from tabml.utils.utils import check_uniqueness
 
 PANDAS_DTYPE_MAPPING = {
-    "BOOL": "bool",
-    "INT32": "int32",
-    "INT64": "int64",
-    "STRING": "str",
-    "FLOAT": "float32",
-    "DOUBLE": "float64",
+    DType.BOOL: "bool",
+    DType.INT32: "int32",
+    DType.INT64: "int64",
+    DType.STRING: "str",
+    DType.FLOAT: "float32",
+    DType.DOUBLE: "float64",
     # DATETIME will be converted to datetime parse_date https://tinyurl.com/y4waw6np
-    "DATETIME": "datetime64[ns]",
+    DType.DATETIME: "datetime64[ns]",
 }
 
 
@@ -99,14 +100,14 @@ class BaseFeatureManager(ABC):
         parse_dates = [
             feature
             for feature, metadata in self.feature_metadata.items()
-            if metadata.dtype == "DATETIME"
+            if metadata.dtype == DType.DATETIME
         ]
         self.dataframe = pd.read_csv(
             self.dataset_path,
             dtype={
                 feature: PANDAS_DTYPE_MAPPING[metadata.dtype]
                 for feature, metadata in self.feature_metadata.items()
-                if metadata.dtype != "DATETIME"
+                if metadata.dtype != DType.DATETIME
             },
             parse_dates=parse_dates,
         )
