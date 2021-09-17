@@ -84,11 +84,6 @@ class BasePipeline(ABC):
             "Add the by_features in model_analysis in the pipeline config"
         )
 
-        # In protocol buffer, default value for int32 is 0.
-        if self.config.model_analysis.training_size == 0:
-            training_size = None
-        else:
-            training_size = int(self.config.model_analysis.training_size)
         ModelAnalysis(
             data_loader=self.data_loader,
             model_wrapper=self.model_wrapper,
@@ -96,5 +91,5 @@ class BasePipeline(ABC):
             label_to_analyze=self.config.model_analysis.by_label,
             metric_names=self.config.model_analysis.metrics,
             output_dir=self.exp_manager.get_model_analysis_dir(),
-            training_size=training_size,
+            training_size=self.config.model_analysis.training_size,
         ).analyze()
