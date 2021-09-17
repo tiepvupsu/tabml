@@ -23,7 +23,7 @@ Key features:
 
 - One of the most important tasks in working with tabular data is to hanlde feature extraction. TabML allow users to define multiple features isolatedly without worrying about other features. This helps reduce coding conflicts if your team have multiple members simultaneously developing different features. In addition, if one feature needs to be updated, unrelated features could be untouched. In this way, the computating cost is relatively small (compared with running a pipeline to re-generate all other features).
 
--Parameters are specified in a config file as a protobuf file. This config file is automatically saved into an experiment folder after each training for the reproducibility purpose.
+- Parameters are specified in a config file as a protobuf file. This config file is automatically saved into an experiment folder after each training for the reproducibility purpose.
 
 - TabML is integreated with [MLflow](https://mlflow.org/) which allows users to keep track all model parameters and metrics.
 
