@@ -2,7 +2,7 @@ import pytest
 from qcore.asserts import AssertRaises, assert_eq
 
 from tabml import feature_config_helper
-from tabml.utils.config_helpers import parse_feature_config
+from tabml.config_helpers import parse_feature_config
 from tabml.utils.utils import write_str_to_file
 
 

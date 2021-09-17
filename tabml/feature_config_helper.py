@@ -1,7 +1,7 @@
 import copy
 from typing import Dict, List, Union
 
-from tabml.utils.config_helpers import parse_feature_config
+from tabml.config_helpers import parse_feature_config
 from tabml.utils.utils import check_uniqueness
 
 

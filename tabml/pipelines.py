@@ -3,10 +3,10 @@ from abc import ABC
 import mlflow
 
 from tabml import experiment_manager, model_wrappers
+from tabml.config_helpers import parse_pipeline_config
 from tabml.data_loaders import BaseDataLoader
 from tabml.model_analysis import ModelAnalysis
 from tabml.utils import factory
-from tabml.utils.config_helpers import parse_pipeline_config
 from tabml.utils.logger import logger
 
 

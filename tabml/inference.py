@@ -2,9 +2,9 @@
 
 from typing import Any, Dict, List, Union
 
+from tabml.config_helpers import parse_pipeline_config
 from tabml.experiment_manager import ExperimentManger
 from tabml.utils import factory
-from tabml.utils.config_helpers import parse_pipeline_config
 
 
 class ModelInference:

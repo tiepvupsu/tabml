@@ -4,9 +4,9 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from tabml.config_helpers import parse_pipeline_config_pb
 from tabml.data_loaders import BaseDataLoader
 from tabml.feature_manager import BaseFeatureManager
-from tabml.utils.config_helpers import parse_pipeline_config_pb
 from tabml.utils.utils import write_str_to_file
 
 
