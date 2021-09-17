@@ -2,7 +2,6 @@ import typing
 from pathlib import Path
 
 import yaml
-from attrdict import AttrDict
 from google.protobuf import json_format, text_format
 
 from tabml.protos import pipeline_pb2
