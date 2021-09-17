@@ -13,7 +13,6 @@
   - [Setup for development](#setup-for-development)
     - [Add path to this repo](#add-path-to-this-repo)
     - [Create the environment](#create-the-environment)
-    - [Install and build/update proto](#install-and-buildupdate-proto)
     - [Check that everthing is working](#check-that-everthing-is-working)
 
 ## Introduction
@@ -71,7 +70,7 @@ python pipelines.py  # to train the model
 
 You can change some parameters in the config file, run `python pipelines.py` again then `mlflow ui` to see information about each run.
 
-In most project, users only need to focus their efforts on designing features. The feature dependecy is defined in a feature config protobuf and the feature implementation is stored in `feature_manager.py`.
+In most project, users only need to focus their efforts on designing features. The feature dependecy is defined in a yaml config file and the feature implementation is stored in `feature_manager.py`.
 
 ## Setup for development
 
@@ -101,15 +100,6 @@ commit:
 pre-commit install
 ```
 
-### Install and build/update proto
-
-Note: do this only if you update protos.
-
-```shell
-apt install -y protobuf-compiler
-tabml_build_proto
-```
-
 ### Check that everthing is working
 
 by running test
@@ -122,12 +112,3 @@ python3 -m pytest ./tests ./examples
 ---
 
 If you find a bug or want to request a feature, feel free to create an issue. Any Pull Request would be much appreciated.
-
-TODO:
-
-- [ ] titanic lgbm config
-- [ ] titanic xgboost and catboost config
-- [ ] housing all configs
-- [ ] remove proto file
-- [ ] update readme
-- [ ] Remove this TODO list
