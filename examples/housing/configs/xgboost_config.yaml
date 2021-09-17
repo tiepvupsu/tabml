@@ -29,13 +29,6 @@ model_wrapper:
       n_estimators: 200
       objective: "reg:squarederror"
 
-    fit_params:
-        categorical_feature:
-          - "encoded_ocean_proximity"
-          - "hashed_bucketized_latitude_X_bucketized_longitude"
-          - "bucketized_latitude"
-          - "bucketized_longitude"
-
 model_analysis:
     metrics: ["smape", "rmse"]
     by_features: ["ocean_proximity"]

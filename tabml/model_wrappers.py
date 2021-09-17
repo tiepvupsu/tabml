@@ -113,7 +113,6 @@ class LgbmClassifierModelWrapper(BaseLgbmModelWrapper):
 
 class LgbmRegressorModelWrapper(BaseLgbmModelWrapper):
     def build_model(self):
-        breakpoint()
         return LGBMRegressor(**self.params)
 
 
