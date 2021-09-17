@@ -20,7 +20,7 @@ def pb_to_dict(config):
 
 def parse_config_yaml(yaml_path: str):
     with open(yaml_path) as f:
-        config = yaml.load(f, Loader=yaml.BaseLoader)  # config is dict
+        config = yaml.load(f)  # config is dict
         return feature_config.FeatureConfig(**config)
 
 
@@ -30,5 +30,5 @@ def parse_feature_config(config_path: str):
 
 def parse_pipeline_config(yaml_path: typing.Union[str, Path]):
     with open(yaml_path) as f:
-        config = yaml.load(f, Loader=yaml.BaseLoader)  # config is dict
-        return pipeline_config.PiplineConfig(**config)
+        config = yaml.load(f)  # config is dict
+        return pipeline_config.PipelineConfig(**config)
