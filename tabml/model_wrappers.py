@@ -6,7 +6,6 @@ from catboost import CatBoostClassifier, CatBoostRegressor
 from lightgbm import LGBMClassifier, LGBMRegressor
 from xgboost import XGBClassifier, XGBRegressor
 
-from tabml.config_helpers import pb_to_dict
 from tabml.data_loaders import BaseDataLoader
 from tabml.utils import utils
 from tabml.utils.logger import boosting_logger_eval
@@ -71,6 +70,7 @@ class BaseBoostingModelWrapper(BaseModelWrapper):
 
         fit_params = self._get_fit_params((train_feature, train_label), val_data)
 
+        # breakpoint()
         self.model.fit(X=train_feature, y=train_label, **fit_params)
         save_as_pickle(self.model, model_dir, self.save_model_name)
 
@@ -80,7 +80,7 @@ class BaseLgbmModelWrapper(BaseBoostingModelWrapper):
 
     def __init__(self, config):
         super().__init__(config)
-        self.params = pb_to_dict(self.config.model_wrapper.lgbm_model_params)
+        self.params = self.config.model_wrapper.model_params
         self.model = self.build_model()
 
     @abstractmethod
@@ -98,7 +98,7 @@ class BaseLgbmModelWrapper(BaseBoostingModelWrapper):
             "eval_set": [train_data, val_data],
             "eval_names": ["train", "val"],
             "callbacks": [boosting_logger_eval(model="lgbm")],
-            **pb_to_dict(self.config.model_wrapper.lgbm_fit_params),
+            **self.config.model_wrapper.fit_params,
         }
         return fit_params
 
@@ -121,7 +121,7 @@ class BaseXGBoostModelWrapper(BaseBoostingModelWrapper):
 
     def __init__(self, config):
         super(BaseXGBoostModelWrapper, self).__init__(config)
-        self.params = pb_to_dict(self.config.model_wrapper.xgboost_model_params)
+        self.params = self.config.model_wrapper.model_params
         self.tree_method = "gpu_hist" if utils.is_gpu_available() else "auto"
         self.model = self.build_model()
 
@@ -139,7 +139,7 @@ class BaseXGBoostModelWrapper(BaseBoostingModelWrapper):
         fit_params = {
             "eval_set": [train_data, val_data],
             "callbacks": [boosting_logger_eval(model="xgboost")],
-            **pb_to_dict(self.config.model_wrapper.xgboost_fit_params),
+            **self.config.model_wrapper.fit_params,
         }
         return fit_params
 
@@ -162,7 +162,7 @@ class BaseCatBoostModelWrapper(BaseBoostingModelWrapper):
 
     def __init__(self, config):
         super(BaseCatBoostModelWrapper, self).__init__(config)
-        self.params = pb_to_dict(self.config.model_wrapper.catboost_model_params)
+        self.params = self.config.model_wrapper.model_params
         self.task_type = "GPU" if utils.is_gpu_available() else "CPU"
         self.model = self.build_model()
 
