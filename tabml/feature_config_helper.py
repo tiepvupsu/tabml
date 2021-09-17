@@ -2,11 +2,14 @@ import copy
 from typing import Dict, List, Union
 
 from tabml.config_helpers import parse_feature_config
+from tabml.schemas.feature_config import DType
 from tabml.utils.utils import check_uniqueness
 
 
 class _Feature:
-    def __init__(self, index: int, dtype: str, dependencies: Union[List, None] = None):
+    def __init__(
+        self, index: int, dtype: DType, dependencies: Union[List, None] = None
+    ):
         self.index = index
         self.dependents: List[str] = []
         self.dtype = dtype
