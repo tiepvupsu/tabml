@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from tabml.config_helpers import parse_pipeline_config_pb
+from tabml.config_helpers import parse_pipeline_config
 from tabml.data_loaders import BaseDataLoader
 from tabml.feature_manager import BaseFeatureManager
 from tabml.utils.utils import write_str_to_file
@@ -69,7 +69,7 @@ class TestBaseDataLoader:
 
         pb_config_path = tmp_path / "pipeline_config.pb"
         write_str_to_file(pipeline_config, pb_config_path)
-        self.config = parse_pipeline_config_pb(pb_config_path)
+        self.config = parse_pipeline_config(pb_config_path)
 
     def test_get_train_data_and_label(self):
         data_loader = BaseDataLoader(self.config)
