@@ -5,13 +5,13 @@ import setuptools
 setup(
     name="tabml",
     packages=setuptools.find_packages(),
-    version="0.1.11.2",
+    version="0.1.12",
     license="apache-2.0",
     description="A package for machine learning with tabular data",
     author="Tiep Vu",
     author_email="vuhuutiep@gmail.com",
     url="https://github.com/tiepvupsu/tabml",
-    download_url="https://github.com/tiepvupsu/tabml/archive/refs/tags/v0_1_10.tar.gz",
+    download_url="https://github.com/tiepvupsu/tabml/archive/refs/tags/v0_1_12.tar.gz",
     keywords=["Machine Learning", "Tabular"],
     install_requires=[
         "catboost>=0.26.1",
