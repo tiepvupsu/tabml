@@ -93,7 +93,7 @@ class BasePipeline(ABC):
             data_loader=self.data_loader,
             model_wrapper=self.model_wrapper,
             features_to_analyze=self.config.model_analysis.by_features,
-            label_to_analyze=self.config.model_analysis.get("by_label", None),
+            label_to_analyze=self.config.model_analysis.by_label,
             metric_names=self.config.model_analysis.metrics,
             output_dir=self.exp_manager.get_model_analysis_dir(),
             training_size=training_size,
