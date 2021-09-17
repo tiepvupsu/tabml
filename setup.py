@@ -25,6 +25,7 @@ setup(
         "pandas>=1.3.1",
         "pandas-profiling>=2.9.0",
         "protobuf>=3.13.0",
+        "pydantic>=1.8.2",
         "pyyaml>=5.4.1",
         "scikit-learn>=0.24.2",
         "scipy>=1.6.2",

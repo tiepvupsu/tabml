@@ -4,7 +4,7 @@ import re
 import shutil
 from pathlib import Path
 
-from tabml.utils.config_helpers import parse_pipeline_config
+from tabml.config_helpers import parse_pipeline_config
 
 
 class ExperimentManger:

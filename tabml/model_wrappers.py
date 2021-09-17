@@ -6,9 +6,9 @@ from catboost import CatBoostClassifier, CatBoostRegressor
 from lightgbm import LGBMClassifier, LGBMRegressor
 from xgboost import XGBClassifier, XGBRegressor
 
+from tabml.config_helpers import pb_to_dict
 from tabml.data_loaders import BaseDataLoader
 from tabml.utils import utils
-from tabml.utils.config_helpers import pb_to_dict
 from tabml.utils.logger import boosting_logger_eval
 from tabml.utils.utils import save_as_pickle
 
