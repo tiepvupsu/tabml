@@ -193,3 +193,23 @@ class CatBoostClassifierModelWrapper(BaseCatBoostModelWrapper):
 class CatBoostRegressorModelWrapper(BaseCatBoostModelWrapper):
     def build_model(self):
         return CatBoostRegressor(task_type=self.task_type, **self.params)
+
+
+def write_model_wrapper_subclasses_to_file(
+    base_cls=BaseModelWrapper, md_path="model_wrapper_map.md"
+):
+    lines = ["# Inheritance map\n", "\n"]
+    level = 0
+    stack = [(base_cls, level)]
+    while stack:
+        node, level = stack.pop()
+        lines.append("    " * level + f"- {node}\n")
+        stack.extend((child, level + 1) for child in node.__subclasses__())
+
+    with open(md_path, "w") as f:
+        f.writelines(lines)
+
+
+if __name__ == "__main__":
+    # Show the subclasses of BaseModelWrapper
+    write_model_wrapper_subclasses_to_file()
