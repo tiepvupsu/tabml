@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Iterable, Tuple, Union
+from typing import Dict, Iterable, Tuple
 
 import mlflow
 from catboost import CatBoostClassifier, CatBoostRegressor
@@ -25,7 +25,10 @@ class BaseModelWrapper(ABC):
         self.config = config
         self.model = None
         self.feature_names = list(self.config.data_loader.features_to_model)
-        self.params: Union[Dict[str, Any], None] = None
+        # Parameters for model instantiating
+        self.model_params = self.config.model_wrapper.model_params
+        # Parameters for model training
+        self.fit_params = self.config.model_wrapper.fit_params
 
     def fit(self, data_loader: BaseDataLoader, model_dir: str):
         pass
@@ -80,7 +83,6 @@ class BaseLgbmModelWrapper(BaseBoostingModelWrapper):
 
     def __init__(self, config):
         super().__init__(config)
-        self.params = self.config.model_wrapper.model_params
         self.model = self.build_model()
 
     @abstractmethod
@@ -98,14 +100,14 @@ class BaseLgbmModelWrapper(BaseBoostingModelWrapper):
             "eval_set": [train_data, val_data],
             "eval_names": ["train", "val"],
             "callbacks": [boosting_logger_eval(model="lgbm")],
-            **self.config.model_wrapper.fit_params,
+            **self.fit_params,
         }
         return fit_params
 
 
 class LgbmClassifierModelWrapper(BaseLgbmModelWrapper):
     def build_model(self):
-        return LGBMClassifier(**self.params)
+        return LGBMClassifier(**self.model_params)
 
     def predict_proba(self, data) -> Iterable:
         return self.model.predict_proba(data)[:, 1]
@@ -113,7 +115,7 @@ class LgbmClassifierModelWrapper(BaseLgbmModelWrapper):
 
 class LgbmRegressorModelWrapper(BaseLgbmModelWrapper):
     def build_model(self):
-        return LGBMRegressor(**self.params)
+        return LGBMRegressor(**self.model_params)
 
 
 class BaseXGBoostModelWrapper(BaseBoostingModelWrapper):
@@ -121,7 +123,6 @@ class BaseXGBoostModelWrapper(BaseBoostingModelWrapper):
 
     def __init__(self, config):
         super(BaseXGBoostModelWrapper, self).__init__(config)
-        self.params = self.config.model_wrapper.model_params
         self.tree_method = "gpu_hist" if utils.is_gpu_available() else "auto"
         self.model = self.build_model()
 
@@ -139,19 +140,19 @@ class BaseXGBoostModelWrapper(BaseBoostingModelWrapper):
         fit_params = {
             "eval_set": [train_data, val_data],
             "callbacks": [boosting_logger_eval(model="xgboost")],
-            **self.config.model_wrapper.fit_params,
+            **self.fit_params,
         }
         return fit_params
 
 
 class XGBoostRegressorModelWrapper(BaseXGBoostModelWrapper):
     def build_model(self):
-        return XGBRegressor(tree_method=self.tree_method, **self.params)
+        return XGBRegressor(tree_method=self.tree_method, **self.model_params)
 
 
 class XGBoostClassifierModelWrapper(BaseXGBoostModelWrapper):
     def build_model(self):
-        return XGBClassifier(tree_method=self.tree_method, **self.params)
+        return XGBClassifier(tree_method=self.tree_method, **self.model_params)
 
     def predict_proba(self, data) -> Iterable:
         return self.model.predict_proba(data)[:, 1]
@@ -162,7 +163,6 @@ class BaseCatBoostModelWrapper(BaseBoostingModelWrapper):
 
     def __init__(self, config):
         super(BaseCatBoostModelWrapper, self).__init__(config)
-        self.params = self.config.model_wrapper.model_params
         self.task_type = "GPU" if utils.is_gpu_available() else "CPU"
         self.model = self.build_model()
 
@@ -184,7 +184,7 @@ class BaseCatBoostModelWrapper(BaseBoostingModelWrapper):
 
 class CatBoostClassifierModelWrapper(BaseCatBoostModelWrapper):
     def build_model(self):
-        return CatBoostClassifier(**self.params)
+        return CatBoostClassifier(**self.model_params)
 
     def predict_proba(self, data) -> Iterable:
         return self.model.predict_proba(data)[:, 1]
@@ -192,7 +192,7 @@ class CatBoostClassifierModelWrapper(BaseCatBoostModelWrapper):
 
 class CatBoostRegressorModelWrapper(BaseCatBoostModelWrapper):
     def build_model(self):
-        return CatBoostRegressor(task_type=self.task_type, **self.params)
+        return CatBoostRegressor(task_type=self.task_type, **self.model_params)
 
 
 def write_model_wrapper_subclasses_to_file(
