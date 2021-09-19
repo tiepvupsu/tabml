@@ -24,7 +24,7 @@ data_loader:
     - passenger_id <= 891
 
 model_wrapper:
-  cls_name: tabml.model_wrappers.TabNetModelWrapper
+  cls_name: tabml.model_wrappers.TabNetClassifierModelWrapper
   model_params:
     n_d: 8
     n_a: 8
