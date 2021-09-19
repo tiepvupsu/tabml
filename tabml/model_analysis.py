@@ -94,21 +94,21 @@ class ModelAnalysis:
         train_feature = self._get_dataset("train")[self.model_wrapper.feature_names]
         shap_values = explainer(train_feature)
 
-        def _get_shape_values_one_sample(shape_values, index: int):
-            # For LightGBM and XGBoost, shape_values[index].values is a 2d array
+        def _get_shap_values_one_sample(shap_values, index: int):
+            # For LightGBM and XGBoost, shap_values[index].values is a 2d array
             # representing logit of two classes. They are basically negative of each
             # other, we only need one.
             # Related issue https://github.com/slundberg/shap/issues/526.
-            if len(shape_values[index].values.shape) == 2:  # binary classification
-                return shape_values[index].values[:, 0]
-            assert len(shape_values[index].values.shape) == 1, len(
-                shape_values[index].values
+            if len(shap_values[index].values.shape) == 2:  # binary classification
+                return shap_values[index].values[:, 0]
+            assert len(shap_values[index].values.shape) == 1, len(
+                shap_values[index].values
             )
-            return shape_values[index].values
+            return shap_values[index].values
 
         feature_importances = np.mean(
             [
-                np.abs(_get_shape_values_one_sample(shap_values, i))
+                np.abs(_get_shap_values_one_sample(shap_values, i))
                 for i in range(len(shap_values))
             ],
             axis=0,
