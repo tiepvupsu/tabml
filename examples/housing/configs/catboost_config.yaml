@@ -1,4 +1,4 @@
-config_name: "lgbm"
+config_name: "catboost"
 data_loader:
     cls_name: "tabml.data_loaders.BaseDataLoader"
     feature_manager_config_path: "configs/feature_config.yaml"
