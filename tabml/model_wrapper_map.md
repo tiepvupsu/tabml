@@ -11,3 +11,4 @@
         - <class '__main__.BaseLgbmModelWrapper'>
             - <class '__main__.LgbmRegressorModelWrapper'>
             - <class '__main__.LgbmClassifierModelWrapper'>
+    - <class '__main__.BaseSklearnModelWrapper'>

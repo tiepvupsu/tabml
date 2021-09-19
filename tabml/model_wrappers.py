@@ -7,11 +7,12 @@ from lightgbm import LGBMClassifier, LGBMRegressor
 from xgboost import XGBClassifier, XGBRegressor
 
 from tabml.data_loaders import BaseDataLoader
-from tabml.utils import utils
+from tabml.utils import factory, utils
 from tabml.utils.logger import boosting_logger_eval
 from tabml.utils.utils import save_as_pickle
 
 MLFLOW_AUTOLOG = {
+    "sklearn": mlflow.sklearn.autolog(),
     "lightgbm": mlflow.lightgbm.autolog(),
     "xgboost": mlflow.xgboost.autolog(),
     "catboost": None,
@@ -49,6 +50,37 @@ class BaseModelWrapper(ABC):
     @abstractmethod
     def load_model(self, model_path: str):
         raise NotImplementedError
+
+
+class BaseSklearnModelWrapper(BaseModelWrapper):
+    """A common model wrapper for scklearn-like models."""
+
+    mlflow_model_type = "sklearn"
+
+    def __init__(self, config):
+        super().__init__(config)
+        self.save_model_name = "model_0"
+        self.model = factory.create(self.config.model_wrapper.model_cls)(
+            **self.model_params
+        )
+
+    def fit(self, data_loader: BaseDataLoader, model_dir: str):
+        assert (
+            data_loader.label_col is not None
+        ), "data_loader.label_col must be declared in BaseDataLoader subclasses."
+        train_feature, train_label = data_loader.get_train_data_and_label()
+
+        self.model.fit(X=train_feature, y=train_label, **self.fit_params)
+        save_as_pickle(self.model, model_dir, self.save_model_name)
+
+    def load_model(self, model_path: str):
+        self.model = utils.load_pickle(model_path)
+
+    def predict(self, data):
+        return self.model.predict(data)
+
+    def predict_proba(self, data) -> Iterable:
+        return self.model.predict_proba(data)[:, 1]
 
 
 class BaseBoostingModelWrapper(BaseModelWrapper):

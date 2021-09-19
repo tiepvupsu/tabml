@@ -1,0 +1,40 @@
+# This config use RandomForest as an example of using a scikit learn model in
+# TabML. Sklearn RandomForest does not handle categorical features directly.
+config_name: "random_forest"
+
+data_loader:
+  cls_name: tabml.data_loaders.BaseDataLoader
+  feature_manager_config_path: configs/feature_config.yaml
+
+  features_to_model:
+    - coded_sex
+    - imputed_age
+    - bucketized_age
+    - min_max_scaled_age
+    - coded_pclass
+    - coded_title
+
+  label_col: survived
+
+  train_filters:
+    - passenger_id <= 891
+
+  validation_filters:
+    - not is_train
+    - passenger_id <= 891
+
+model_wrapper:
+  cls_name: tabml.model_wrappers.BaseSklearnModelWrapper
+  model_cls: sklearn.ensemble.RandomForestClassifier
+  model_params:
+    n_estimators: 100
+
+model_analysis:
+  training_size: 100
+  metrics:
+    - accuracy_score
+    - roc_auc
+    - max_f1
+  by_features:
+    - sex
+    - pclass
