@@ -22,4 +22,6 @@ def train_catboost():
 
 
 if __name__ == "__main__":
-    train_lgbm()
+    # train_lgbm()
+    path_to_config = "configs/tabnet_config.yaml"
+    BasePipeline(path_to_config).run()

@@ -6,6 +6,7 @@ import numpy as np
 import shap
 from catboost import CatBoostClassifier, CatBoostRegressor
 from lightgbm import LGBMClassifier, LGBMRegressor
+from pytorch_tabnet.tab_model import TabNetClassifier, TabNetRegressor
 from xgboost import XGBClassifier, XGBRegressor
 
 from tabml.data_loaders import BaseDataLoader
@@ -19,6 +20,7 @@ MLFLOW_AUTOLOG = {
     "lightgbm": mlflow.lightgbm.autolog(),
     "xgboost": mlflow.xgboost.autolog(),
     "catboost": None,
+    "tabnet": None,
 }
 
 
@@ -259,18 +261,50 @@ class CatBoostRegressorModelWrapper(BaseCatBoostModelWrapper):
         return CatBoostRegressor(task_type=self.task_type, **self.model_params)
 
 
-class TabNetModelWrapper(BaseSklearnModelWrapper):
+class BaseTabNetModelWrapper(BaseModelWrapper):
+    mlflow_model_type = "tabnet"
+
     def __init__(self, config):
         super().__init__(config)
+        self.model_params = get_tabnet_params(config)
+        self.model = self.build_model()
 
-    def get_params(self):
-        return get_tabnet_params(self.config)
+    # def get_params(self):
+    #     return get_tabnet_params(self.config)
 
     def predict(self, data):
         return self.model.predict(data.to_numpy())
 
     def predict_proba(self, data):
         return self.model.predict(data.to_numpy())
+
+    def fit(self, data_loader: BaseDataLoader, model_dir: str):
+        train_feature, train_label = data_loader.get_train_data_and_label()
+        val_feature, val_label = data_loader.get_val_data_and_label()
+
+        self.model.fit(
+            train_feature.to_numpy(),
+            train_label,
+            eval_set=[(val_feature.to_numpy(), val_label)],
+            **self.fit_params,
+        )
+        self.model.save_model(model_dir)
+
+    def load_model(self, model_path: str):
+        self.model.load_model(model_path)
+
+    def get_shap_values(self, input_feature):
+        raise NotImplementedError
+
+
+class TabNetClassifierModelWrapper(BaseTabNetModelWrapper):
+    def build_model(self):
+        return TabNetClassifier(**self.model_params)
+
+
+class TabNetRegressorModelWrapper(BaseTabNetModelWrapper):
+    def build_model(self):
+        return TabNetRegressor(**self.model_params)
 
 
 def get_tabnet_params(config) -> Dict[str, Any]:
