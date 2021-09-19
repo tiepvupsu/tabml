@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Iterable, Tuple
+from typing import Any, Dict, Iterable, Tuple
 
 import mlflow
 import numpy as np
@@ -257,6 +257,38 @@ class CatBoostClassifierModelWrapper(BaseCatBoostModelWrapper):
 class CatBoostRegressorModelWrapper(BaseCatBoostModelWrapper):
     def build_model(self):
         return CatBoostRegressor(task_type=self.task_type, **self.model_params)
+
+
+class TabNetModelWrapper(BaseSklearnModelWrapper):
+    def __init__(self, config):
+        super().__init__(config)
+
+    def get_params(self):
+        return get_tabnet_params(self.config)
+
+    def predict(self, data):
+        return self.model.predict(data.to_numpy())
+
+    def predict_proba(self, data):
+        return self.model.predict(data.to_numpy())
+
+
+def get_tabnet_params(config) -> Dict[str, Any]:
+    tabnet_params = config.model_wrapper.model_params
+    features_to_model = config.data_loader.features_to_model
+    cat_features = tabnet_params["cat_features"]
+    cat_feature_names = [cat_feature["feature"] for cat_feature in cat_features]
+
+    cat_idxs = [
+        i for i, feature in enumerate(features_to_model) if feature in cat_feature_names
+    ]
+    cat_dims = [cat_feature["dim"] for cat_feature in cat_features]
+    cat_emb_dim = [cat_feature["emb_dim"] for cat_feature in cat_features]
+    del tabnet_params["cat_features"]
+    tabnet_params.update(
+        {"cat_idxs": cat_idxs, "cat_dims": cat_dims, "cat_emb_dim": cat_emb_dim}
+    )
+    return tabnet_params
 
 
 def write_model_wrapper_subclasses_to_file(
