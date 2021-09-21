@@ -3,9 +3,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Union
 
 import mlflow
-import numpy as np
 import pandas as pd
-import shap
 
 from tabml.data_loaders import BaseDataLoader
 from tabml.metrics import BaseMetric, get_instantiated_metric_dict
@@ -83,42 +81,16 @@ class ModelAnalysis:
         self.training_size = training_size
 
     def analyze(self):
-        self.shap_explain()
+        self._show_feature_importance()
         self._analyze_metrics_one_dataset("train")
         self._analyze_metrics_one_dataset("val")
 
-    def shap_explain(self):
-        """Explains model using SHAP https://github.com/slundberg/shap."""
-        # show shap feature importance
-        explainer = shap.Explainer(self.model_wrapper.model)
+    def _show_feature_importance(self):
         train_feature = self._get_dataset("train")[self.model_wrapper.feature_names]
-        shap_values = explainer(train_feature)
-
-        def _get_shap_values_one_sample(shap_values, index: int):
-            # For LightGBM and XGBoost, shap_values[index].values is a 2d array
-            # representing logit of two classes. They are basically negative of each
-            # other, we only need one.
-            # Related issue https://github.com/slundberg/shap/issues/526.
-            if len(shap_values[index].values.shape) == 2:  # binary classification
-                return shap_values[index].values[:, 0]
-            assert len(shap_values[index].values.shape) == 1, len(
-                shap_values[index].values
-            )
-            return shap_values[index].values
-
-        feature_importances = np.mean(
-            [
-                np.abs(_get_shap_values_one_sample(shap_values, i))
-                for i in range(len(shap_values))
-            ],
-            axis=0,
-        ).tolist()
-
-        feature_names = train_feature.columns.tolist()
-        feature_importance_dict = dict(zip(feature_names, feature_importances))
+        feature_importance_dict = self.model_wrapper.get_feature_importance(
+            train_feature
+        )
         utils.show_feature_importance(feature_importance_dict)
-        # TODO: save beeswarm and force plot to html or pdf.
-        # Wait for a fix of https://github.com/slundberg/shap/issues/2142.
 
     def _analyze_metrics_one_dataset(self, dataset_name: str):
         self._show_overall_flag = True
