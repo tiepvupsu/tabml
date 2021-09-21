@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from typing import Dict, Iterable, Tuple
 
 import mlflow
+import numpy as np
+import shap
 from catboost import CatBoostClassifier, CatBoostRegressor
 from lightgbm import LGBMClassifier, LGBMRegressor
 from xgboost import XGBClassifier, XGBRegressor
@@ -50,6 +52,39 @@ class BaseModelWrapper(ABC):
     @abstractmethod
     def load_model(self, model_path: str):
         raise NotImplementedError
+
+    def get_feature_importance(self, input_data) -> Dict[str, float]:
+        """Computes feature importance for each feature based on an input data.
+
+        Most of models are supported by SHAP (https://github.com/slundberg/shap). For
+        unsupported models, please override this method by a workable solution.
+        """
+        explainer = shap.Explainer(self.model)
+        shap_values = explainer(input_data)
+
+        def _get_shap_values_one_sample(shap_values, index: int):
+            # For LightGBM and XGBoost, shap_values[index].values is a 2d array
+            # representing logit of two classes. They are basically negative of each
+            # other, we only need one.
+            # Related issue https://github.com/slundberg/shap/issues/526.
+            if len(shap_values[index].values.shape) == 2:  # binary classification
+                return shap_values[index].values[:, 0]
+            assert len(shap_values[index].values.shape) == 1, len(
+                shap_values[index].values
+            )
+            return shap_values[index].values
+
+        feature_importances = np.mean(
+            [
+                np.abs(_get_shap_values_one_sample(shap_values, i))
+                for i in range(len(shap_values))
+            ],
+            axis=0,
+        ).tolist()
+
+        feature_names = input_data.columns.tolist()
+        feature_importance_dict = dict(zip(feature_names, feature_importances))
+        return feature_importance_dict
 
 
 class BaseSklearnModelWrapper(BaseModelWrapper):
