@@ -11,7 +11,7 @@ from xgboost import XGBClassifier, XGBRegressor
 
 from tabml.data_loaders import BaseDataLoader
 from tabml.schemas import pipeline_config
-from tabml.utils import factory, utils
+from tabml.utils import factory, logger, utils
 from tabml.utils.logger import boosting_logger_eval
 from tabml.utils.utils import save_as_pickle
 
@@ -269,9 +269,6 @@ class BaseTabNetModelWrapper(BaseModelWrapper):
         self.model_params = get_tabnet_params(config)
         self.model = self.build_model()
 
-    # def get_params(self):
-    #     return get_tabnet_params(self.config)
-
     def predict(self, data):
         return self.model.predict(data.to_numpy())
 
@@ -293,8 +290,12 @@ class BaseTabNetModelWrapper(BaseModelWrapper):
     def load_model(self, model_path: str):
         self.model.load_model(model_path)
 
-    def get_shap_values(self, input_feature):
-        raise NotImplementedError
+    def get_feature_importance(self, input_data) -> Dict[str, float]:
+        logger.info(
+            "Feature importance for tabnet model is currently not supported. "
+            "Please check the progress at "
+            "https://github.com/tiepvupsu/tabml/issues/153."
+        )
 
 
 class TabNetClassifierModelWrapper(BaseTabNetModelWrapper):
