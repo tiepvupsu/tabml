@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from pathlib import Path
 from typing import Any, Dict, Iterable, Tuple
 
 import mlflow
@@ -266,6 +267,7 @@ class BaseTabNetModelWrapper(BaseModelWrapper):
 
     def __init__(self, config):
         super().__init__(config)
+        self.save_model_name = "model_0"
         self.model_params = get_tabnet_params(config)
         self.model = self.build_model()
 
@@ -285,7 +287,7 @@ class BaseTabNetModelWrapper(BaseModelWrapper):
             eval_set=[(val_feature.to_numpy(), val_label)],
             **self.fit_params,
         )
-        self.model.save_model(model_dir)
+        self.model.save_model(Path(model_dir) / self.save_model_name)
 
     def load_model(self, model_path: str):
         self.model.load_model(model_path)
