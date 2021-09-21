@@ -11,8 +11,8 @@ from xgboost import XGBClassifier, XGBRegressor
 
 from tabml.data_loaders import BaseDataLoader
 from tabml.schemas import pipeline_config
-from tabml.utils import factory, logger, utils
-from tabml.utils.logger import boosting_logger_eval
+from tabml.utils import factory, utils
+from tabml.utils.logger import boosting_logger_eval, logger
 from tabml.utils.utils import save_as_pickle
 
 MLFLOW_AUTOLOG = {
@@ -296,6 +296,7 @@ class BaseTabNetModelWrapper(BaseModelWrapper):
             "Please check the progress at "
             "https://github.com/tiepvupsu/tabml/issues/153."
         )
+        return {}
 
 
 class TabNetClassifierModelWrapper(BaseTabNetModelWrapper):
