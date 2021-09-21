@@ -42,9 +42,7 @@ class BaseMetric(abc.ABC):
                 f"self.score_names ({self.score_names}) and scores ({scores}) "
                 "must have the same length."
             )
-        return {
-            score_name: score for (score_name, score) in zip(self.score_names, scores)
-        }
+        return dict(zip(self.score_names, scores))
 
     def _compute_scores(self, labels: Collection, preds: Collection) -> List[float]:
         raise NotImplementedError
