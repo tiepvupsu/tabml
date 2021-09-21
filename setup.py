@@ -25,6 +25,7 @@ setup(
         "pandas-profiling>=2.9.0",
         "pydantic>=1.8.2",
         "pyyaml>=5.4.1",
+        "pytorch-tabnet>=3.1.1",
         "scikit-learn>=0.24.2",
         "scipy>=1.6.2",
         "shap>=0.39.0",
