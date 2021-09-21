@@ -85,6 +85,13 @@ def test_full_pipeline_randomforest():
 
 
 @change_working_dir_pytest
+def test_full_pipeline_tabnet():
+    config_path = "./configs/tabnet_config.yaml"
+    pipelines.run(config_path)
+    _test_inference(config_path, test_custom_pipeline_config_path=True)
+
+
+@change_working_dir_pytest
 def test_custom_transformer_path():
     with tempfile.NamedTemporaryFile() as temp:
         transformer_path = temp.name
