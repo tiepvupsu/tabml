@@ -90,7 +90,12 @@ class ModelAnalysis:
         feature_importance_dict = self.model_wrapper.get_feature_importance(
             train_feature
         )
-        utils.show_feature_importance(feature_importance_dict)
+        if feature_importance_dict:
+            utils.show_feature_importance(feature_importance_dict)
+        else:
+            logger.info(
+                "Feature importance for this model wrapper is not availabe yet."
+            )
 
     def _analyze_metrics_one_dataset(self, dataset_name: str):
         self._show_overall_flag = True
