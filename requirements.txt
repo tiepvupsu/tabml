@@ -7,6 +7,7 @@ lightgbm==2.3.1
 loguru==0.5.1
 mlflow==1.20.1
 mypy==0.910
+networkx==2.6.2
 numpy==1.18.5
 pandas==1.1.4
 pandas-profiling==2.9.0
