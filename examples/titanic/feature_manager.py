@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import MinMaxScaler
 
-from tabml import datasets
+from tabml import datasets, feature_config_helper
 from tabml.feature_manager import BaseFeatureManager, BaseTransformingFeature
 
 
@@ -179,4 +179,7 @@ def run(transformer_path=None):
 
 
 if __name__ == "__main__":
-    run()
+    # run()
+    feature_config_helper.FeatureConfigHelper(
+        "./configs/feature_config.yaml"
+    ).visualize_dependency_graph()

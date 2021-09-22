@@ -1,6 +1,9 @@
 import copy
 from typing import Dict, List, Union
 
+import matplotlib.pyplot as plt
+import networkx as nx
+
 from tabml.config_helpers import parse_feature_config
 from tabml.schemas.feature_config import DType
 from tabml.utils.utils import check_uniqueness
@@ -205,3 +208,49 @@ class FeatureConfigHelper:
         ]
 
         return new_config
+
+    def visualize_dependency_graph(self, output_file="feature_dependency.png"):
+        plt.figure(figsize=(20, 20))
+        G = nx.MultiDiGraph()
+        # self.feature_metadata[dependency].dependents.append(feature.name)
+        # for transforming_feature in self.transforming_features:
+        #     for
+        edges = []
+        for feature in self.feature_metadata:
+            for dependent in self.feature_metadata[feature].dependents:
+                edges.append((feature, dependent))
+
+        G.add_edges_from(edges)
+
+        options = {
+            # "font_size": 16,
+            # "node_size": 3000,
+            "node_color": "white",
+            "edgecolors": "black",
+            # "linewidths": 3,
+            # "width": 3,
+        }
+
+        # pos=nx.spring_layout(G)
+
+        # fixed_positions = {
+        #     'base1': (-50, 5),
+        #     'base2': (50, 5)
+        # }
+        pos = nx.spring_layout(
+            G
+        )  # ,pos=fixed_positions, fixed = fixed_positions.keys())
+        bbox = dict(boxstyle="round", fc="w", ec="k")
+        nx.draw_networkx_labels(
+            G, pos=pos, font_size=10, font_family="sans-serif", bbox=bbox
+        )
+
+        # nx.draw_networkx_nodes(G, pos, node_color=color_node)
+        nx.draw_networkx_edges(G, pos)
+
+        # Set margins for the axes so that nodes aren't clipped
+        ax = plt.gca()
+        ax.margins(1)
+        plt.axis("off")
+        # plt.show()
+        plt.savefig(output_file)
