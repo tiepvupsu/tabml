@@ -72,9 +72,9 @@ class TestBaseDataLoader:
             training_size: 50
         """
 
-        pb_config_path = tmp_path / "pipeline_config.yaml"
-        write_str_to_file(pipeline_config, pb_config_path)
-        self.config = parse_pipeline_config(pb_config_path)
+        pipeline_config_path = tmp_path / "pipeline_config.yaml"
+        write_str_to_file(pipeline_config, pipeline_config_path)
+        self.config = parse_pipeline_config(pipeline_config_path)
 
     def test_get_train_data_and_label(self):
         data_loader = BaseDataLoader(self.config.data_loader)
