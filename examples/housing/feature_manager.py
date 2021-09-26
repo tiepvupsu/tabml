@@ -13,8 +13,8 @@ DATA_URL = (
 
 
 class FeatureManager(BaseFeatureManager):
-    def __init__(self, pb_config_path, transformer_path=None):
-        super().__init__(pb_config_path, transformer_path=transformer_path)
+    def __init__(self, feature_config_path, transformer_path=None):
+        super().__init__(feature_config_path, transformer_path=transformer_path)
 
     def _get_base_transforming_class(self):
         return BaseHousingTransformingFeature
@@ -198,8 +198,8 @@ class FeatureEncodedOceanProximity(BaseHousingTransformingFeature):
 
 
 def run():
-    pb_config_path = "configs/feature_config.yaml"
-    fm = FeatureManager(pb_config_path)
+    feature_config_path = "configs/feature_config.yaml"
+    fm = FeatureManager(feature_config_path)
     fm.run_all()
 
 

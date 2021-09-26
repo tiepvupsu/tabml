@@ -54,8 +54,6 @@ class TestCrossColumns:
 class TestCategoryEncoder:
     @pytest.fixture(autouse=True)
     def setup_class(self, tmp_path):
-        # self.pb_config_path = tmp_path / "pipeline_config.pb"
-        # write_str_to_file(pb_str, self.pb_config_path)
         self.series = pd.Series(["a", "b", "c", "d"])
 
     def test_1(self):
