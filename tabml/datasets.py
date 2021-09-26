@@ -49,6 +49,7 @@ def load_california_housing(data_dir: str) -> Dict[str, pd.DataFrame]:
     return {"housing": pd.read_csv(DATA_SOURCE + "california_housing/housing.csv")}
 
 
+# TODO: manually download the dataset and load from disk
 def download_movielen_1m() -> Dict[str, pd.DataFrame]:
     url = "http://files.grouplens.org/datasets/movielens/ml-1m.zip"
     # Download and extract ml-1m dataset to a temporary folder.
