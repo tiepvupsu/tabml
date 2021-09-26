@@ -8,6 +8,7 @@ import pandas as pd
 from tabml.data_loaders import BaseDataLoader
 from tabml.metrics import BaseMetric, get_instantiated_metric_dict
 from tabml.model_wrappers import BaseModelWrapper
+from tabml.schemas import pipeline_config
 from tabml.utils import utils
 from tabml.utils.logger import logger
 
@@ -56,21 +57,18 @@ class ModelAnalysis:
         self,
         data_loader: BaseDataLoader,
         model_wrapper: BaseModelWrapper,
-        by_features: List[str],
-        metrics: List[str],
         output_dir: str,
-        by_label: str = "",
+        params: pipeline_config.ModelAnalysis,
         pred_col: str = "prediction",
         pred_proba_col: str = "prediction_probability",
-        training_size: Union[int, None] = None,
     ):
 
         self.data_loader = data_loader
         self.model_wrapper = model_wrapper
-        self.features_to_analyze = by_features
-        self.metrics = _get_metrics(metrics)
+        self.features_to_analyze = params.by_features
+        self.metrics = _get_metrics(params.metrics)
         self.output_dir = output_dir
-        self.label_to_analyze = by_label or self.data_loader.label_col
+        self.label_to_analyze = params.by_label or self.data_loader.label_col
         self.pred_col = pred_col
         self.pred_proba_col = pred_proba_col
         need_pred_proba_list = [metric.need_pred_proba for metric in self.metrics]
@@ -82,7 +80,7 @@ class ModelAnalysis:
         # True at initialization, then to False right after printing the first overall
         # scores.
         self._show_overall_flag = True
-        self.training_size = training_size
+        self.training_size = params.training_size
 
     def analyze(self):
         self._show_feature_importance()
