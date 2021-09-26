@@ -15,7 +15,7 @@ class FeatureManager(BaseFeatureManager):
         return BaseTitanicTransformingFeature
 
     def load_raw_data(self):
-        df_dict = datasets.download_titanic()
+        df_dict = datasets.load_titanic(data_dir=self.raw_data_dir)
         full_df = pd.concat(
             [df_dict["train"], df_dict["test"]], axis=0, ignore_index=True
         )
