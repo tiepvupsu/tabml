@@ -6,15 +6,33 @@ from typing import Dict
 import pandas as pd
 from six.moves.urllib.request import urlretrieve
 
+from tabml.utils.logger import logger
+
 SUPPORTED_DATASETS = ("titanic", "california_housing", "movielen-1m")
 DATA_SOURCE = "https://media.githubusercontent.com/media/tiepvupsu/tabml_data/master/"
 
 
-def download_titanic() -> Dict[str, pd.DataFrame]:
+def load_titanic(data_dir: str) -> Dict[str, pd.DataFrame]:
+    """Loads data from data_dir folder if they exist, downloads otherwise."""
+    source_dir = Path(DATA_SOURCE).joinpath("titanic")
+
+    def get_full_csv_path(csv_name: str) -> Path:
+        if Path(data_dir).joinpath(csv_name).exists():
+            return Path(data_dir).joinpath(csv_name)
+        return source_dir.joinpath(csv_name)
+
+    train_path = get_full_csv_path("train.csv")
+    test_path = get_full_csv_path("test.csv")
+    gender_submission_path = get_full_csv_path("gender_submission.csv")
+    logger.info(
+        f"Loading dataframes from {train_path}, {test_path}, and "
+        f"{gender_submission_path}"
+    )
+
     return {
-        "train": pd.read_csv(DATA_SOURCE + "titanic/train.csv"),
-        "test": pd.read_csv(DATA_SOURCE + "titanic/test.csv"),
-        "gender_submission": pd.read_csv(DATA_SOURCE + "titanic/gender_submission.csv"),
+        "train": pd.read_csv(train_path),
+        "test": pd.read_csv(test_path),
+        "gender_submission": pd.read_csv(gender_submission_path),
     }
 
 
