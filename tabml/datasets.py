@@ -10,19 +10,6 @@ SUPPORTED_DATASETS = ("titanic", "california_housing", "movielen-1m")
 DATA_SOURCE = "https://media.githubusercontent.com/media/tiepvupsu/tabml_data/master/"
 
 
-def download_as_dataframes(dataset_name: str) -> Dict[str, pd.DataFrame]:
-    if dataset_name not in SUPPORTED_DATASETS:
-        raise ValueError(
-            f"{dataset_name} is not supported. Available datasets: {SUPPORTED_DATASETS}"
-        )
-
-    return {
-        "titanic": download_titanic(),
-        "california_housing": download_california_housing(),
-        "movielen-1m": download_movielen_1m(),
-    }[dataset_name]
-
-
 def download_titanic() -> Dict[str, pd.DataFrame]:
     return {
         "train": pd.read_csv(DATA_SOURCE + "titanic/train.csv"),
