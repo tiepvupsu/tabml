@@ -63,18 +63,18 @@ class ExperimentManger:
         shutil.copyfile(self._path_to_config, self.get_config_path())
 
     def get_log_path(self):
-        return self._make_path(self.log_filename)
+        return self._make_path_under_run_dir(self.log_filename)
 
     def get_config_path(self):
-        return self._make_path(self.config_filename)
+        return self._make_path_under_run_dir(self.config_filename)
 
     def get_model_analysis_dir(self):
-        res = self._make_path(self._model_analysis_dir)
+        res = self._make_path_under_run_dir(self._model_analysis_dir)
         _make_dir_if_needed(res)
         return res
 
-    def _make_path(self, filename: str) -> str:
-        return self.run_dir.joinpath(filename)
+    def _make_path_under_run_dir(self, sub_path: str) -> str:
+        return self.run_dir.joinpath(sub_path)
 
     def get_most_recent_run_dir(self):
         """Returns the run_dir corresponding to the most recent timestamp.
