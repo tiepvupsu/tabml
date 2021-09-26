@@ -14,7 +14,7 @@ class TestExperimentManager:
             config_name: "foo"
             data_loader:
               cls_name: "bar"
-              feature_manager_config_path: "rab"
+              feature_config_path: "rab"
               features_to_model: ["c"]
               label_col: "d"
               train_filters: []
