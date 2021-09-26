@@ -12,18 +12,25 @@ SUPPORTED_DATASETS = ("titanic", "california_housing", "movielen-1m")
 DATA_SOURCE = "https://media.githubusercontent.com/media/tiepvupsu/tabml_data/master/"
 
 
+def _get_full_data_path(local_dir, tabml_data_dir, filename):
+    """Returns the full path to a data file.
+
+    Returns local path if exists, otherwise the tabml_data path.
+    """
+    if Path(local_dir).joinpath(filename).exists():
+        return Path(local_dir).joinpath(filename)
+
+    return f"{DATA_SOURCE}/{tabml_data_dir}/{filename}"
+
+
 def load_titanic(data_dir: str) -> Dict[str, pd.DataFrame]:
     """Loads data from data_dir folder if they exist, downloads otherwise."""
-    source_dir = Path(DATA_SOURCE).joinpath("titanic")
 
-    def get_full_csv_path(csv_name: str) -> Path:
-        if Path(data_dir).joinpath(csv_name).exists():
-            return Path(data_dir).joinpath(csv_name)
-        return source_dir.joinpath(csv_name)
-
-    train_path = get_full_csv_path("train.csv")
-    test_path = get_full_csv_path("test.csv")
-    gender_submission_path = get_full_csv_path("gender_submission.csv")
+    train_path = _get_full_data_path(data_dir, "titanic", "train.csv")
+    test_path = _get_full_data_path(data_dir, "titanic", "test.csv")
+    gender_submission_path = _get_full_data_path(
+        data_dir, "titanic", "gender_submission.csv"
+    )
     logger.info(
         f"Loading dataframes from {train_path}, {test_path}, and "
         f"{gender_submission_path}"
