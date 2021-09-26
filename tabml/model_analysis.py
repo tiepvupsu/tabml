@@ -85,7 +85,7 @@ class ModelAnalysis:
         self._analyze_metrics_one_dataset("val")
 
     def _show_feature_importance(self):
-        train_feature = self._get_dataset("train")[self.model_wrapper.feature_names]
+        train_feature = self._get_dataset("train")[self.data_loader.features]
         feature_importance_dict = self.model_wrapper.get_feature_importance(
             train_feature
         )
