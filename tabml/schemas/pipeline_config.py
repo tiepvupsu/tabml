@@ -7,19 +7,19 @@ class DataLoader(pydantic.BaseModel):
     cls_name: str = "tabml.data_loaders.BaseDataLoader"  # name of DataLoader class
 
     # path to feature_config
-    feature_config_path: str
+    feature_config_path: str = ""
 
     # list of features going in to the model
     features_to_model: List[str] = []
 
     # filters to determine training, validation, and submission dataset. For each
     # dataset, rows that are met all conditions will be selected.
-    train_filters: List[str]
-    validation_filters: List[str]
+    train_filters: List[str] = []
+    validation_filters: List[str] = []
     submission_filters: List[str] = []
 
     # name of label column
-    label_col: str
+    label_col: str = ""
 
 
 class ModelWrapper(pydantic.BaseModel):
@@ -32,10 +32,10 @@ class ModelWrapper(pydantic.BaseModel):
 class ModelAnalysis(pydantic.BaseModel):
     # list of metrics to compute.
     # Each element must be the name of a subclass of tabml.metrics.BaseMetric
-    metrics: List[str]
+    metrics: List[str] = []
 
     # list of features for analysis
-    by_features: List[str]
+    by_features: List[str] = []
 
     # This field specifies the label for analysis. In some cases, we use a
     # transformation of the true label for training but need to evaluate on the
