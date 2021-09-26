@@ -1,6 +1,6 @@
 # This config use RandomForest as an example of using a scikit learn model in
 # TabML. Sklearn RandomForest does not handle categorical features directly.
-config_name: "random_forest"
+config_name: "tabnet"
 
 data_loader:
   cls_name: tabml.data_loaders.BaseDataLoader
