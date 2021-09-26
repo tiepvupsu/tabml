@@ -272,6 +272,9 @@ class BaseTabNetModelWrapper(BaseModelWrapper):
         self.model_params = get_tabnet_params(config)
         self.model = self.build_model()
 
+    def build_model(self):
+        raise NotImplementedError
+
     def predict(self, data):
         return self.model.predict(data.to_numpy())
 
@@ -289,10 +292,13 @@ class BaseTabNetModelWrapper(BaseModelWrapper):
             **self.fit_params,
         )
         model_path = Path(model_dir) / self.save_model_name
-        torch.save(self.model.network.state_dict(), model_path)
+        # torch.save(self.model.network.state_dict(), model_path)
+        breakpoint()
+        self.saved_path = self.model.save_model(model_path)
 
     def load_model(self, model_path: str):
-        self.model.network.load_state_dict(torch.load(model_path))
+        self.model.load_model(self.saved_path)
+        # self.model.network.load_state_dict(torch.load(model_path))
 
     def get_feature_importance(self, input_data) -> Dict[str, float]:
         logger.info(
