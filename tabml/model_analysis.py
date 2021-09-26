@@ -11,6 +11,8 @@ from tabml.model_wrappers import BaseModelWrapper
 from tabml.utils import utils
 from tabml.utils.logger import logger
 
+# from tabml.schemas import C.pipeline_config import ModelAnalysis
+
 
 class ModelAnalysis:
     """A class performing model analysis on validation dataset on different dimensions.
@@ -29,9 +31,11 @@ class ModelAnalysis:
             A data loader object.
         model_wrapper:
             A model wrapper object.
-        features_to_analyze:
-            A list of feature names to do the analysis.
-        metric_names:
+        by_features:
+            A list of feature names to analyze
+        by_label:
+            A string of label to analyze
+        metrics:
             A list of metric names to be computed.
         output_dir:
             A string of output directory.
@@ -52,10 +56,10 @@ class ModelAnalysis:
         self,
         data_loader: BaseDataLoader,
         model_wrapper: BaseModelWrapper,
-        features_to_analyze: List[str],
-        metric_names: List[str],
+        by_features: List[str],
+        metrics: List[str],
         output_dir: str,
-        label_to_analyze: str = "",
+        by_label: str = "",
         pred_col: str = "prediction",
         pred_proba_col: str = "prediction_probability",
         training_size: Union[int, None] = None,
@@ -63,10 +67,10 @@ class ModelAnalysis:
 
         self.data_loader = data_loader
         self.model_wrapper = model_wrapper
-        self.features_to_analyze = features_to_analyze
-        self.metrics = _get_metrics(metric_names)
+        self.features_to_analyze = by_features
+        self.metrics = _get_metrics(metrics)
         self.output_dir = output_dir
-        self.label_to_analyze = label_to_analyze or self.data_loader.label_col
+        self.label_to_analyze = by_label or self.data_loader.label_col
         self.pred_col = pred_col
         self.pred_proba_col = pred_proba_col
         need_pred_proba_list = [metric.need_pred_proba for metric in self.metrics]
