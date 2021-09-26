@@ -7,6 +7,7 @@ import pandas as pd
 from tabml.data_loaders import BaseDataLoader
 from tabml.metrics import BaseMetric, get_instantiated_metric_dict
 from tabml.model_wrappers import BaseModelWrapper
+from tabml.schemas import pipeline_config
 from tabml.utils import utils
 from tabml.utils.logger import logger
 
@@ -30,7 +31,10 @@ class ModelAnalysis:
             A model wrapper object.
         features_to_analyze:
             A list of feature names to do the analysis.
-        metric_names:
+        label_to_analyze:
+            A string of label name for the analysis. This label could be different from
+            training label.
+        metrics:
             A list of metric names to be computed.
         output_dir:
             A string of output directory.
@@ -51,21 +55,18 @@ class ModelAnalysis:
         self,
         data_loader: BaseDataLoader,
         model_wrapper: BaseModelWrapper,
-        features_to_analyze: List[str],
-        metric_names: List[str],
-        output_dir: str,
-        label_to_analyze: str = "",
+        params=pipeline_config.ModelAnalysis(),
+        output_dir: str = "",
         pred_col: str = "prediction",
         pred_proba_col: str = "prediction_probability",
-        training_size: Union[int, None] = None,
     ):
 
         self.data_loader = data_loader
         self.model_wrapper = model_wrapper
-        self.features_to_analyze = features_to_analyze
-        self.metrics = _get_metrics(metric_names)
+        self.features_to_analyze = params.by_features
+        self.metrics = _get_metrics(params.metrics)
         self.output_dir = output_dir
-        self.label_to_analyze = label_to_analyze or self.data_loader.label_col
+        self.label_to_analyze = params.by_label or self.data_loader.label_col
         self.pred_col = pred_col
         self.pred_proba_col = pred_proba_col
         need_pred_proba_list = [metric.need_pred_proba for metric in self.metrics]
@@ -77,7 +78,7 @@ class ModelAnalysis:
         # True at initialization, then to False right after printing the first overall
         # scores.
         self._show_overall_flag = True
-        self.training_size = training_size
+        self.training_size = params.training_size
 
     def analyze(self):
         self._show_feature_importance()
@@ -85,7 +86,7 @@ class ModelAnalysis:
         self._analyze_metrics_one_dataset("val")
 
     def _show_feature_importance(self):
-        train_feature = self._get_dataset("train")[self.model_wrapper.feature_names]
+        train_feature = self._get_dataset("train")[self.data_loader.features]
         feature_importance_dict = self.model_wrapper.get_feature_importance(
             train_feature
         )
@@ -107,8 +108,7 @@ class ModelAnalysis:
         )
         if dataset_name == "train":
             df = self.data_loader.feature_manager.extract_dataframe(
-                features_to_select=all_features,
-                filters=self.data_loader.config.data_loader.train_filters,
+                features_to_select=all_features, filters=self.data_loader.train_filters
             )
             if self.training_size:
                 return df.sample(n=min(int(self.training_size), len(df)))
@@ -117,7 +117,7 @@ class ModelAnalysis:
         if dataset_name == "val":
             return self.data_loader.feature_manager.extract_dataframe(
                 features_to_select=all_features,
-                filters=self.data_loader.config.data_loader.validation_filters,
+                filters=self.data_loader.validation_filters,
             )
         raise ValueError(f"dataset_name ({dataset_name}) not in ('train', 'val')")
 

@@ -77,7 +77,7 @@ class TestBaseDataLoader:
         self.config = parse_pipeline_config(pb_config_path)
 
     def test_get_train_data_and_label(self):
-        data_loader = BaseDataLoader(self.config)
+        data_loader = BaseDataLoader(self.config.data_loader)
         got_data, got_label = data_loader.get_train_data_and_label()
         expected_data = pd.DataFrame(data={"a": [1, 3, 4], "b": [6, 8, 9]})
         expected_label = pd.Series(data={"label": [0, 1, 0]})
@@ -87,7 +87,7 @@ class TestBaseDataLoader:
         np.array_equal(expected_label.values, got_label.values)
 
     def test_get_validation_data_and_label(self):
-        data_loader = BaseDataLoader(self.config)
+        data_loader = BaseDataLoader(self.config.data_loader)
         got_data, got_label = data_loader.get_val_data_and_label()
         expected_data = pd.DataFrame(data={"a": [2, 5], "b": [7, 0]})
         expected_label = pd.Series(data={"label": [1, 1]})

@@ -64,14 +64,14 @@ class BasePipeline(ABC):
         self.model_wrapper.fit(self.data_loader, model_dir)
 
     def _get_data_loader(self) -> BaseDataLoader:
-        return factory.create(self.config.data_loader.cls_name)(self.config)
+        return factory.create(self.config.data_loader.cls_name)(self.config.data_loader)
 
     def _get_model_wrapper(self, custom_model_wrapper):
         if custom_model_wrapper:
-            self.model_wrapper = custom_model_wrapper(self.config)
+            self.model_wrapper = custom_model_wrapper(self.config.model_wrapper)
         else:
             self.model_wrapper = factory.create(self.config.model_wrapper.cls_name)(
-                self.config
+                self.config.model_wrapper
             )
 
     def analyze_model(self) -> None:
@@ -93,9 +93,6 @@ class BasePipeline(ABC):
         ModelAnalysis(
             data_loader=self.data_loader,
             model_wrapper=self.model_wrapper,
-            features_to_analyze=self.config.model_analysis.by_features,
-            label_to_analyze=self.config.model_analysis.by_label,
-            metric_names=self.config.model_analysis.metrics,
+            params=self.config.model_analysis,
             output_dir=self.exp_manager.get_model_analysis_dir(),
-            training_size=self.config.model_analysis.training_size,
         ).analyze()

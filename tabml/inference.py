@@ -26,10 +26,10 @@ class ModelInference:
             )
         self.config = parse_pipeline_config(pipeline_config_path)
         if custom_model_wrapper:
-            self.model_wrapper = custom_model_wrapper(self.config)
+            self.model_wrapper = custom_model_wrapper(self.config.model_wrapper)
         else:
             self.model_wrapper = factory.create(self.config.model_wrapper.cls_name)(
-                self.config
+                self.config.model_wrapper
             )
         self.model_wrapper.load_model(model_path)
         self.features_to_model = list(self.config.data_loader.features_to_model)
