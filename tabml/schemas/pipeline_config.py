@@ -7,8 +7,7 @@ class DataLoader(pydantic.BaseModel):
     cls_name: str = "tabml.data_loaders.BaseDataLoader"  # name of DataLoader class
 
     # path to feature_config
-    # TODO: rename to feature_config_path
-    feature_manager_config_path: str
+    feature_config_path: str
 
     # list of features going in to the model
     features_to_model: List[str] = []

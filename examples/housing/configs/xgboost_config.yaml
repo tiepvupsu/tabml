@@ -1,7 +1,7 @@
 config_name: "xgboost"
 data_loader:
     cls_name: "tabml.data_loaders.BaseDataLoader"
-    feature_manager_config_path: "configs/feature_config.yaml"
+    feature_config_path: "configs/feature_config.yaml"
 
     features_to_model:
       - "scaled_housing_median_age"

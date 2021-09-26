@@ -58,7 +58,7 @@ class TestBaseDataLoader:
         config_name: "dummy"
         data_loader:
             cls_name: "tabml.data_loaders.BaseDataLoader"
-            feature_manager_config_path: "{fm_pb_path}"
+            feature_config_path: "{fm_pb_path}"
             label_col: "label"
             features_to_model: ["a", "b"]
             train_filters: ["is_train"]
