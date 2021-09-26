@@ -9,6 +9,7 @@ from lightgbm import LGBMClassifier, LGBMRegressor
 from xgboost import XGBClassifier, XGBRegressor
 
 from tabml.data_loaders import BaseDataLoader
+from tabml.schemas import pipeline_config
 from tabml.utils import factory, utils
 from tabml.utils.logger import boosting_logger_eval
 from tabml.utils.utils import save_as_pickle
@@ -24,14 +25,13 @@ MLFLOW_AUTOLOG = {
 class BaseModelWrapper(ABC):
     mlflow_model_type = ""
 
-    def __init__(self, config):
-        self.config = config
+    def __init__(self, params: pipeline_config.ModelWrapper):
         self.model = None
-        self.feature_names = list(self.config.data_loader.features_to_model)
+        # self.feature_names = list(self.config.data_loader.features_to_model)
         # Parameters for model instantiating
-        self.model_params = self.config.model_wrapper.model_params
+        self.model_params = params.model_params
         # Parameters for model training
-        self.fit_params = self.config.model_wrapper.fit_params
+        self.fit_params = params.fit_params
 
     def fit(self, data_loader: BaseDataLoader, model_dir: str):
         pass
@@ -92,12 +92,10 @@ class BaseSklearnModelWrapper(BaseModelWrapper):
 
     mlflow_model_type = "sklearn"
 
-    def __init__(self, config):
-        super().__init__(config)
+    def __init__(self, params: pipeline_config.ModelWrapper):
+        super().__init__(params)
         self.save_model_name = "model_0"
-        self.model = factory.create(self.config.model_wrapper.model_cls)(
-            **self.model_params
-        )
+        self.model = factory.create(params.model_cls)(**self.model_params)
 
     def fit(self, data_loader: BaseDataLoader, model_dir: str):
         assert (
@@ -123,8 +121,8 @@ class BaseBoostingModelWrapper(BaseModelWrapper):
 
     Boosting models: LightGBM, XGBoost, CatBoost."""
 
-    def __init__(self, config):
-        super().__init__(config)
+    def __init__(self, params: pipeline_config.ModelWrapper):
+        super().__init__(params)
         self.save_model_name = "model_0"
 
     @abstractmethod
@@ -148,8 +146,8 @@ class BaseBoostingModelWrapper(BaseModelWrapper):
 class BaseLgbmModelWrapper(BaseBoostingModelWrapper):
     mlflow_model_type = "lightgbm"
 
-    def __init__(self, config):
-        super().__init__(config)
+    def __init__(self, params: pipeline_config.ModelWrapper):
+        super().__init__(params)
         self.model = self.build_model()
 
     @abstractmethod
@@ -188,8 +186,8 @@ class LgbmRegressorModelWrapper(BaseLgbmModelWrapper):
 class BaseXGBoostModelWrapper(BaseBoostingModelWrapper):
     mlflow_model_type = "xgboost"
 
-    def __init__(self, config):
-        super(BaseXGBoostModelWrapper, self).__init__(config)
+    def __init__(self, params: pipeline_config.ModelWrapper):
+        super().__init__(params)
         self.tree_method = "gpu_hist" if utils.is_gpu_available() else "auto"
         self.model = self.build_model()
 
@@ -228,8 +226,8 @@ class XGBoostClassifierModelWrapper(BaseXGBoostModelWrapper):
 class BaseCatBoostModelWrapper(BaseBoostingModelWrapper):
     mlflow_model_type = "catboost"
 
-    def __init__(self, config):
-        super(BaseCatBoostModelWrapper, self).__init__(config)
+    def __init__(self, params: pipeline_config.ModelWrapper):
+        super().__init__(params)
         self.task_type = "GPU" if utils.is_gpu_available() else "CPU"
         self.model = self.build_model()
 

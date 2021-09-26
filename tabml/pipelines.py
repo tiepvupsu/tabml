@@ -67,10 +67,10 @@ class BasePipeline(ABC):
 
     def _get_model_wrapper(self, custom_model_wrapper):
         if custom_model_wrapper:
-            self.model_wrapper = custom_model_wrapper(self.config)
+            self.model_wrapper = custom_model_wrapper(self.config.model_wrapper)
         else:
             self.model_wrapper = factory.create(self.config.model_wrapper.cls_name)(
-                self.config
+                self.config.model_wrapper
             )
 
     def analyze_model(self) -> None:
