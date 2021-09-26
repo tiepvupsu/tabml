@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Union
 
@@ -188,7 +187,7 @@ class ModelAnalysis:
         return res
 
     def _get_df_pred_csv_path(self):
-        return os.path.join(self.output_dir, "prediction.csv")
+        return Path(self.output_dir).joinpath("prediction.csv")
 
     def _get_df_feature_metric_csv_path(self, dataset_name: str, col: str):
         dirname = Path(self.output_dir) / dataset_name

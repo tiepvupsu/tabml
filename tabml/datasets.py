@@ -1,6 +1,6 @@
-import os
 import tempfile
 import zipfile
+from pathlib import Path
 from typing import Dict
 
 import pandas as pd
@@ -38,20 +38,20 @@ def download_california_housing() -> Dict[str, pd.DataFrame]:
 def download_movielen_1m() -> Dict[str, pd.DataFrame]:
     url = "http://files.grouplens.org/datasets/movielens/ml-1m.zip"
     # Download and extract ml-1m dataset to a temporary folder.
-    tmp_dir = tempfile.mkdtemp()
-    tmp_file_path = os.path.join(tmp_dir, "tmp.zip")
+    tmp_dir = Path(tempfile.mkdtemp())
+    tmp_file_path = tmp_dir.joinpath("tmp.zip")
     urlretrieve(url, tmp_file_path)
     with zipfile.ZipFile(tmp_file_path, "r") as tmp_zip:
         tmp_zip.extractall(tmp_dir)
 
     users = pd.read_csv(
-        os.path.join(tmp_dir, "ml-1m/users.dat"),
+        tmp_dir.joinpath("ml-1m", "users.dat"),
         delimiter="::",
         engine="python",
         names=["UserID", "Gender", "Age", "Occupation", "Zip-code"],
     )
     movies = pd.read_csv(
-        os.path.join(tmp_dir, "ml-1m/movies.dat"),
+        tmp_dir.joinpath("ml-1m", "movies.dat"),
         delimiter="::",
         encoding="ISO-8859-1",
         engine="python",
@@ -59,7 +59,7 @@ def download_movielen_1m() -> Dict[str, pd.DataFrame]:
     )
 
     ratings = pd.read_csv(
-        os.path.join(tmp_dir, "ml-1m/ratings.dat"),
+        tmp_dir.joinpath("ml-1m", "ratings.dat"),
         delimiter="::",
         engine="python",
         names=["UserID", "MovieID", "Rating", "Timestamp"],

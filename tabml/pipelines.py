@@ -1,4 +1,5 @@
 from abc import ABC
+from pathlib import Path
 
 import mlflow
 
@@ -32,7 +33,7 @@ class BasePipeline(ABC):
         logger.info(f"Running pipeline with config {path_to_config}")
         logger.info("=" * 80)
         self.exp_manager = experiment_manager.ExperimentManger(
-            path_to_config, custom_run_dir=custom_run_dir
+            path_to_config, custom_run_dir=Path(custom_run_dir)
         )
         self.config = parse_pipeline_config(path_to_config)
         self.data_loader = self._get_data_loader()

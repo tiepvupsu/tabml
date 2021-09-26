@@ -1,8 +1,8 @@
 import datetime
-import os
 import re
 import shutil
 from pathlib import Path
+from typing import Union
 
 from tabml.config_helpers import parse_pipeline_config
 
@@ -28,8 +28,8 @@ class ExperimentManger:
         self,
         path_to_config: str,
         should_create_new_run_dir: bool = True,
-        exp_root_dir: str = "./experiments",
-        custom_run_dir="",
+        exp_root_dir: Path = Path("./experiments"),
+        custom_run_dir: Union[None, Path] = None,
     ):
         """
         Args:
@@ -45,7 +45,7 @@ class ExperimentManger:
         self.exp_root_dir = exp_root_dir
         self.run_prefix = self._config.config_name + "_"
         self.custom_run_dir = custom_run_dir
-        if not custom_run_dir:
+        if not custom_run_dir or not custom_run_dir.name:
             self.run_dir = self._get_run_dir(should_create_new_run_dir)
         else:
             self.run_dir = custom_run_dir
@@ -53,7 +53,7 @@ class ExperimentManger:
     def _get_run_dir(self, should_create_new_run_dir):
         if not should_create_new_run_dir:
             return self.get_most_recent_run_dir()
-        return os.path.join(self.exp_root_dir, self.run_prefix + _get_time_stamp())
+        return self.exp_root_dir.joinpath(self.run_prefix + _get_time_stamp())
 
     def create_new_run_dir(self):
         _make_dir_if_needed(self.run_dir)
@@ -63,21 +63,21 @@ class ExperimentManger:
         shutil.copyfile(self._path_to_config, self.get_config_path())
 
     def get_log_path(self):
-        return self._make_path(self.log_filename)
+        return self._make_path_under_run_dir(self.log_filename)
 
     def get_config_path(self):
-        return self._make_path(self.config_filename)
+        return self._make_path_under_run_dir(self.config_filename)
 
     def get_model_analysis_dir(self):
-        res = self._make_path(self._model_analysis_dir)
+        res = self._make_path_under_run_dir(self._model_analysis_dir)
         _make_dir_if_needed(res)
         return res
 
-    def _make_path(self, filename: str) -> str:
-        return os.path.join(self.run_dir, filename)
+    def _make_path_under_run_dir(self, sub_path: str) -> str:
+        return self.run_dir.joinpath(sub_path)
 
     def get_most_recent_run_dir(self):
-        """Return the run_dir corresponding to the most recent timestamp.
+        """Returns the run_dir corresponding to the most recent timestamp.
 
         Raises:
             IOError if there is no such folder
@@ -87,22 +87,19 @@ class ExperimentManger:
         subfolders = sorted(
             [
                 sub
-                for sub in os.listdir(self.exp_root_dir)
-                # if os.path.isdir(os.path.join(self.exp_root_dir, sub))
-                if (Path(self.exp_root_dir) / sub).is_dir()
-                and sub.startswith(self.run_prefix)
-                and bool(re.match("[0-9]{6}_[0-9]{6}", sub[-13:]))
+                for sub in self.exp_root_dir.iterdir()
+                if sub.is_dir()
+                and sub.name.startswith(self.run_prefix)
+                and bool(re.match("[0-9]{6}_[0-9]{6}", sub.name[-13:]))
             ],
-            key=lambda x: x[-13:],  # YYmmDD_HHMMSS
+            key=lambda x: x.name[-13:],  # YYmmDD_HHMMSS
         )
         if not subfolders:
             raise IOError(
                 "Could not find any run directory starting with "
-                f"{Path(self.exp_root_dir) / self.run_prefix}"
+                f"{self.exp_root_dir.joinpath(self.run_prefix)}"
             )
-        sub = subfolders[-1]
-        most_recent_run_dir = os.path.join(self.exp_root_dir, sub)
-        return most_recent_run_dir
+        return subfolders[-1]
 
     @classmethod
     def get_config_path_from_model_path(cls, model_path: str) -> str:
@@ -111,8 +108,8 @@ class ExperimentManger:
 
 
 def _make_dir_if_needed(dir_path: str):
-    if not os.path.exists(dir_path):
-        os.makedirs(dir_path)
+    if not Path(dir_path).exists():
+        Path(dir_path).mkdir(parents=True)
 
 
 def _get_time_stamp() -> str:
