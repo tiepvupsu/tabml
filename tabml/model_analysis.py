@@ -110,8 +110,7 @@ class ModelAnalysis:
         )
         if dataset_name == "train":
             df = self.data_loader.feature_manager.extract_dataframe(
-                features_to_select=all_features,
-                filters=self.data_loader.config.data_loader.train_filters,
+                features_to_select=all_features, filters=self.data_loader.train_filters
             )
             if self.training_size:
                 return df.sample(n=min(int(self.training_size), len(df)))
@@ -120,7 +119,7 @@ class ModelAnalysis:
         if dataset_name == "val":
             return self.data_loader.feature_manager.extract_dataframe(
                 features_to_select=all_features,
-                filters=self.data_loader.config.data_loader.validation_filters,
+                filters=self.data_loader.validation_filters,
             )
         raise ValueError(f"dataset_name ({dataset_name}) not in ('train', 'val')")
 

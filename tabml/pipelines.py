@@ -63,7 +63,7 @@ class BasePipeline(ABC):
         self.model_wrapper.fit(self.data_loader, model_dir)
 
     def _get_data_loader(self) -> BaseDataLoader:
-        return factory.create(self.config.data_loader.cls_name)(self.config)
+        return factory.create(self.config.data_loader.cls_name)(self.config.data_loader)
 
     def _get_model_wrapper(self, custom_model_wrapper):
         if custom_model_wrapper:
