@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 
-from tabml import data_processing
+from tabml import data_processing, datasets
 from tabml.feature_manager import BaseFeatureManager, BaseTransformingFeature
 
 DATA_URL = (
@@ -20,7 +20,7 @@ class FeatureManager(BaseFeatureManager):
         return BaseHousingTransformingFeature
 
     def load_raw_data(self):
-        full_df = pd.read_csv(DATA_URL)
+        full_df = datasets.load_california_housing(self.raw_data_dir)["housing"]
         full_df["house_id"] = full_df.index
         self.raw_data["full"] = full_df
 

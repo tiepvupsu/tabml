@@ -43,7 +43,9 @@ def load_titanic(data_dir: str) -> Dict[str, pd.DataFrame]:
     }
 
 
-def download_california_housing() -> Dict[str, pd.DataFrame]:
+def load_california_housing(data_dir: str) -> Dict[str, pd.DataFrame]:
+    data_path = _get_full_data_path(data_dir, "california_housing", "housing.csv")
+    logger.info(f"Loading dataframe from {data_path}")
     return {"housing": pd.read_csv(DATA_SOURCE + "california_housing/housing.csv")}
 
 
