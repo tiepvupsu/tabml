@@ -9,7 +9,7 @@ from tabml.schemas import pipeline_config
 class BaseDataLoader:
     """Base class for DataLoader.
 
-    Support extract relevant dataset based on feature manager.
+    Support extract relevant datasets based on feature manager.
     """
 
     def __init__(self, params=pipeline_config.DataLoader()):

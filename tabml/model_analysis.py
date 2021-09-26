@@ -31,7 +31,10 @@ class ModelAnalysis:
             A model wrapper object.
         features_to_analyze:
             A list of feature names to do the analysis.
-        metric_names:
+        label_to_analyze:
+            A string of label name for the analysis. This label could be different from
+            training label.
+        metrics:
             A list of metric names to be computed.
         output_dir:
             A string of output directory.
