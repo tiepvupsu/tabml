@@ -303,10 +303,13 @@ class BaseTabNetModelWrapper(BaseModelWrapper):
         )
         model_path = Path(model_dir) / self.save_model_name
         # torch.save(self.model.network.state_dict(), model_path)
-        self.saved_path = self.model.save_model(model_path)
+        breakpoint()
+        self.saved_path = self.model.save_model(str(model_path))
 
     def load_model(self, model_path: str):
         self.model.load_model(self.saved_path)
+        # if not hasattr(self.model, "network"):
+        #     self.model._set_network()
         # self.model.network.load_state_dict(torch.load(model_path))
 
     def get_feature_importance(self, input_data) -> Dict[str, float]:
@@ -334,7 +337,7 @@ def get_tabnet_params(params) -> Dict[str, Any]:
     # TODO: add a validation to make sure cat_features are first features in
     # data_loader.features_to_model in that order.  The validation could be
     # in fit method.
-    cat_idxs = range(len(cat_features))
+    cat_idxs = list(range(len(cat_features)))
     cat_dims = [cat_feature["dim"] for cat_feature in cat_features]
     cat_emb_dim = [cat_feature["emb_dim"] for cat_feature in cat_features]
     del tabnet_params["cat_features"]
