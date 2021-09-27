@@ -206,7 +206,6 @@ class BaseFeatureManager(ABC):
     def transform_new_samples(self, raw_data_samples, transforming_features):
         self.set_raw_data(raw_data_samples)
         self.initialize_dataframe()
-        self.load_transformers()
         if transforming_features is None:
             # If transforming features are not specified, get all transforming features.
             transforming_features_and_dependencies = (
