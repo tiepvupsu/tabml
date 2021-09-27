@@ -19,10 +19,10 @@ def test_get_tabnet_params(tmp_path):
         name: "foo_tabnet"
         model_params:
             cat_features:
-                - feature: "b"
+                - feature: "a"
                   dim: 3
                   emb_dim: 2
-                - feature: "e"
+                - feature: "b"
                   dim: 4
                   emb_dim: 1
     model_analysis:
@@ -32,6 +32,6 @@ def test_get_tabnet_params(tmp_path):
     config_path = tmp_path / "tmp.yaml"
     write_str_to_file(config_str, config_path)
     config = parse_pipeline_config(config_path)
-    tabnet_params = get_tabnet_params(config)
-    expected_params = {"cat_idxs": [1, 4], "cat_dims": [3, 4], "cat_emb_dim": [2, 1]}
+    tabnet_params = get_tabnet_params(config.model_wrapper)
+    expected_params = {"cat_idxs": [0, 1], "cat_dims": [3, 4], "cat_emb_dim": [2, 1]}
     assert_eq(expected_params, tabnet_params)
