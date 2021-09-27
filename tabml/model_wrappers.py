@@ -266,10 +266,14 @@ class CatBoostRegressorModelWrapper(BaseCatBoostModelWrapper):
 class BaseTabNetModelWrapper(BaseModelWrapper):
     mlflow_model_type = "tabnet"
 
-    def __init__(self, config):
-        super().__init__(config)
+    def __init__(self, params=pipeline_config.ModelWrapper()):
+        super().__init__(params)
         self.save_model_name = "model_0"
-        self.model_params = get_tabnet_params(config)
+        self.model_params = get_tabnet_params(params)
+        self.cat_features = [
+            cat_feature["feature"]
+            for cat_feature in params.model_params["cat_features"]
+        ]
         self.model = self.build_model()
 
     def build_model(self):
@@ -284,6 +288,12 @@ class BaseTabNetModelWrapper(BaseModelWrapper):
     def fit(self, data_loader: BaseDataLoader, model_dir: str):
         train_feature, train_label = data_loader.get_train_data_and_label()
         val_feature, val_label = data_loader.get_val_data_and_label()
+        # make sure cat feature must be first items in in data to model
+        for i, feature in enumerate(self.cat_features):
+            assert feature == data_loader.features[i], (
+                f"cat_features ({self.cat_features}) must be the first items "
+                f"in data_loaders.features_to_model ({data_loader.features})."
+            )
 
         self.model.fit(
             train_feature.to_numpy(),
@@ -293,7 +303,6 @@ class BaseTabNetModelWrapper(BaseModelWrapper):
         )
         model_path = Path(model_dir) / self.save_model_name
         # torch.save(self.model.network.state_dict(), model_path)
-        breakpoint()
         self.saved_path = self.model.save_model(model_path)
 
     def load_model(self, model_path: str):
@@ -319,15 +328,13 @@ class TabNetRegressorModelWrapper(BaseTabNetModelWrapper):
         return TabNetRegressor(**self.model_params)
 
 
-def get_tabnet_params(config) -> Dict[str, Any]:
-    tabnet_params = config.model_wrapper.model_params
-    features_to_model = config.data_loader.features_to_model
-    cat_features = tabnet_params["cat_features"]
-    cat_feature_names = [cat_feature["feature"] for cat_feature in cat_features]
-
-    cat_idxs = [
-        i for i, feature in enumerate(features_to_model) if feature in cat_feature_names
-    ]
+def get_tabnet_params(params) -> Dict[str, Any]:
+    tabnet_params = params.model_params.copy()
+    cat_features = params.model_params["cat_features"]
+    # TODO: add a validation to make sure cat_features are first features in
+    # data_loader.features_to_model in that order.  The validation could be
+    # in fit method.
+    cat_idxs = range(len(cat_features))
     cat_dims = [cat_feature["dim"] for cat_feature in cat_features]
     cat_emb_dim = [cat_feature["emb_dim"] for cat_feature in cat_features]
     del tabnet_params["cat_features"]
