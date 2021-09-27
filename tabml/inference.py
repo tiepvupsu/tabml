@@ -20,6 +20,7 @@ class ModelInference:
         self.fm = feature_manager_cls(
             feature_config_path, transformer_path=transformer_path
         )
+        self.fm.load_transformers()
         if pipeline_config_path is None:
             pipeline_config_path = ExperimentManger.get_config_path_from_model_path(
                 model_path
