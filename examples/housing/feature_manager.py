@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 from tabml import data_processing, datasets
@@ -64,20 +63,6 @@ class FeatureHousingMedianAge(BaseHousingTransformingFeature):
 
     def transform(self, df):
         return self.transformer.transform(df[["housing_median_age"]]).reshape(-1)
-
-
-def _scale_clean_transform(df, input_columns):
-    return data_processing.fit_train_transform_all(
-        whole_df=df,
-        input_columns=input_columns,
-        training_filters=["is_train"],
-        transformer=Pipeline(
-            [
-                ("clip_outlier", data_processing.BoxplotOutlierClipper()),
-                ("std_scaler", StandardScaler()),
-            ]
-        ),
-    ).reshape(-1)
 
 
 class FeatureScaledCleanTotalRooms(BaseHousingTransformingFeature):
