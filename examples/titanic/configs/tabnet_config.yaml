@@ -4,7 +4,7 @@ config_name: "tabnet"
 
 data_loader:
   cls_name: tabml.data_loaders.BaseDataLoader
-  feature_manager_config_path: configs/feature_config.yaml
+  feature_config_path: configs/feature_config.yaml
 
   features_to_model:
     - coded_sex
