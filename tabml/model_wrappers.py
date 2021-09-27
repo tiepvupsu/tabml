@@ -5,7 +5,6 @@ from typing import Any, Dict, Iterable, Tuple
 import mlflow
 import numpy as np
 import shap
-import torch
 from catboost import CatBoostClassifier, CatBoostRegressor
 from lightgbm import LGBMClassifier, LGBMRegressor
 from pytorch_tabnet.tab_model import TabNetClassifier, TabNetRegressor
@@ -303,7 +302,6 @@ class BaseTabNetModelWrapper(BaseModelWrapper):
         )
         model_path = Path(model_dir) / self.save_model_name
         # torch.save(self.model.network.state_dict(), model_path)
-        breakpoint()
         self.saved_path = self.model.save_model(str(model_path))
 
     def load_model(self, model_path: str):
