@@ -8,20 +8,21 @@ data_loader:
 
   features_to_model:
     - coded_sex
+    - coded_pclass
+    - coded_title
     - imputed_age
     - bucketized_age
     - min_max_scaled_age
-    - coded_pclass
-    - coded_title
 
   label_col: survived
 
   train_filters:
     - passenger_id <= 891
+    - is_train
 
   validation_filters:
-    - not is_train
     - passenger_id <= 891
+    - not is_train
 
 model_wrapper:
   cls_name: tabml.model_wrappers.TabNetClassifierModelWrapper
@@ -36,6 +37,10 @@ model_wrapper:
       - feature: "coded_pclass"
         dim: 3
         emb_dim: 2
+
+      - feature: "coded_title"
+        dim: 6
+        emb_dim: 3
 
 model_analysis:
   training_size: 100
