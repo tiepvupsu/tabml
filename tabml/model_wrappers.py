@@ -259,16 +259,6 @@ class CatBoostRegressorModelWrapper(BaseCatBoostModelWrapper):
         return CatBoostRegressor(task_type=self.task_type, **self.model_params)
 
 
-def get_model_wrapper(
-    params: pipeline_config.ModelWrapper,
-    custom_model_wrapper: Union[Type[BaseModelWrapper], None] = None,
-):
-    if custom_model_wrapper:
-        return custom_model_wrapper(params)
-    model_wrapper = custom_model_wrapper or factory.create(params.cls_name)
-    return model_wrapper(params)
-
-
 def write_model_wrapper_subclasses_to_file(
     base_cls=BaseModelWrapper, md_path="model_wrapper_map.md"
 ):
