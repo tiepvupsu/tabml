@@ -31,7 +31,7 @@ class BasePipeline(ABC):
         self,
         path_to_config: str,
         custom_model_wrapper: Union[Type[model_wrappers.BaseModelWrapper], None] = None,
-        custom_run_dir="",
+        custom_run_dir: str = "",
     ):
         logger.info("=" * 80)
         logger.info(f"Running pipeline with config {path_to_config}")

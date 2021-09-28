@@ -12,7 +12,7 @@ from tabml.schemas import pipeline_config
 
 @dataclass
 class ModelInference:
-    feature_manager_cls: Type[BaseFeatureManager]
+    feature_manager_cls: BaseFeatureManager
     feature_config_path: str
     transformer_path: Union[str, None] = None
     model_path: str = ""
@@ -22,7 +22,7 @@ class ModelInference:
     def __post_init__(self):
         self._init_feature_manager()
         config = self._get_config()
-        self._init_model_wrapper(config.model_wrapper)
+        self._load_model_wrapper(config.model_wrapper)
         self.features_to_model = list(config.data_loader.features_to_model)
 
     def _init_feature_manager(self):
@@ -38,7 +38,7 @@ class ModelInference:
         )
         return parse_pipeline_config(pipeline_config_path)
 
-    def _init_model_wrapper(self, model_wrapper_params: pipeline_config.ModelWrapper):
+    def _load_model_wrapper(self, model_wrapper_params: pipeline_config.ModelWrapper):
         self.model_wrapper = initialize_model_wrapper(
             model_wrapper_params, custom_model_wrapper=self.custom_model_wrapper
         )
