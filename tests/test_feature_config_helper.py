@@ -93,7 +93,7 @@ class TestFeatureConfigHelper:
                 index: 2
                 dtype: STRING
         """
-        config_path = tmp_path / "tmp.pb"
+        config_path = tmp_path / "tmp.yaml"
         write_str_to_file(config_STRING, config_path)
         with AssertRaises(AssertionError) as assert_raises:
             feature_config_helper.FeatureConfigHelper(config_path)
@@ -120,7 +120,7 @@ class TestFeatureConfigHelper:
                 dependencies:
                   - "date"
         """
-        config_path = tmp_path / "tmp.pb"
+        config_path = tmp_path / "tmp.yaml"
         write_str_to_file(invalid_dependency_STRING, config_path)
         with AssertRaises(AssertionError) as assert_raises:
             feature_config_helper.FeatureConfigHelper(config_path)
