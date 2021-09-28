@@ -1,41 +1,54 @@
 """Utilities that support making inference."""
 
-from typing import Any, Dict, List, Union
+from dataclasses import dataclass
+from typing import Any, Dict, Iterable, List, Type, Union
 
 from tabml.config_helpers import parse_pipeline_config
 from tabml.experiment_manager import ExperimentManger
+from tabml.feature_manager import BaseFeatureManager
+from tabml.model_wrappers import BaseModelWrapper
+from tabml.schemas import pipeline_config
 from tabml.utils import factory
 
 
+@dataclass
 class ModelInference:
-    def __init__(
-        self,
-        feature_manager_cls,
-        feature_config_path: str,
-        model_path: str,
-        pipeline_config_path: Union[str, None] = None,
-        custom_model_wrapper=None,
-        transformer_path=None,
-    ):
-        self.fm = feature_manager_cls(
-            feature_config_path, transformer_path=transformer_path
+    feature_manager_cls: Type[BaseFeatureManager]
+    feature_config_path: str
+    transformer_path: Union[str, None] = None
+    model_path: str = ""
+    custom_model_wrapper: Union[Type[BaseModelWrapper], None] = None
+    pipeline_config_path: Union[str, None] = None
+
+    def __post_init__(self):
+        self._init_feature_manager()
+        config = self._get_config()
+        self._init_model_wrapper(config.model_wrapper)
+        self.features_to_model = list(config.data_loader.features_to_model)
+
+    def _init_feature_manager(self):
+        self.fm = self.feature_manager_cls(
+            self.feature_config_path, transformer_path=self.transformer_path
         )
         self.fm.load_transformers()
-        if pipeline_config_path is None:
-            pipeline_config_path = ExperimentManger.get_config_path_from_model_path(
-                model_path
-            )
-        self.config = parse_pipeline_config(pipeline_config_path)
-        if custom_model_wrapper:
-            self.model_wrapper = custom_model_wrapper(self.config.model_wrapper)
-        else:
-            self.model_wrapper = factory.create(self.config.model_wrapper.cls_name)(
-                self.config.model_wrapper
-            )
-        self.model_wrapper.load_model(model_path)
-        self.features_to_model = list(self.config.data_loader.features_to_model)
 
-    def predict(self, raw_data: List[Dict[str, Any]]) -> List[Any]:
+    def _get_config(self):
+        pipeline_config_path = (
+            self.pipeline_config_path
+            or ExperimentManger.get_config_path_from_model_path(self.model_path)
+        )
+        return parse_pipeline_config(pipeline_config_path)
+
+    def _init_model_wrapper(self, model_wrapper_params: pipeline_config.ModelWrapper):
+        if self.custom_model_wrapper:
+            self.model_wrapper = self.custom_model_wrapper(model_wrapper_params)
+        else:
+            self.model_wrapper = factory.create(model_wrapper_params.cls_name)(
+                model_wrapper_params
+            )
+        self.model_wrapper.load_model(self.model_path)
+
+    def predict(self, raw_data: List[Dict[str, Any]]) -> Iterable[Any]:
         """Makes prediction for new samples.
 
         The sample should be given in a form of a list of dictionaries whose keys are
