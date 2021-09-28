@@ -25,7 +25,7 @@ class TestExperimentManager:
               metrics: ["a"]
               by_features: ["b"]
         """
-        self.pipeline_config_path = tmp_path / "pipeline_config.pb"
+        self.pipeline_config_path = tmp_path / "pipeline_config.yaml"
         write_str_to_file(pb_str, self.pipeline_config_path)
 
     def test_not_create_new_run_dir(self, tmp_path):

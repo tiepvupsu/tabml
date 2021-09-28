@@ -21,7 +21,7 @@ class ExperimentManger:
     """
 
     log_filename = "run.log"
-    config_filename = "config.pb"
+    config_filename = "config.yaml"
     _model_analysis_dir = "model_analysis"
 
     def __init__(
