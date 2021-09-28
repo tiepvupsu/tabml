@@ -18,9 +18,9 @@ def _test_inference(
     model_inference = ModelInference(
         feature_manager_cls=feature_manager.FeatureManager,
         feature_config_path=feature_config_path,
+        transformer_path=transformer_path,
         model_path=model_path,
         pipeline_config_path=pipeline_config_path,
-        transformer_path=transformer_path,
     )
     raw_data_samples = [
         {
