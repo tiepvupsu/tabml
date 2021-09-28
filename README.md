@@ -31,7 +31,7 @@ Key features:
   - [x] [LightGBM](https://lightgbm.readthedocs.io/en/latest/)
   - [x] [XGBoost](https://xgboost.readthedocs.io/en/latest/)
   - [x] [CatBoost](https://catboost.ai/)
-  - [ ] Scikit-learn
+  - [x] Scikit-learn
   - [ ] Keras
   - [ ] Pytorch
   - [ ] TabNet
