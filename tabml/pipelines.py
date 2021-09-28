@@ -1,5 +1,6 @@
 from abc import ABC
 from pathlib import Path
+from typing import Type, Union
 
 import mlflow
 
@@ -27,7 +28,10 @@ class BasePipeline(ABC):
     """
 
     def __init__(
-        self, path_to_config: str, custom_model_wrapper=None, custom_run_dir=""
+        self,
+        path_to_config: str,
+        custom_model_wrapper: Union[Type[model_wrappers.BaseModelWrapper], None] = None,
+        custom_run_dir="",
     ):
         logger.info("=" * 80)
         logger.info(f"Running pipeline with config {path_to_config}")
@@ -38,7 +42,9 @@ class BasePipeline(ABC):
         self.config = parse_pipeline_config(path_to_config)
         self.data_loader = self._get_data_loader()
         assert self.data_loader.label_col is not None, "label_col must be specified"
-        self._get_model_wrapper(custom_model_wrapper)
+        self.model_wrapper = model_wrappers.initialize_model_wrapper(
+            self.config.model_wrapper, custom_model_wrapper=custom_model_wrapper
+        )
 
         logger.add(self.exp_manager.get_log_path())
 
@@ -65,14 +71,6 @@ class BasePipeline(ABC):
 
     def _get_data_loader(self) -> BaseDataLoader:
         return factory.create(self.config.data_loader.cls_name)(self.config.data_loader)
-
-    def _get_model_wrapper(self, custom_model_wrapper):
-        if custom_model_wrapper:
-            self.model_wrapper = custom_model_wrapper(self.config.model_wrapper)
-        else:
-            self.model_wrapper = factory.create(self.config.model_wrapper.cls_name)(
-                self.config.model_wrapper
-            )
 
     def analyze_model(self) -> None:
         """Analyze the model on the validation dataset.
