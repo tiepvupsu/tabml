@@ -12,7 +12,7 @@ from tabml.schemas import pipeline_config
 
 @dataclass
 class ModelInference:
-    feature_manager_cls: Type[BaseFeatureManager]
+    feature_manager_cls: BaseFeatureManager
     feature_config_path: str
     transformer_path: Union[str, None] = None
     model_path: str = ""

@@ -260,7 +260,7 @@ class CatBoostRegressorModelWrapper(BaseCatBoostModelWrapper):
 
 
 def get_model_wrapper(
-    params: Type[pipeline_config.ModelWrapper],
+    params: pipeline_config.ModelWrapper,
     custom_model_wrapper: Union[Type[BaseModelWrapper], None] = None,
 ):
     if custom_model_wrapper:
