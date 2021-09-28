@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import Type, Union
 
 import mlflow
-from pydantic.main import BaseModel
 
 from tabml import experiment_manager, model_wrappers
 from tabml.config_helpers import parse_pipeline_config
@@ -32,7 +31,7 @@ class BasePipeline(ABC):
         self,
         path_to_config: str,
         custom_model_wrapper: Union[Type[model_wrappers.BaseModelWrapper], None] = None,
-        custom_run_dir="",
+        custom_run_dir: str = "",
     ):
         logger.info("=" * 80)
         logger.info(f"Running pipeline with config {path_to_config}")
@@ -70,7 +69,7 @@ class BasePipeline(ABC):
         logger.info("Start training the model.")
         self.model_wrapper.fit(self.data_loader, model_dir)
 
-    def _get_data_loader(self) -> Type[BaseDataLoader]:
+    def _get_data_loader(self) -> BaseDataLoader:
         return factory.create(self.config.data_loader.cls_name)(self.config.data_loader)
 
     def analyze_model(self) -> None:
