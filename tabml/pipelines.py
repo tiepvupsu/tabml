@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Type, Union
 
 import mlflow
+from pydantic.main import BaseModel
 
 from tabml import experiment_manager, model_wrappers
 from tabml.config_helpers import parse_pipeline_config
@@ -69,7 +70,7 @@ class BasePipeline(ABC):
         logger.info("Start training the model.")
         self.model_wrapper.fit(self.data_loader, model_dir)
 
-    def _get_data_loader(self) -> BaseDataLoader:
+    def _get_data_loader(self) -> Type[BaseDataLoader]:
         return factory.create(self.config.data_loader.cls_name)(self.config.data_loader)
 
     def analyze_model(self) -> None:
