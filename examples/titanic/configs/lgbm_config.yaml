@@ -15,11 +15,11 @@ data_loader:
   label_col: survived
 
   train_filters:
-    - passenger_id <= 891
+    - PassengerId <= 891
 
   validation_filters:
     - not is_train
-    - passenger_id <= 891
+    - PassengerId <= 891
 
 model_wrapper:
   cls_name: tabml.model_wrappers.LgbmClassifierModelWrapper
@@ -38,5 +38,5 @@ model_analysis:
     - roc_auc
     - max_f1
   by_features:
-    - sex
-    - pclass
+    - Sex
+    - Pclass

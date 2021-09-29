@@ -27,11 +27,19 @@ class FeatureManager(BaseFeatureManager):
 
     def initialize_dataframe(self):
         self.dataframe = pd.DataFrame()
-        self.dataframe["passenger_id"] = self.raw_data["full"]["PassengerId"]
-        self.dataframe["sibsp"] = self.raw_data["full"]["SibSp"]
-        self.dataframe["parch"] = self.raw_data["full"]["Parch"]
-        self.dataframe["fare"] = self.raw_data["full"]["Fare"]
-        self.dataframe["age"] = self.raw_data["full"]["Age"]
+        self.dataframe = self.raw_data["full"][
+            [
+                "PassengerId",
+                "SibSp",
+                "Parch",
+                "Fare",
+                "Age",
+                "Sex",
+                "Pclass",
+                "Embarked",
+                "Name",
+            ]
+        ]
 
 
 class BaseTitanicTransformingFeature(BaseTransformingFeature):
@@ -56,11 +64,11 @@ class FeatureImputedAge(BaseTitanicTransformingFeature):
 
     def fit(self, df):
         self.transformer = SimpleImputer(strategy="mean")
-        train_data = df.query("is_train")[["age"]]
+        train_data = df.query("is_train")[["Age"]]
         self.transformer.fit(train_data)
 
     def transform(self, df):
-        return self.transformer.transform(df[["age"]]).reshape(-1)
+        return self.transformer.transform(df[["Age"]]).reshape(-1)
 
 
 class FeatureBucketizedAge(BaseTitanicTransformingFeature):
@@ -78,36 +86,22 @@ class FeatureSurvived(BaseTitanicTransformingFeature):
         return self.raw_data["full"]["Survived"]
 
 
-class FeatureSex(BaseTitanicTransformingFeature):
-    name = "sex"
-
-    def transform(self, df):
-        return self.raw_data["full"]["Sex"]
-
-
 class FeatureCodedSex(BaseTitanicTransformingFeature):
     name = "coded_sex"
 
     def transform(self, df):
-        return df["sex"].map({"male": 0, "female": 1})
-
-
-class FeaturePclass(BaseTitanicTransformingFeature):
-    name = "pclass"
-
-    def transform(self, df):
-        return self.raw_data["full"]["Pclass"]
+        return df["Sex"].map({"male": 0, "female": 1})
 
 
 class FeatureCodedPclass(BaseTitanicTransformingFeature):
     name = "coded_pclass"
 
     def transform(self, df):
-        return df["pclass"].map({1: 1, 2: 2, 3: 0})
+        return df["Pclass"].map({1: 1, 2: 2, 3: 0})
 
 
 class FeatureEmbarked(BaseTitanicTransformingFeature):
-    name = "embarked"
+    name = "imputed_embarked"
 
     def transform(self, df):
         embarked = self.raw_data["full"]["Embarked"]
@@ -119,7 +113,7 @@ class FeatureCodedEmbarked(BaseTitanicTransformingFeature):
     name = "coded_embarked"
 
     def transform(self, df):
-        return df["embarked"].map({"C": 0, "Q": 1, "S": 2, "Unknown": 3})
+        return df["imputed_embarked"].map({"C": 0, "Q": 1, "S": 2, "Unknown": 3})
 
 
 class FeatureTitle(BaseTitanicTransformingFeature):
