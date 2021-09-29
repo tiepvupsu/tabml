@@ -1,34 +1,45 @@
 raw_data_dir: data
 dataset_name: sample
 base_features:
-  - name: passenger_id
+  - name: PassengerId
     dtype: INT32
 
-  - name: sibsp
+  - name: SibSp
     dtype: INT32
 
-  - name: parch
+  - name: Parch
     dtype: INT32
 
-  - name: fare
+  - name: Fare
     dtype: FLOAT
 
-  - name: age
+  - name: Age
     dtype: FLOAT
 
+  - name: Sex
+    dtype: STRING
+
+  - name: Pclass
+    dtype: FLOAT
+
+  - name: Embarked
+    dtype: STRING
+
+  - name: Name
+    dtype: STRING
 
 transforming_features:
   - name: is_train
     index: 1
     dependencies:
-     - passenger_id
+     - PassengerId
     dtype: BOOL
 
   - name: imputed_age
     index: 2
     dtype: FLOAT
     dependencies:
-      - age
+      - Age
       - is_train
 
   - name: bucketized_age
@@ -41,39 +52,34 @@ transforming_features:
     dtype: FLOAT
     index: 5
 
-  - name: sex
-    dtype: STRING
-    index: 6
-
   - name: coded_sex
     index: 7
     dependencies:
-      - sex
+      - Sex
     dtype: INT32
-
-  - name: pclass
-    index: 8
-    dtype: FLOAT
 
   - name: coded_pclass
     index: 9
     dtype: INT32
     dependencies:
-      - pclass
-
-  - name: embarked
+      - Pclass
+  - name: imputed_embarked
     index: 10
     dtype: STRING
+    dependencies:
+      - Embarked
 
   - name: coded_embarked
     index: 11
     dtype: INT32
     dependencies:
-      - embarked
+      - imputed_embarked
 
   - name: title
     index: 12
     dtype: STRING
+    dependencies:
+      - Name
 
   - name: coded_title
     index: 13
