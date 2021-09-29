@@ -17,7 +17,7 @@ data_loader:
     -  "is_train"
   validation_filters:
     - "not is_train"
-    - "passenger_id <= 891"
+    - "PassengerId <= 891"
 
 model_wrapper:
   cls_name: "tabml.model_wrappers.XGBoostClassifierModelWrapper"
@@ -31,5 +31,5 @@ model_analysis:
     - "roc_auc"
     - "max_f1"
   by_features:
-    - "sex"
-    - "pclass"
+    - "Sex"
+    - "Pclass"
