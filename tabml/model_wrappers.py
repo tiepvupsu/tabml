@@ -38,7 +38,7 @@ class BaseModelWrapper(ABC):
     @abstractmethod
     def predict(self, data) -> Iterable:
         """Predicts data inputs."""
-        raise NotImplementedError
+        pass
 
     def predict_proba(self, data) -> Iterable:
         """Predicts probability of data inputs.
@@ -50,7 +50,7 @@ class BaseModelWrapper(ABC):
 
     @abstractmethod
     def load_model(self, model_path: str):
-        raise NotImplementedError
+        pass
 
     def get_feature_importance(self, input_data) -> Dict[str, float]:
         """Computes feature importance for each feature based on an input data.
@@ -126,7 +126,7 @@ class BaseBoostingModelWrapper(BaseModelWrapper):
 
     @abstractmethod
     def _get_fit_params(self, train_data: Tuple, val_data: Tuple) -> Dict:
-        raise NotImplementedError
+        pass
 
     def fit(self, data_loader: BaseDataLoader, model_dir: str):
         assert (
@@ -151,7 +151,7 @@ class BaseLgbmModelWrapper(BaseBoostingModelWrapper):
 
     @abstractmethod
     def build_model(self):
-        raise NotImplementedError
+        pass
 
     def predict(self, data):
         return self.model.predict(data)
