@@ -294,4 +294,4 @@ class BaseTransformingFeature(ABC):
 
     @abstractmethod
     def transform(self, df):
-        raise NotImplementedError
+        pass
