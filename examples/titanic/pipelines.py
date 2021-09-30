@@ -21,5 +21,10 @@ def train_catboost():
     run(pipeline_config_path)
 
 
+def train_randomforest():
+    pipeline_config_path = "./configs/rf_config.yaml"
+    run(pipeline_config_path)
+
+
 if __name__ == "__main__":
     train_lgbm()
