@@ -62,6 +62,7 @@ class BasePipeline(ABC):
 
     def _log_to_mlflow(self):
         model_type = self.model_wrapper.mlflow_model_type
+        mlflow.log_param("run_dir", self.exp_manager.run_dir)
         mlflow.log_param("model_type", model_type)
         mlflow.log_params(
             {
