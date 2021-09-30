@@ -50,19 +50,25 @@ class BasePipeline(ABC):
 
     def run(self):
         self.exp_manager.create_new_run_dir()
-        # start mlflow auto log
-        model_type = self.model_wrapper.mlflow_model_type
-        model_wrappers.MLFLOW_AUTOLOG[model_type]
+        self._init_mlflow()
         with mlflow.start_run():
-            mlflow.log_param("model_type", model_type)
-            mlflow.log_params(
-                {
-                    "model_params": self.config.model_wrapper.model_params,
-                    "fit_params": self.config.model_wrapper.fit_params,
-                }
-            )
+            self._log_to_mlflow()
             self.train()
             self.analyze_model()
+
+    def _init_mlflow(self):
+        model_type = self.model_wrapper.mlflow_model_type
+        model_wrappers.MLFLOW_AUTOLOG[model_type]
+
+    def _log_to_mlflow(self):
+        model_type = self.model_wrapper.mlflow_model_type
+        mlflow.log_param("model_type", model_type)
+        mlflow.log_params(
+            {
+                "model_params": self.config.model_wrapper.model_params,
+                "fit_params": self.config.model_wrapper.fit_params,
+            }
+        )
 
     def train(self):
         model_dir = self.exp_manager.run_dir
