@@ -109,6 +109,16 @@ by running test
 python3 -m pytest ./tests ./examples
 ```
 
+### Common errors
+
+1. SHAP
+
+SHAP might not work for MacOS if Xcode version < 13, try to upgrade it to xcode 13. [Related issue](https://github.com/slundberg/shap/issues/1386).  
+
+2. LightGBM
+
+`pip install lightgbm` might not work for MacOS, try to follow [official installation guide for mac](https://lightgbm.readthedocs.io/en/latest/Installation-Guide.html#macos).
+
 ---
 
 If you find a bug or want to request a feature, feel free to create an issue. Any Pull Request would be much appreciated.
