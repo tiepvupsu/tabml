@@ -116,7 +116,7 @@ class FeatureConfigHelper:
     def sort_features(self, feature_names: List[str]) -> List[str]:
         return sorted(feature_names, key=lambda x: self.feature_metadata[x].index)
 
-    def find_dependencies(self, feature_name: str) -> List[str]:
+    def get_direct_dependencies(self, feature_name: str) -> List[str]:
         return self.feature_metadata[feature_name].dependencies
 
     def get_dependencies_recursively(self, features: List[str]) -> List[str]:
@@ -131,7 +131,7 @@ class FeatureConfigHelper:
             if feature in seen:
                 continue
             seen.append(feature)
-            queue.extend(self.find_dependencies(feature))
+            queue.extend(self.get_direct_dependencies(feature))
         return self.sort_features(seen)
 
     def find_dependents(self, feature_name: str) -> List[str]:
