@@ -77,8 +77,8 @@ class FeatureConfigHelper:
             )
 
     def _validate_dependency(self):
-        """Checks if all dependencies of a transforming feature exists."""
-        # initialize from base_features then gradually adding transforming_feature
+        """Checks if all dependencies of a transforming feature exist."""
+        # Start from base_features then gradually add transforming_features.
         features_so_far = self.base_features.copy()
         for feature in self.config.transforming_features:
             for dependency in feature.dependencies:
@@ -91,7 +91,7 @@ class FeatureConfigHelper:
 
     def _build_feature_metadata(self):
         for feature in self.config.base_features:
-            # all base features are considered to have index 0
+            # All base features are considered to have index 0.
             self.feature_metadata[feature.name] = _Feature(index=0, dtype=feature.dtype)
 
         for feature in self.config.transforming_features:
@@ -125,7 +125,7 @@ class FeatureConfigHelper:
         return self.sort_features(seen)
 
     def find_dependents(self, feature_name: str) -> List[str]:
-        """Finds all features that are directly/indirectly dependent on a feature.
+        """Finds all features that are directly/indirectly dependents of a feature.
 
         This is necessary when we want to update one feature. All of its dependents also
         need to be updated. The list of returning features is required to be in the
@@ -136,7 +136,7 @@ class FeatureConfigHelper:
             * If "a" is a dependent of "b" and "b" is a dependent of "c" then "a" is a
               dependent of "c".
         """
-        # BFS to find all dependents
+        # BFS to find all dependents.
         dependents: List[str] = []
         queue = self.feature_metadata[feature_name].dependents
         while queue:
