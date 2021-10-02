@@ -2,11 +2,11 @@ import copy
 from typing import Dict, List, Union
 
 from tabml.config_helpers import parse_feature_config
-from tabml.schemas.feature_config import DType
+from tabml.schemas.feature_config import BaseFeature, DType, TransformingFeature
 from tabml.utils.utils import check_uniqueness
 
 
-class _Feature:
+class FeatureMetadata:
     def __init__(
         self, index: int, dtype: DType, dependencies: Union[List, None] = None
     ):
@@ -14,6 +14,17 @@ class _Feature:
         self.dependents: List[str] = []
         self.dtype = dtype
         self.dependencies = dependencies or []
+
+    @classmethod
+    def from_base_feature(cls, feature: BaseFeature):
+        # All base features are considered to have index 0.
+        return cls(index=0, dtype=feature.dtype)
+
+    @classmethod
+    def from_transforming_feature(cls, feature: TransformingFeature):
+        return cls(
+            index=feature.index, dtype=feature.dtype, dependencies=feature.dependencies
+        )
 
 
 class FeatureConfigHelper:
@@ -48,7 +59,7 @@ class FeatureConfigHelper:
         ]
         self.all_features = self.base_features + self.transforming_features
         self._validate()
-        self.feature_metadata: Dict[str, _Feature] = {}
+        self.feature_metadata: Dict[str, FeatureMetadata] = {}
         self._build_feature_metadata()
 
     def _validate(self):
@@ -91,15 +102,14 @@ class FeatureConfigHelper:
 
     def _build_feature_metadata(self):
         for feature in self.config.base_features:
-            # All base features are considered to have index 0.
-            self.feature_metadata[feature.name] = _Feature(index=0, dtype=feature.dtype)
+            self.feature_metadata[feature.name] = FeatureMetadata.from_base_feature(
+                feature
+            )
 
         for feature in self.config.transforming_features:
-            self.feature_metadata[feature.name] = _Feature(
-                index=feature.index,
-                dtype=feature.dtype,
-                dependencies=feature.dependencies,
-            )
+            self.feature_metadata[
+                feature.name
+            ] = FeatureMetadata.from_transforming_feature(feature)
             for dependency in feature.dependencies:
                 self.feature_metadata[dependency].dependents.append(feature.name)
 
