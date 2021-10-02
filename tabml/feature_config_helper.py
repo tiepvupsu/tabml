@@ -134,7 +134,7 @@ class FeatureConfigHelper:
     def sort_features(self, feature_names: List[str]) -> List[str]:
         return sorted(feature_names, key=lambda x: self.feature_metadata[x].index)
 
-    def find_dependents(self, feature_name: str) -> List[str]:
+    def get_dependents_recursively(self, feature_name: str) -> List[str]:
         """Finds all features that are directly/indirectly dependents of a feature.
 
         This is necessary when we want to update one feature. All of its dependents also
@@ -168,7 +168,7 @@ class FeatureConfigHelper:
         """
         all_features = feature_names
         for feature_name in feature_names:
-            all_features.extend(self.find_dependents(feature_name))
+            all_features.extend(self.get_dependents_recursively(feature_name))
 
         return self.sort_features(list(set(all_features)))
 
