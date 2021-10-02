@@ -192,10 +192,11 @@ class FeatureConfigHelper:
             features=selected_features
         )
         new_config = copy.deepcopy(self.config)
-        new_config.transforming_features = [
+        minimum_transforming_features = [
             transforming_feature
             for transforming_feature in self.config.transforming_features
             if transforming_feature.name in all_relevant_features
         ]
+        new_config.transforming_features = minimum_transforming_features
 
         return new_config
