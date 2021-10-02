@@ -179,14 +179,15 @@ class FeatureConfigHelper:
 
         """
         self._validate_features(selected_features)
-        all_relevant_features = self.get_dependencies_recursively(
+
+        new_config = copy.deepcopy(self.config)
+        required_features = self.get_dependencies_recursively(
             features=selected_features
         )
-        new_config = copy.deepcopy(self.config)
         minimum_transforming_features = [
             transforming_feature
             for transforming_feature in self.config.transforming_features
-            if transforming_feature.name in all_relevant_features
+            if transforming_feature.name in required_features
         ]
         new_config.transforming_features = minimum_transforming_features
 
