@@ -23,8 +23,8 @@ class FeatureConfigHelper:
     """A config helper class for feature manager.
 
     Attributes:
-        _config:
-            A protobuf object parsed from a pb text file.
+        config:
+            A feature_config object parsed from a yaml file.
         raw_data_dir:
             A string of directory to raw data.
         dataset_name:
@@ -41,13 +41,13 @@ class FeatureConfigHelper:
     """
 
     def __init__(self, config_path: str):
-        self._config = parse_feature_config(config_path)
-        self.raw_data_dir = self._config.raw_data_dir
-        self.dataset_name = self._config.dataset_name
-        self.base_features = [feature.name for feature in self._config.base_features]
+        self.config = parse_feature_config(config_path)
+        self.raw_data_dir = self.config.raw_data_dir
+        self.dataset_name = self.config.dataset_name
+        self.base_features = [feature.name for feature in self.config.base_features]
         self.transforming_features = [
             transforming_feature.name
-            for transforming_feature in self._config.transforming_features
+            for transforming_feature in self.config.transforming_features
         ]
         self.all_features = self.base_features + self.transforming_features
         self._validate()
@@ -63,7 +63,7 @@ class FeatureConfigHelper:
         """Checks if indexes are positive and monotonically increasing."""
         indexes = [
             transforming_feature.index
-            for transforming_feature in self._config.transforming_features
+            for transforming_feature in self.config.transforming_features
         ]
         if not (
             indexes[0] > 0
@@ -83,7 +83,7 @@ class FeatureConfigHelper:
         """Checks if all dependencies of a transforming feature exists."""
         # initialize from base_features then gradually adding transforming_feature
         features_so_far = self.base_features.copy()
-        for feature in self._config.transforming_features:
+        for feature in self.config.transforming_features:
             for dependency in feature.dependencies:
                 assert (
                     dependency in features_so_far
@@ -93,11 +93,11 @@ class FeatureConfigHelper:
             features_so_far.append(feature.name)
 
     def _build_feature_metadata(self):
-        for feature in self._config.base_features:
+        for feature in self.config.base_features:
             # all base features are considered to have index 0
             self.feature_metadata[feature.name] = _Feature(index=0, dtype=feature.dtype)
 
-        for feature in self._config.transforming_features:
+        for feature in self.config.transforming_features:
             self.feature_metadata[feature.name] = _Feature(
                 index=feature.index,
                 dtype=feature.dtype,
@@ -195,10 +195,10 @@ class FeatureConfigHelper:
         all_relevant_features = self.get_dependencies_recursively(
             features=selected_features
         )
-        new_config = copy.deepcopy(self._config)
+        new_config = copy.deepcopy(self.config)
         new_config.transforming_features = [
             transforming_feature
-            for transforming_feature in self._config.transforming_features
+            for transforming_feature in self.config.transforming_features
             if transforming_feature.name in all_relevant_features
         ]
 
