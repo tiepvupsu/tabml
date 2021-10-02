@@ -177,17 +177,8 @@ class FeatureConfigHelper:
         Args:
             selected_features: a list of selected features.
 
-        Raises:
-            ValueError if selected_features contains an unknown features (not in the
-            original config).
         """
-        invalid_features = [
-            feature for feature in selected_features if feature not in self.all_features
-        ]
-        if invalid_features:
-            raise ValueError(
-                f"Features {invalid_features} are not in the original config."
-            )
+        self._validate_features(selected_features)
         all_relevant_features = self.get_dependencies_recursively(
             features=selected_features
         )
@@ -200,3 +191,18 @@ class FeatureConfigHelper:
         new_config.transforming_features = minimum_transforming_features
 
         return new_config
+
+    def _validate_features(self, features: List[str]):
+        """Checks if all features are in the config.
+
+        Raises:
+            ValueError if selected_features contains an unknown features (not in the
+            original config).
+        """
+        invalid_features = [
+            feature for feature in features if feature not in self.all_features
+        ]
+        if invalid_features:
+            raise ValueError(
+                f"Features {invalid_features} are not in the original config."
+            )
