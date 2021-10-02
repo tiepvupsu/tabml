@@ -17,12 +17,11 @@ class BasePipeline(ABC):
 
     Attributions:
         config:
-            the pb object of the prototext config file
-            (passed via path_to_config when initialized)
+            A pipeline config object.
         data_loader:
-            a data loader object, a subclass of base.data_loaders.BaseDataLoader.
+            A data loader object, a subclass of base.data_loaders.BaseDataLoader.
         exp_manager:
-            a base.experiment_manager.ExperimentManager object.
+            A base.experiment_manager.ExperimentManager object.
         custom_model_wrapper:
             model_wrapper defined by users.
     """

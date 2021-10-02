@@ -1,7 +1,6 @@
 ignore:
   - "setup.py"
   - "tabml/utils/git.py"
-  - "tabml/protos/*.py"
 
 codecov:
   disable_default_path_fixes: false
