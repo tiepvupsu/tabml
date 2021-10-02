@@ -13,10 +13,7 @@ class _Feature:
         self.index = index
         self.dependents: List[str] = []
         self.dtype = dtype
-        if dependencies is None:
-            self.dependencies = []
-        else:
-            self.dependencies = dependencies
+        self.dependencies = dependencies or []
 
 
 class FeatureConfigHelper:
