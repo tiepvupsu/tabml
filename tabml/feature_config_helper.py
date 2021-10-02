@@ -157,21 +157,6 @@ class FeatureConfigHelper:
             queue.extend(self.feature_metadata[feature].dependents)
         return self.sort_features(dependents)
 
-    def append_dependents(self, feature_names: List[str]) -> List[str]:
-        """Finds all dependents of a list of features then appends them to the list.
-
-        This will be used when multiple features need to be updated or remove. For the
-        first case, all dependents also need to be updated. For the second case, it's
-        required that there is no dependent in the remaining features.
-
-        NOTE: the results should also contain the input feature_names.
-        """
-        all_features = feature_names
-        for feature_name in feature_names:
-            all_features.extend(self.get_dependents_recursively(feature_name))
-
-        return self.sort_features(list(set(all_features)))
-
     def extract_config(self, selected_features: List[str]):
         """Creates a minimum valid config that contains all selected_features.
 
