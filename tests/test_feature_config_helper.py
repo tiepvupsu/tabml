@@ -146,11 +146,6 @@ class TestFeatureConfigHelper:
         expected_3 = []
         assert_eq(expected_3, got_3)
 
-    def test_append_dependents(self, tmp_path):
-        got = self.fm_helper.append_dependents(["d", "b"])
-        expected = ["b", "c", "d", "e"]
-        assert_eq(expected, got)
-
     def test_extract_config_1(self, tmp_path):
         subset_features = ["e"]
         expected_STRING = """
