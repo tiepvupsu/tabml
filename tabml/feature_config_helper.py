@@ -62,8 +62,7 @@ class FeatureConfigHelper:
     def _validate_indexes(self):
         """Checks if indexes are positive and monotonically increasing."""
         indexes = [
-            # TODO: why we need int() here? Does yaml parse this incorrectly?
-            int(transforming_feature.index)
+            transforming_feature.index
             for transforming_feature in self._config.transforming_features
         ]
         if not (
@@ -108,8 +107,7 @@ class FeatureConfigHelper:
                 self.feature_metadata[dependency].dependents.append(feature.name)
 
     def sort_features(self, feature_names: List[str]) -> List[str]:
-        # TODO: fix parsing index as int in yaml
-        return sorted(feature_names, key=lambda x: int(self.feature_metadata[x].index))
+        return sorted(feature_names, key=lambda x: self.feature_metadata[x].index)
 
     def find_dependencies(self, feature_name: str) -> List[str]:
         # NOTE: repeated fields in proto are NOT parsed to python lists but
