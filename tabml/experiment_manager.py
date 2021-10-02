@@ -33,7 +33,7 @@ class ExperimentManger:
     ):
         """
         Args:
-            path_to_config: path to proto pipeline config file.
+            path_to_config: path to pipeline config file.
             should_create_new_run_dir: create new experiment subfolder (True) or not
                 (False). If not, set the experiment subfolder to the most recent run.
             run_prefix: prefix of the run name subfolder inside exp_root_dir

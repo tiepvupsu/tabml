@@ -132,7 +132,7 @@ class FeatureConfigHelper:
 
         This is necessary when we want to update one feature. All of its dependents also
         need to be updated. The list of returning features is required to be in the
-        order determined by their indexes in the proto config.
+        order determined by their indexes in the config.
 
         Notes:
             * If "b" is a dependency of "a" then "a" is a dependent of "b".
@@ -168,8 +168,8 @@ class FeatureConfigHelper:
     def extract_config(self, selected_features: List[str]):
         """Creates a minimum valid config that contains all selected_features.
 
-        Returns a protobuf with only a subset of transforming features and all of their
-        dependencies.
+        Returns a feature_config object with only a subset of transforming features and
+        all of their dependencies.
 
         NOTE: all base features will be in the extracted config; they were created in
         the raw data loading step.
