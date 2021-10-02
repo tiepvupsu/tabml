@@ -133,16 +133,16 @@ class TestFeatureConfigHelper:
             ),
         )
 
-    def test_find_dependents(self, tmp_path):
-        got_1 = self.fm_helper.find_dependents("a")
+    def test_get_dependents_recursively(self, tmp_path):
+        got_1 = self.fm_helper.get_dependents_recursively("a")
         expected_1 = ["b", "c", "d", "e"]
         assert_eq(expected_1, got_1)
 
-        got_2 = self.fm_helper.find_dependents("b")
+        got_2 = self.fm_helper.get_dependents_recursively("b")
         expected_2 = ["c", "e"]
         assert_eq(expected_2, got_2)
 
-        got_3 = self.fm_helper.find_dependents("d")
+        got_3 = self.fm_helper.get_dependents_recursively("d")
         expected_3 = []
         assert_eq(expected_3, got_3)
 
