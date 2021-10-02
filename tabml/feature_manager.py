@@ -159,7 +159,7 @@ class BaseFeatureManager(ABC):
         transforming_class = self.transforming_class_by_feature_name[feature_name]
         transformer = self.transformer_dict.get(feature_name)
         transformer_object = transforming_class(
-            dependencies=self.config_helper.find_dependencies(feature_name),
+            dependencies=self.config_helper.get_direct_dependencies(feature_name),
             raw_data=self.raw_data,
         )
         series = transformer_object._transform(self.dataframe, transformer)
@@ -192,7 +192,9 @@ class BaseFeatureManager(ABC):
         If this is an existing feature, all of its dependents should be computed.
         """
         features_to_compute = [feature_name]
-        features_to_compute.extend(self.config_helper.find_dependents(feature_name))
+        features_to_compute.extend(
+            self.config_helper.get_dependents_recursively(feature_name)
+        )
         for _feature_name in features_to_compute:
             self._compute_feature(_feature_name)
 
