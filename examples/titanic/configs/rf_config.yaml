@@ -25,7 +25,7 @@ data_loader:
 
 model_wrapper:
   cls_name: tabml.model_wrappers.BaseSklearnModelWrapper
-  model_cls: sklearn.ensemble.RandomForestClassifier
+  sklearn_cls: sklearn.ensemble.RandomForestClassifier
   model_params:
     n_estimators: 100
 

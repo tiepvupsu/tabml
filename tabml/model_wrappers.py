@@ -94,7 +94,7 @@ class BaseSklearnModelWrapper(BaseModelWrapper):
     def __init__(self, params=pipeline_config.ModelWrapper()):
         super().__init__(params)
         self.save_model_name = "model_0"
-        self.model = factory.create(params.model_cls)(**self.model_params)
+        self.model = factory.create(params.sklearn_cls)(**self.model_params)
 
     def fit(self, data_loader: BaseDataLoader, model_dir: str):
         assert (
