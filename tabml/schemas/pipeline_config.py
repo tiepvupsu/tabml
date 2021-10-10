@@ -24,7 +24,7 @@ class DataLoader(pydantic.BaseModel):
 
 class ModelWrapper(pydantic.BaseModel):
     cls_name: str = "tabml.data_loaders.BaseDataLoader"  # name of model_wrapper class
-    model_cls: str = ""  # a sklearn-like model class
+    sklearn_cls: str = ""  # a sklearn-like model class
     model_params: Dict = {}
     fit_params: Dict = {}
 
