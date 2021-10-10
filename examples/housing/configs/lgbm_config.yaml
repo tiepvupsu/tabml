@@ -17,13 +17,12 @@ data_loader:
     label_col: "log10_median_house_value"
 
     train_filters: ["is_train"]
-
     validation_filters: ["not is_train"]
 
     submission_filters: ["not is_train"]
 
 model_wrapper:
-    # use a custom model
+    cls_name: model_wrappers.CustomLgbmRegressorModelWrapperLog10
     model_params:
       learning_rate: 0.1
       n_estimators: 200

@@ -5,10 +5,7 @@ from . import model_wrappers
 
 def train_lgbm():
     path_to_config = "configs/lgbm_config.yaml"
-    pipeline = BasePipeline(
-        path_to_config,
-        custom_model_wrapper=model_wrappers.CustomLgbmRegressorModelWrapperLog10,
-    )
+    pipeline = BasePipeline(path_to_config)
     pipeline.run()
 
 
