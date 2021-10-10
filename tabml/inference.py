@@ -14,7 +14,7 @@ from tabml.schemas import pipeline_config
 class ModelInference:
     feature_manager_cls: BaseFeatureManager
     feature_config_path: str
-    transformer_path: Union[str, None] = None
+    transformer_path: str
     model_path: str = ""
     custom_model_wrapper: Union[Type[BaseModelWrapper], None] = None
     pipeline_config_path: Union[str, None] = None
