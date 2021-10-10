@@ -42,6 +42,19 @@ class TransformingFeature(pydantic.BaseModel):
     dependencies: List[str] = []
 
 
+class PredictionFeature(pydantic.BaseModel):
+    # Features that are predicted by a tabml model. These features could be used in
+    # stacking models.
+    name: str
+    index: int
+    dtype: DType
+    model_path: str
+
+    # The list of dependencies can be found in
+    # pipeline_config.data_loader.features_to_model.
+    pipeline_config_path: str
+
+
 class FeatureConfig(pydantic.BaseModel):
     # directory of raw data files
     raw_data_dir: str
@@ -59,3 +72,7 @@ class FeatureConfig(pydantic.BaseModel):
     # the final dataframe saved in dataset_name. Data taken from additional dataframes
     # is not considered as features.
     transforming_features: List[TransformingFeature]
+
+    # prediction features are those computed as predictions of another models. These
+    # are useful for stacking models.
+    prediction_features: List[PredictionFeature]
