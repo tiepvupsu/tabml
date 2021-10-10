@@ -29,6 +29,7 @@ setup(
         "scipy>=1.6.2",
         "shap>=0.39.0",
         "termgraph>=0.4.2",
+        "types-PyYAML>=5.4.10",
         "xgboost>=1.4.2",
     ],
     classifiers=[
