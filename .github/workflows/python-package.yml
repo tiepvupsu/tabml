@@ -46,7 +46,8 @@ jobs:
     - name: Test with pytest
       run: |
         # python3 -m pytest -s --durations=0 . # https://stackoverflow.com/a/55095253
-        python3 -m pytest -s --durations=0 --cov=./ --cov-report=xml tests/ examples/
+        # python3 -m pytest -s --durations=0 --cov=./ --cov-report=xml tests/ examples/
+        python3 -m pytest -s --durations=0 --cov=./ --cov-report=xml examples/titanic
     - name: "Upload coverage to Codecov"
       uses: codecov/codecov-action@v1
       with:

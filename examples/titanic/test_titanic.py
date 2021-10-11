@@ -58,36 +58,36 @@ def test_run():
     feature_manager.run()
 
 
-@change_working_dir_pytest
-def test_full_pipeline_lgbm():
-    pipelines.train_lgbm()
-    _test_inference("./configs/lgbm_config.yaml")
+# @change_working_dir_pytest
+# def test_full_pipeline_lgbm():
+#     pipelines.train_lgbm()
+#     _test_inference("./configs/lgbm_config.yaml")
 
 
-@change_working_dir_pytest
-def test_full_pipeline_xgboost():
-    pipelines.train_xgboost()
-    _test_inference("./configs/xgboost_config.yaml")
+# @change_working_dir_pytest
+# def test_full_pipeline_xgboost():
+#     pipelines.train_xgboost()
+#     _test_inference("./configs/xgboost_config.yaml")
 
 
-@change_working_dir_pytest
-def test_full_pipeline_catboost():
-    pipelines.train_catboost()
-    _test_inference(
-        "./configs/catboost_config.yaml", test_custom_pipeline_config_path=True
-    )
+# @change_working_dir_pytest
+# def test_full_pipeline_catboost():
+#     pipelines.train_catboost()
+#     _test_inference(
+#         "./configs/catboost_config.yaml", test_custom_pipeline_config_path=True
+#     )
 
 
-@change_working_dir_pytest
-def test_full_pipeline_randomforest():
-    config_path = "./configs/rf_config.yaml"
-    pipelines.run(config_path)
-    _test_inference(config_path, test_custom_pipeline_config_path=True)
+# @change_working_dir_pytest
+# def test_full_pipeline_randomforest():
+#     config_path = "./configs/rf_config.yaml"
+#     pipelines.run(config_path)
+#     _test_inference(config_path, test_custom_pipeline_config_path=True)
 
 
-@change_working_dir_pytest
-def test_custom_transformer_path():
-    with tempfile.NamedTemporaryFile() as temp:
-        transformer_path = temp.name
-        feature_manager.run(transformer_path)
-        _test_inference("./configs/lgbm_config.yaml", transformer_path=transformer_path)
+# @change_working_dir_pytest
+# def test_custom_transformer_path():
+#     with tempfile.NamedTemporaryFile() as temp:
+#         transformer_path = temp.name
+#         feature_manager.run(transformer_path)
+#         _test_inference("./configs/lgbm_config.yaml", transformer_path=transformer_path)
