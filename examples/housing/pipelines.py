@@ -1,5 +1,3 @@
-import model_wrappers
-
 from tabml.pipelines import BasePipeline
 
 
