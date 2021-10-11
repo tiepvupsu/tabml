@@ -24,6 +24,7 @@ data_loader:
 
 model_wrapper:
     # use a custom model
+    cls_name: model_wrappers.CustomXGBoostRegressorModelWrapperLog10
     model_params:
       learning_rate: 0.1
       n_estimators: 200
