@@ -1,6 +1,6 @@
-from tabml.pipelines import BasePipeline
+import model_wrappers
 
-from . import model_wrappers
+from tabml.pipelines import BasePipeline
 
 
 def train_lgbm():
