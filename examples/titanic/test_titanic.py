@@ -1,12 +1,13 @@
-import tempfile
+# import tempfile
 from pathlib import Path
 
 import feature_manager
-import pipelines
 
 from tabml.experiment_manager import ExperimentManger
 from tabml.inference import ModelInference
 from tabml.utils.utils import change_working_dir_pytest
+
+# import pipelines
 
 
 def _test_inference(
@@ -90,4 +91,5 @@ def test_run():
 #     with tempfile.NamedTemporaryFile() as temp:
 #         transformer_path = temp.name
 #         feature_manager.run(transformer_path)
-#         _test_inference("./configs/lgbm_config.yaml", transformer_path=transformer_path)
+#         _test_inference("./configs/lgbm_config.yaml",
+# transformer_path=transformer_path)
