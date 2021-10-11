@@ -1,6 +1,6 @@
 from tabml.utils.utils import change_working_dir_pytest
 
-from . import feature_manager, pipelines
+from . import feature_manager, model_wrappers, pipelines
 
 
 @change_working_dir_pytest
