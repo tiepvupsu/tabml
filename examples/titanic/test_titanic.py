@@ -64,18 +64,18 @@ def test_full_pipeline_lgbm():
     _test_inference("./configs/lgbm_config.yaml")
 
 
-# @change_working_dir_pytest
-# def test_full_pipeline_xgboost():
-#     pipelines.train_xgboost()
-#     _test_inference("./configs/xgboost_config.yaml")
+@change_working_dir_pytest
+def test_full_pipeline_xgboost():
+    pipelines.train_xgboost()
+    _test_inference("./configs/xgboost_config.yaml")
 
 
-# @change_working_dir_pytest
-# def test_full_pipeline_catboost():
-#     pipelines.train_catboost()
-#     _test_inference(
-#         "./configs/catboost_config.yaml", test_custom_pipeline_config_path=True
-#     )
+@change_working_dir_pytest
+def test_full_pipeline_catboost():
+    pipelines.train_catboost()
+    _test_inference(
+        "./configs/catboost_config.yaml", test_custom_pipeline_config_path=True
+    )
 
 
 # @change_working_dir_pytest
