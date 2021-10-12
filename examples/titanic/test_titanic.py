@@ -78,11 +78,11 @@ def test_full_pipeline_catboost():
     )
 
 
-# @change_working_dir_pytest
-# def test_full_pipeline_randomforest():
-#     config_path = "./configs/rf_config.yaml"
-#     pipelines.run(config_path)
-#     _test_inference(config_path, test_custom_pipeline_config_path=True)
+@change_working_dir_pytest
+def test_full_pipeline_randomforest():
+    config_path = "./configs/rf_config.yaml"
+    pipelines.run(config_path)
+    _test_inference(config_path, test_custom_pipeline_config_path=True)
 
 
 # @change_working_dir_pytest
