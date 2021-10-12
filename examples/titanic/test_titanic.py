@@ -1,4 +1,4 @@
-# import tempfile
+import tempfile
 from pathlib import Path
 
 import feature_manager
@@ -85,10 +85,9 @@ def test_full_pipeline_randomforest():
     _test_inference(config_path, test_custom_pipeline_config_path=True)
 
 
-# @change_working_dir_pytest
-# def test_custom_transformer_path():
-#     with tempfile.NamedTemporaryFile() as temp:
-#         transformer_path = temp.name
-#         feature_manager.run(transformer_path)
-#         _test_inference("./configs/lgbm_config.yaml",
-# transformer_path=transformer_path)
+@change_working_dir_pytest
+def test_custom_transformer_path():
+    with tempfile.NamedTemporaryFile() as temp:
+        transformer_path = temp.name
+        feature_manager.run(transformer_path)
+        _test_inference("./configs/lgbm_config.yaml", transformer_path=transformer_path)
