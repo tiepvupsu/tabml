@@ -2,12 +2,11 @@
 from pathlib import Path
 
 import feature_manager
+import pipelines
 
 from tabml.experiment_manager import ExperimentManger
 from tabml.inference import ModelInference
 from tabml.utils.utils import change_working_dir_pytest
-
-# import pipelines
 
 
 def _test_inference(
@@ -59,10 +58,10 @@ def test_run():
     feature_manager.run()
 
 
-# @change_working_dir_pytest
-# def test_full_pipeline_lgbm():
-#     pipelines.train_lgbm()
-#     _test_inference("./configs/lgbm_config.yaml")
+@change_working_dir_pytest
+def test_full_pipeline_lgbm():
+    pipelines.train_lgbm()
+    _test_inference("./configs/lgbm_config.yaml")
 
 
 # @change_working_dir_pytest
