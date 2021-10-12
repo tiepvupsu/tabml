@@ -41,12 +41,12 @@ jobs:
         python setup.py install
     - name: Lint with flake8, tpye check with mypy
       run: |
-        flake8 ./tabml ./tests ./examples
-        mypy --show-traceback ./tabml ./tests ./examples # see configs in /mypy.ini
+        flake8 ./tabml
+        mypy --show-traceback ./tabml # see configs in /mypy.ini
     - name: Test with pytest
       run: |
         # python3 -m pytest -s --durations=0 . # https://stackoverflow.com/a/55095253
-        python3 -m pytest -s --durations=0 --cov=./ --cov-report=xml tests/ examples/
+        python3 -m pytest -s --durations=0 --cov=./ --cov-report=xml tabml/
     - name: "Upload coverage to Codecov"
       uses: codecov/codecov-action@v1
       with:
