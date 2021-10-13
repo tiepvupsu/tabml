@@ -14,6 +14,7 @@
     - [Add path to this repo](#add-path-to-this-repo)
     - [Create the environment](#create-the-environment)
     - [Check that everthing is working](#check-that-everthing-is-working)
+    - [Common errors](#common-errors)
 
 ## Introduction
 
@@ -49,7 +50,7 @@ pip install tabml
 
 In TRAINING step,
 
-1. The **FeatureManager** class is responsible for loading raw data and engineering it into relavent features for model training and analysis. If a `fit` step, e.g. imputation, is required for a feature, the fitted parameters will be stored for using later in the `transform` step. One such usage is in the serving step when there is only `transform` step. For each project, there is one `feature_manager.py` file which specifies how each feature is computed ([example](https://github.com/tiepvupsu/tabml/blob/master/examples/titanic/feature_manager.py)). The computation order as well as feature dependencies are specified in a yaml config file ([example](https://github.com/tiepvupsu/tabml/blob/master/examples/titanic/configs/feature_config.yaml)).
+1. The **FeatureManager** class is responsible for loading raw data and engineering it into relavent features for model training and analysis. If a `fit` step, e.g. imputation, is required for a feature, the fitted parameters will be stored for using later in the `transform` step. One such usage is in the serving step when there is only `transform` step. For each project, there is one `feature_manager.py` file which specifies how each feature is computed ([example](https://github.com/tiepvupsu/tabml/blob/master/examples/titanic/feature_manager.py)). The computation order as well as feature dependencies are specified in a yaml config file ([example](https://github.com/tiepvupsu/tabml/blob/master/tabml/examples/titanic/configs/feature_config.yaml)).
 
 2. The **DataLoader** loads training and validation data for model training and analysis. In a typical project, tabml already takes care of this class, users only need to specify configuration in the pipeline config file ([example](https://github.com/tiepvupsu/tabml/blob/95da6aa7f8947329487ff70f189ce213469ebbf1/examples/titanic/configs/lgbm_config.yaml#L2-L19)). In that file, features and label used for training need to be specified. In addition, a set of boolean features are used as conditions for selecting training and validation data. Only rows in the dataset that meet all training/validation conditions are selected.
 
@@ -61,7 +62,7 @@ In SERVING step, raw data is fed into the *fitted* FeatureManager to get the tra
 
 ## Examples
 
-Please check the [`examples`](https://github.com/tiepvupsu/tabml/tree/master/examples) folder for several example projects. For each project:
+Please check the [`examples`](https://github.com/tiepvupsu/tabml/tree/master/tabml/examples) folder for several example projects. For each project:
 
 ```bash
 python feature_manager.py  # to generate features
@@ -113,7 +114,7 @@ python3 -m pytest ./tests ./examples
 
 1. SHAP
 
-SHAP might not work for MacOS if Xcode version < 13, try to upgrade it to xcode 13. [Related issue](https://github.com/slundberg/shap/issues/1386).  
+SHAP might not work for MacOS if Xcode version < 13, try to upgrade it to xcode 13. [Related issue](https://github.com/slundberg/shap/issues/1386).
 
 2. LightGBM
 
