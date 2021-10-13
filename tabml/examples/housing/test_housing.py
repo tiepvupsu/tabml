@@ -1,6 +1,4 @@
-import feature_manager
-import pipelines
-
+from tabml.examples.housing import feature_manager, pipelines
 from tabml.utils.utils import change_working_dir_pytest
 
 
