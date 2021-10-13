@@ -1,11 +1,10 @@
 import tempfile
 from pathlib import Path
 
+from tabml.examples.titanic import feature_manager, pipelines
 from tabml.experiment_manager import ExperimentManger
 from tabml.inference import ModelInference
 from tabml.utils.utils import change_working_dir_pytest
-
-from . import feature_manager, pipelines
 
 
 def _test_inference(
