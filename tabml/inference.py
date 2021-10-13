@@ -1,12 +1,12 @@
 """Utilities that support making inference."""
 
 from dataclasses import dataclass
-from typing import Any, Dict, Iterable, List, Type, Union
+from typing import Any, Dict, Iterable, List, Union
 
 from tabml.config_helpers import parse_pipeline_config
 from tabml.experiment_manager import ExperimentManger
 from tabml.feature_manager import BaseFeatureManager
-from tabml.model_wrappers import BaseModelWrapper, initialize_model_wrapper
+from tabml.model_wrappers import initialize_model_wrapper
 from tabml.schemas import pipeline_config
 
 

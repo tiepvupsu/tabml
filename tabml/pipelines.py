@@ -1,6 +1,5 @@
 from abc import ABC
 from pathlib import Path
-from typing import Type, Union
 
 import mlflow
 

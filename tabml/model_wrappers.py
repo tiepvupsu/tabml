@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Iterable, Tuple, Type, Union
+from typing import Dict, Iterable, Tuple
 
 import mlflow
 import numpy as np
