@@ -22,16 +22,9 @@ class BasePipeline(ABC):
             A data loader object, a subclass of base.data_loaders.BaseDataLoader.
         exp_manager:
             A base.experiment_manager.ExperimentManager object.
-        custom_model_wrapper:
-            model_wrapper defined by users.
     """
 
-    def __init__(
-        self,
-        path_to_config: str,
-        custom_model_wrapper: Union[Type[model_wrappers.BaseModelWrapper], None] = None,
-        custom_run_dir: str = "",
-    ):
+    def __init__(self, path_to_config: str, custom_run_dir: str = ""):
         logger.info("=" * 80)
         logger.info(f"Running pipeline with config {path_to_config}")
         logger.info("=" * 80)
@@ -42,7 +35,7 @@ class BasePipeline(ABC):
         self.data_loader = self._get_data_loader()
         assert self.data_loader.label_col is not None, "label_col must be specified"
         self.model_wrapper = model_wrappers.initialize_model_wrapper(
-            self.config.model_wrapper, custom_model_wrapper=custom_model_wrapper
+            self.config.model_wrapper
         )
 
         logger.add(self.exp_manager.get_log_path())

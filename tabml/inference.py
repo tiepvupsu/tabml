@@ -16,7 +16,6 @@ class ModelInference:
     feature_config_path: str
     transformer_path: str
     model_path: str = ""
-    custom_model_wrapper: Union[Type[BaseModelWrapper], None] = None
     pipeline_config_path: Union[str, None] = None
 
     def __post_init__(self):
@@ -39,9 +38,7 @@ class ModelInference:
         return parse_pipeline_config(pipeline_config_path)
 
     def _load_model_wrapper(self, model_wrapper_params: pipeline_config.ModelWrapper):
-        self.model_wrapper = initialize_model_wrapper(
-            model_wrapper_params, custom_model_wrapper=self.custom_model_wrapper
-        )
+        self.model_wrapper = initialize_model_wrapper(model_wrapper_params)
         self.model_wrapper.load_model(self.model_path)
 
     def predict(self, raw_data: List[Dict[str, Any]]) -> Iterable[Any]:
