@@ -23,7 +23,7 @@ data_loader:
     submission_filters: ["not is_train"]
 
 model_wrapper:
-    # use a custom model
+    cls_name: tabml.examples.housing.model_wrappers.CustomCatBoostRegressorModelWrapperLog10
     model_params:
       learning_rate: 0.1
       n_estimators: 200
