@@ -13,18 +13,18 @@ class CustomModelWrapperLog10:
 
 
 class CustomLgbmRegressorModelWrapperLog10(
-    LgbmRegressorModelWrapper, CustomModelWrapperLog10
+    CustomModelWrapperLog10, LgbmRegressorModelWrapper
 ):
     pass
 
 
 class CustomXGBoostRegressorModelWrapperLog10(
-    XGBoostRegressorModelWrapper, CustomModelWrapperLog10
+    CustomModelWrapperLog10, XGBoostRegressorModelWrapper
 ):
     pass
 
 
 class CustomCatBoostRegressorModelWrapperLog10(
-    CatBoostRegressorModelWrapper, CustomModelWrapperLog10
+    CustomModelWrapperLog10, CatBoostRegressorModelWrapper
 ):
     pass
