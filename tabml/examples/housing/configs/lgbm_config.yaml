@@ -37,7 +37,7 @@ model_wrapper:
           - "bucketized_longitude"
 
 model_analysis:
-    metrics: ["smape", "rmse"]
+    metrics: ["smape", "rmse", "r2"]
     by_features: ["ocean_proximity"]
     by_label: "median_house_value"
     training_size: 500

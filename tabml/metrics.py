@@ -187,6 +187,15 @@ class SMAPE(BaseMetric):
         return [100 * np.mean(np.divide(nominator, denominator))]
 
 
+class R2(BaseMetric):
+    name = "r2"
+    score_names = ["r2"]
+    is_higher_better = True
+
+    def _compute_scores(self, labels: Collection, preds: Collection) -> List[float]:
+        return [sk_metrics.r2_score(labels, preds)]
+
+
 def get_instantiated_metric_dict() -> Dict[str, BaseMetric]:
     res = {}
     for sub_class in BaseMetric.__subclasses__():
