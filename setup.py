@@ -1,6 +1,10 @@
 from distutils.core import setup
+from pathlib import Path
 
 import setuptools
+
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 setup(
     name="tabml",
@@ -13,6 +17,8 @@ setup(
     url="https://github.com/tiepvupsu/tabml",
     download_url="https://github.com/tiepvupsu/tabml/archive/refs/tags/v0_1_14.tar.gz",
     keywords=["Machine Learning", "Tabular"],
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     install_requires=[
         "catboost>=0.26.1",
         "GPUtil>=1.4.0",
