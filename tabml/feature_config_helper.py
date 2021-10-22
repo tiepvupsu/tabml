@@ -37,11 +37,11 @@ class FeatureConfigHelper:
             A string of directory to raw data.
         dataset_name:
             A string of the dataset name
-        base_features:
+        base_feature_names:
             A list of base feature names in the config.
-        transforming_features:
+        transforming_feature_names:
             A list of transforming feature names in the config.
-        all_features:
+        all_feature_names:
             A list of all features in the config.
         feature_metadata:
             A dict of {feature_name: (index, dtype, list of its dependents)}.
@@ -52,12 +52,16 @@ class FeatureConfigHelper:
         self.config = parse_feature_config(config_path)
         self.raw_data_dir = self.config.raw_data_dir
         self.dataset_name = self.config.dataset_name
-        self.base_features = [feature.name for feature in self.config.base_features]
-        self.transforming_features = [
+        self.base_feature_names = [
+            feature.name for feature in self.config.base_features
+        ]
+        self.transforming_feature_names = [
             transforming_feature.name
             for transforming_feature in self.config.transforming_features
         ]
-        self.all_features = self.base_features + self.transforming_features
+        self.all_feature_names = (
+            self.base_feature_names + self.transforming_feature_names
+        )
         self._validate()
         self.feature_metadata: Dict[str, FeatureMetadata] = {}
         self._build_feature_metadata()
@@ -65,7 +69,7 @@ class FeatureConfigHelper:
     def _validate(self):
         self._validate_indexes()
         self._validate_dependency()
-        check_uniqueness(self.all_features)
+        check_uniqueness(self.all_feature_names)
 
     def _validate_indexes(self):
         """Checks if indexes are positive and monotonically increasing."""
@@ -90,7 +94,7 @@ class FeatureConfigHelper:
     def _validate_dependency(self):
         """Checks if all dependencies of a transforming feature exist."""
         # Start from base_features then gradually add transforming_features.
-        features_so_far = self.base_features.copy()
+        features_so_far = self.base_feature_names.copy()
         for feature in self.config.transforming_features:
             for dependency in feature.dependencies:
                 assert (
@@ -193,7 +197,7 @@ class FeatureConfigHelper:
             original config).
         """
         invalid_features = [
-            feature for feature in features if feature not in self.all_features
+            feature for feature in features if feature not in self.all_feature_names
         ]
         if invalid_features:
             raise ValueError(
