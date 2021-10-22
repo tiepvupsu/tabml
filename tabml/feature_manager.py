@@ -58,7 +58,7 @@ class BaseFeatureManager(ABC):
         self.dataset_name = self.config_helper.dataset_name
         self.feature_metadata = self.config_helper.feature_metadata
         self.dataset_path = self.get_dataset_path()
-        self.features_in_config: List[str] = self.config_helper.all_features
+        self.features_in_config: List[str] = self.config_helper.all_feature_names
         self.raw_data: Dict[str, Any] = {}
         self.dataframe: pd.DataFrame = pd.DataFrame()
         self.transforming_class_by_feature_name: Dict[str, Any] = {}
@@ -182,7 +182,7 @@ class BaseFeatureManager(ABC):
         expected that features are updated one by one or in a set of few features.
         """
         if transforming_features is None:
-            transforming_features = self.config_helper.transforming_features
+            transforming_features = self.config_helper.transforming_feature_names
         for feature_name in transforming_features:
             self.compute_feature(feature_name, is_training=is_training)
 
@@ -211,7 +211,7 @@ class BaseFeatureManager(ABC):
         if transforming_features is None:
             # If transforming features are not specified, get all transforming features.
             transforming_features_and_dependencies = (
-                self.config_helper.transforming_features
+                self.config_helper.transforming_feature_names
             )
         else:
             # Find all dependencies for the transforming features. The base features
@@ -222,7 +222,7 @@ class BaseFeatureManager(ABC):
                 for feature in self.config_helper.get_dependencies_recursively(
                     list(transforming_features)
                 )
-                if feature not in self.config_helper.base_features
+                if feature not in self.config_helper.base_feature_names
             ]
         self.compute_all_transforming_features(
             transforming_features_and_dependencies, is_training=False
