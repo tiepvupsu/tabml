@@ -21,6 +21,11 @@ class TestFeatureConfigHelper:
                 dtype: STRING
                 dependencies:
                   - "a"
+              - name: "e"
+                index: 4
+                dtype: STRING
+                dependencies:
+                  - "c"
               - name: "c"
                 index: 2
                 dtype: STRING
@@ -32,11 +37,6 @@ class TestFeatureConfigHelper:
                 dtype: STRING
                 dependencies:
                   - "a"
-              - name: "e"
-                index: 4
-                dtype: STRING
-                dependencies:
-                  - "c"
         """
         config_path = tmp_path / "feature_config_str.yaml"
         write_str_to_file(feature_config_str, config_path)

@@ -1,6 +1,7 @@
 import copy
 from typing import Dict, List, Union
 
+from tabml import schemas
 from tabml.config_helpers import parse_feature_config
 from tabml.schemas.feature_config import BaseFeature, DType, TransformingFeature
 from tabml.utils.utils import check_uniqueness
@@ -54,7 +55,7 @@ class FeatureConfigHelper:
         self.dataset_name = self.config.dataset_name
         self.base_features = self.config.base_features
         self.base_feature_names = self._get_base_feature_names()
-        self.transforming_features = self.config.transforming_features
+        self.transforming_features = self._get_sorted_transforming_features()
         self.transforming_feature_names = self._get_transforming_feature_names()
         self.all_feature_names = self._get_all_feature_names()
         self._validate()
@@ -63,6 +64,11 @@ class FeatureConfigHelper:
 
     def _get_base_feature_names(self):
         return [feature.name for feature in self.config.base_features]
+
+    def _get_sorted_transforming_features(
+        self,
+    ) -> List[schemas.feature_config.TransformingFeature]:
+        return sorted(self.config.transforming_features, key=lambda x: x.index)
 
     def _get_transforming_feature_names(self):
         return [
