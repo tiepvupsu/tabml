@@ -1,35 +1,35 @@
-config_name: "xgboost"
+config_name: xgboost
 data_loader:
-  cls_name: "tabml.data_loaders.BaseDataLoader"
-  feature_config_path: "configs/feature_config.yaml"
+  cls_name: tabml.data_loaders.BaseDataLoader
+  feature_config_path: configs/feature_config.yaml
 
   features_to_model:
-    - "coded_sex"
-    - "imputed_age"
-    - "bucketized_age"
-    - "min_max_scaled_age"
-    - "coded_pclass"
-    - "coded_title"
+    - coded_sex
+    - imputed_age
+    - bucketized_age
+    - min_max_scaled_age
+    - coded_pclass
+    - coded_title
 
-  label_col: "survived"
+  label_col: survived
 
   train_filters:
-    -  "is_train"
+    -  is_train
   validation_filters:
-    - "not is_train"
-    - "PassengerId <= 891"
+    - not is_train
+    - PassengerId <= 891
 
 model_wrapper:
-  cls_name: "tabml.model_wrappers.XGBoostClassifierModelWrapper"
+  cls_name: tabml.model_wrappers.XGBoostClassifierModelWrapper
   model_params:
     n_estimators: 100
-    objective: "binary:logistic"
+    objective: binary:logistic
 
 model_analysis:
   metrics:
-    - "accuracy_score"
-    - "roc_auc"
-    - "max_f1"
+    - accuracy_score
+    - roc_auc
+    - max_f1
   by_features:
-    - "Sex"
-    - "Pclass"
+    - Sex
+    - Pclass
