@@ -1,0 +1,43 @@
+config_name: "stacking"
+data_loader:
+    cls_name: "tabml.data_loaders.BaseDataLoader"
+    feature_config_path: "configs/feature_config.yaml"
+
+    features_to_model:
+      - "scaled_housing_median_age"
+      - "median_income"
+      - "scaled_total_rooms"
+      - "scaled_total_bedrooms"
+      - "scaled_population"
+      - "bucketized_latitude"
+      - "bucketized_longitude"
+      - "hashed_bucketized_latitude_X_bucketized_longitude"
+      - "encoded_ocean_proximity"
+
+    label_col: "log10_median_house_value"
+
+    train_filters: ["is_train"]
+
+    validation_filters: ["not is_train"]
+
+    submission_filters: ["not is_train"]
+
+model_wrapper:
+    cls_name: tabml.examples.housing.model_wrappers.CustomLgbmRegressorModelWrapperLog10
+    model_params:
+      learning_rate: 0.1
+      n_estimators: 200
+      objective: "rmse"
+
+    fit_params:
+        categorical_feature:
+          - "encoded_ocean_proximity"
+          - "hashed_bucketized_latitude_X_bucketized_longitude"
+          - "bucketized_latitude"
+          - "bucketized_longitude"
+
+model_analysis:
+    metrics: ["smape", "rmse", "r2"]
+    by_features: ["ocean_proximity"]
+    by_label: "median_house_value"
+    training_size: 500

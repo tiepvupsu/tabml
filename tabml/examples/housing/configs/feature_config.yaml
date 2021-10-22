@@ -1,108 +1,108 @@
-raw_data_dir: "data"
-dataset_name: "processed"
+raw_data_dir: data
+dataset_name: processed
 
 base_features:
-  - name: "house_id"
+  - name: house_id
     dtype: INT32
-  - name: "median_house_value"
+  - name: median_house_value
     dtype: FLOAT
-  - name: "housing_median_age"
+  - name: housing_median_age
     dtype: FLOAT
-  - name: "total_rooms"
+  - name: total_rooms
     dtype: FLOAT
-  - name: "population"
+  - name: population
     dtype: FLOAT
-  - name: "total_bedrooms"
+  - name: total_bedrooms
     dtype: FLOAT
-  - name: "households"
+  - name: households
     dtype: FLOAT
-  - name: "median_income"
+  - name: median_income
     dtype: FLOAT
-  - name: "ocean_proximity"
+  - name: ocean_proximity
     dtype: STRING
-  - name: "longitude"
+  - name: longitude
     dtype: FLOAT
-  - name: "latitude"
+  - name: latitude
     dtype: FLOAT
 
 transforming_features:
-  - name: "is_train"
+  - name: is_train
     index: 1
     dtype: BOOL
     dependencies:
-      - "house_id"
+      - house_id
 
-  - name: "scaled_housing_median_age"
+  - name: scaled_housing_median_age
     index: 2
     dtype: FLOAT
     dependencies:
-      - "is_train"
-      - "housing_median_age"
-  - name: "scaled_total_rooms"
+      - is_train
+      - housing_median_age
+  - name: scaled_total_rooms
     index: 3
     dtype: FLOAT
     dependencies:
-      - "is_train"
-      - "total_rooms"
-  - name: "scaled_population"
+      - is_train
+      - total_rooms
+  - name: scaled_population
     index: 4
     dtype: FLOAT
     dependencies:
-      - "is_train"
-      - "population"
-  - name: "scaled_total_bedrooms"
+      - is_train
+      - population
+  - name: scaled_total_bedrooms
     index: 5
     dtype: FLOAT
     dependencies:
-      - "is_train"
-      - "total_bedrooms"
+      - is_train
+      - total_bedrooms
 
-  - name: "scaled_households"
+  - name: scaled_households
     index: 6
     dtype: FLOAT
     dependencies:
-      -  "is_train"
-      - "households"
+      -  is_train
+      - households
 
-  - name: "scaled_median_income"
+  - name: scaled_median_income
     index: 7
     dtype: FLOAT
     dependencies:
-      - "is_train"
-      - "median_income"
+      - is_train
+      - median_income
 
-  - name: "log10_median_house_value"
+  - name: log10_median_house_value
     dtype: FLOAT
     index: 8
     dependencies:
-      - "median_house_value"
+      - median_house_value
 
-  - name: "bucketized_longitude"
+  - name: bucketized_longitude
     index: 9
     dtype: INT32
     dependencies:
-      -  "longitude"
+      -  longitude
 
-  - name: "bucketized_latitude"
+  - name: bucketized_latitude
     index: 10
     dtype: INT32
     dependencies:
-      - "latitude"
-  - name: "bucketized_latitude_X_bucketized_longitude"
+      - latitude
+  - name: bucketized_latitude_X_bucketized_longitude
     index: 11
     dtype: STRING
     dependencies:
-      -  "bucketized_latitude"
-      - "bucketized_longitude"
+      -  bucketized_latitude
+      - bucketized_longitude
 
-  - name: "hashed_bucketized_latitude_X_bucketized_longitude"
+  - name: hashed_bucketized_latitude_X_bucketized_longitude
     index: 12
     dtype: INT32
     dependencies:
-      - "bucketized_latitude_X_bucketized_longitude"
+      - bucketized_latitude_X_bucketized_longitude
 
-  - name: "encoded_ocean_proximity"
+  - name: encoded_ocean_proximity
     index:  13
     dtype: INT32
     dependencies:
-      - "ocean_proximity"
+      - ocean_proximity
