@@ -7,7 +7,6 @@ from tabml.config_helpers import parse_pipeline_config
 from tabml.experiment_manager import ExperimentManger
 from tabml.feature_manager import BaseFeatureManager
 from tabml.model_wrappers import initialize_model_wrapper
-from tabml.schemas import pipeline_config
 
 
 @dataclass
@@ -21,7 +20,9 @@ class ModelInference:
     def __post_init__(self):
         self._init_feature_manager()
         config = self._get_config()
-        self._load_model_wrapper(config.model_wrapper)
+        self.model_wrapper = initialize_model_wrapper(
+            config.model_wrapper, self.model_path
+        )
         self.features_to_model = list(config.data_loader.features_to_model)
 
     def _init_feature_manager(self):
@@ -36,10 +37,6 @@ class ModelInference:
             or ExperimentManger.get_config_path_from_model_path(self.model_path)
         )
         return parse_pipeline_config(pipeline_config_path)
-
-    def _load_model_wrapper(self, model_wrapper_params: pipeline_config.ModelWrapper):
-        self.model_wrapper = initialize_model_wrapper(model_wrapper_params)
-        self.model_wrapper.load_model(self.model_path)
 
     def predict(self, raw_data: List[Dict[str, Any]]) -> Iterable[Any]:
         """Makes prediction for new samples.
