@@ -19,7 +19,7 @@ class ModelInference:
 
     def __post_init__(self):
         self._init_feature_manager()
-        config = self._get_config()
+        config = _get_config(self.pipeline_config_path, self.model_path)
         self.model_wrapper = initialize_model_wrapper(
             config.model_wrapper, self.model_path
         )
@@ -31,13 +31,6 @@ class ModelInference:
         )
         self.fm.load_transformers()
 
-    def _get_config(self):
-        pipeline_config_path = (
-            self.pipeline_config_path
-            or ExperimentManger.get_config_path_from_model_path(self.model_path)
-        )
-        return parse_pipeline_config(pipeline_config_path)
-
     def predict(self, raw_data: List[Dict[str, Any]]) -> Iterable[Any]:
         """Makes prediction for new samples.
 
@@ -47,3 +40,11 @@ class ModelInference:
         """
         features = self.fm.transform_new_samples(raw_data, self.features_to_model)
         return self.model_wrapper.predict(features[self.features_to_model])
+
+
+def _get_config(pipeline_config_path, model_path):
+    pipeline_config_path = (
+        pipeline_config_path
+        or ExperimentManger.get_config_path_from_model_path(model_path)
+    )
+    return parse_pipeline_config(pipeline_config_path)

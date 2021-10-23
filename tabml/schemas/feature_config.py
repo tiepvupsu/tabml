@@ -24,7 +24,6 @@ class BaseFeature(pydantic.BaseModel):
 
 
 class TransformingFeature(pydantic.BaseModel):
-    # feature name, need to be unique in the FeatureConfig.
     name: str
 
     # The index of the feature in the dataset. Indexes should be unique, positive and
