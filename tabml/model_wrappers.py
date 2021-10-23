@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Iterable, Tuple, Union
+from  pathlib import Path
+from typing import IO, Dict, Iterable, Tuple, Union
 
 import mlflow
 import numpy as np
@@ -9,6 +10,7 @@ from lightgbm import LGBMClassifier, LGBMRegressor
 from xgboost import XGBClassifier, XGBRegressor
 
 from tabml.data_loaders import BaseDataLoader
+from tabml.experiment_manager import ExperimentManger
 from tabml.schemas import pipeline_config
 from tabml.utils import factory, utils
 from tabml.utils.logger import boosting_logger_eval
@@ -27,6 +29,7 @@ class BaseModelWrapper(ABC):
 
     def __init__(self, params=pipeline_config.ModelWrapper()):
         self.model = None
+        self.save_model_name = None
         # Parameters for model instantiating
         self.model_params = params.model_params
         # Parameters for model training
@@ -285,6 +288,37 @@ def initialize_model_wrapper(
     if model_path:
         _model_wrapper.load_model(model_path)
     return _model_wrapper
+
+
+def load_or_train_model(
+    model_path: Union[str, None], pipeline_config_path: Union[str, None] = None
+) -> BaseModelWrapper:
+    """Loads or trains a model, returns a model wrapper."""
+    if model_path is None and pipeline_config_path is None:
+        raise ValueError(
+            "At least one of model_path and pipeline_config_path must be not None."
+        )
+
+    if pipeline_config_path is None:
+        pipeline_config_path = ExperimentManger.get_config_path_from_model_path(
+            model_path
+        )
+
+    if model_path is None:
+        try:
+            model_path = (
+            Path(ExperimentManger(pipeline_config).get_most_recent_run_dir()) / "model_0"
+            )
+
+        except IOError e:
+            import tabml.pipelines
+            pipeline = tabml.pipelines.BasePipeline()
+            pipeline.run()
+            model_path = pipeline.model_wrapper.save_model_name
+    initialize_model_wrapper(params=None)
+        
+
+
 
 
 if __name__ == "__main__":
