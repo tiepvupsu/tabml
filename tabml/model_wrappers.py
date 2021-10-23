@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from  pathlib import Path
+from pathlib import Path
 from typing import IO, Dict, Iterable, Tuple, Union
 
 import mlflow
@@ -8,13 +8,13 @@ import shap
 from catboost import CatBoostClassifier, CatBoostRegressor
 from lightgbm import LGBMClassifier, LGBMRegressor
 from xgboost import XGBClassifier, XGBRegressor
-from tabml.config_helpers import parse_pipeline_config
 
+from tabml.config_helpers import parse_pipeline_config
 from tabml.data_loaders import BaseDataLoader
 from tabml.experiment_manager import ExperimentManger
 from tabml.schemas import pipeline_config
 from tabml.utils import factory, utils
-from tabml.utils.logger import boosting_logger_eval
+from tabml.utils.logger import boosting_logger_eval, logger
 from tabml.utils.utils import save_as_pickle
 
 MLFLOW_AUTOLOG = {
@@ -307,21 +307,22 @@ def load_or_train_model(
 
     if model_path is None:
         try:
-            model_path = (
-            Path(ExperimentManger(pipeline_config).get_most_recent_run_dir()) / "model_0"
+            logger.info(
+                f"Searching for the last run dir with {pipeline_config_path} config."
             )
-
-        except IOError e:
+            run_dir = ExperimentManger(pipeline_config).get_most_recent_run_dir()
+            # TODO: create a function/method in experiment_manager to find model_path
+            # in run_dir.
+            model_path = Path(run_dir) / "model_0"
+        except IOError:
             import tabml.pipelines
-            pipeline = tabml.pipelines.BasePipeline()
+
+            pipeline = tabml.pipelines.BasePipeline(pipeline_config_path)
             pipeline.run()
-            model_path = pipeline.model_wrapper.save_model_name
-    
+            return pipeline.model_wrapper
+
     config = parse_pipeline_config(pipeline_config_path)
-    initialize_model_wrapper(config.model_wrapper, model_path)
-        
-
-
+    return initialize_model_wrapper(config.model_wrapper, model_path)
 
 
 if __name__ == "__main__":
