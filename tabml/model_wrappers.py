@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Iterable, Tuple
+from typing import Dict, Iterable, Tuple, Union
 
 import mlflow
 import numpy as np
@@ -274,12 +274,17 @@ def write_model_wrapper_subclasses_to_file(
         f.writelines(lines)
 
 
-def initialize_model_wrapper(params: pipeline_config.ModelWrapper,):
+def initialize_model_wrapper(
+    params: pipeline_config.ModelWrapper, model_path: Union[str, None] = None
+):
     """Initializes model wrapper from params."""
     model_wrapper_cls = factory.create(params.cls_name)
     if not issubclass(model_wrapper_cls, BaseModelWrapper):
         raise ValueError(f"{model_wrapper_cls} is not a subclass of BaseModelWrapper")
-    return model_wrapper_cls(params)
+    _model_wrapper = model_wrapper_cls(params)
+    if model_path:
+        _model_wrapper.load_model(model_path)
+    return _model_wrapper
 
 
 if __name__ == "__main__":
