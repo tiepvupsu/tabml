@@ -1,11 +1,6 @@
 from abc import ABC, abstractmethod
-<<<<<<< HEAD
 from pathlib import Path
 from typing import Dict, Iterable, Tuple, Union
-=======
-from  pathlib import Path
-from typing import IO, Dict, Iterable, Tuple, Union
->>>>>>> 2433049 (wip)
 
 import mlflow
 import numpy as np
@@ -296,13 +291,7 @@ def initialize_model_wrapper(
     return _model_wrapper
 
 
-<<<<<<< HEAD
 def load_or_train_model(model_path, pipeline_config_path) -> BaseModelWrapper:
-=======
-def load_or_train_model(
-    model_path: Union[str, None], pipeline_config_path: Union[str, None] = None
-) -> BaseModelWrapper:
->>>>>>> 2433049 (wip)
     """Loads or trains a model, returns a model wrapper."""
     if model_path is None and pipeline_config_path is None:
         raise ValueError(
@@ -316,7 +305,6 @@ def load_or_train_model(
 
     if model_path is None:
         try:
-<<<<<<< HEAD
             logger.info(
                 f"Searching for the last run dir with {pipeline_config_path} config."
             )
@@ -333,21 +321,6 @@ def load_or_train_model(
 
     config = parse_pipeline_config(pipeline_config_path)
     return initialize_model_wrapper(config.model_wrapper, model_path)
-=======
-            model_path = (
-            Path(ExperimentManger(pipeline_config).get_most_recent_run_dir()) / "model_0"
-            )
-
-        except IOError e:
-            import tabml.pipelines
-            pipeline = tabml.pipelines.BasePipeline()
-            pipeline.run()
-            model_path = pipeline.model_wrapper.save_model_name
-    initialize_model_wrapper(params=None)
-        
-
-
->>>>>>> 2433049 (wip)
 
 
 if __name__ == "__main__":

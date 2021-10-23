@@ -24,7 +24,9 @@ class _DummyFeatureManager(BaseFeatureManager):
 class _DummyFeatureManager2(BaseFeatureManager):
     """A dummy FeatureManager class to check to update and clean logics."""
 
-    def _compute_feature(self, feature_name: str, is_training: bool = True):
+    def _compute_transforming_feature(
+        self, feature_name: str, is_training: bool = True
+    ):
         print(feature_name)
 
     def initialize_dataframe(self):
@@ -121,7 +123,7 @@ class TestBaseFeatureManager:
         cls.fm2.initialize_dataframe()
 
     def test_compute_all_transforming_features(self, tmp_path):
-        self.fm.compute_all_transforming_features()
+        self.fm.compute_transforming_features()
         expected_dataframe = pd.DataFrame(
             data={
                 "a": [1, 2],
@@ -154,14 +156,14 @@ class TestBaseFeatureManager:
         self.fm.load_dataframe()
         pd.testing.assert_frame_equal(expected_dataframe, self.fm.dataframe)
 
-    def test_update_feature(self, capsys):
-        self.fm2.update_feature("b")
+    def test_update_transforming_feature(self, capsys):
+        self.fm2.update_transforming_feature("b")
         # check that "b", "c", "e" are computed.
         captured = capsys.readouterr()
         assert captured.out == "b\nc\ne\n"
 
     def test_extract_dataframe(self):
-        self.fm.compute_all_transforming_features()
+        self.fm.compute_transforming_features()
         features_to_select = ["a", "c", "d2"]
         filters = ["d2 > '2021-03-01'"]
         expected_dataframe = pd.DataFrame(
