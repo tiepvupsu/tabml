@@ -8,6 +8,7 @@ import shap
 from catboost import CatBoostClassifier, CatBoostRegressor
 from lightgbm import LGBMClassifier, LGBMRegressor
 from xgboost import XGBClassifier, XGBRegressor
+from tabml.config_helpers import parse_pipeline_config
 
 from tabml.data_loaders import BaseDataLoader
 from tabml.experiment_manager import ExperimentManger
@@ -315,7 +316,9 @@ def load_or_train_model(
             pipeline = tabml.pipelines.BasePipeline()
             pipeline.run()
             model_path = pipeline.model_wrapper.save_model_name
-    initialize_model_wrapper(params=None)
+    
+    config = parse_pipeline_config(pipeline_config_path)
+    initialize_model_wrapper(config.model_wrapper, model_path)
         
 
 
