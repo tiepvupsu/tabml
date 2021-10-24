@@ -125,3 +125,8 @@ prediction_features:
     dtype: FLOAT
     model_path: experiments/xgboost_211018_202852/model_0
     pipeline_config_path: configs/xgboost_config.yaml
+
+  - name: pred_lgbm_for_test
+    index: 17
+    dtype: FLOAT
+    pipeline_config_path: configs/lgbm_config.yaml
