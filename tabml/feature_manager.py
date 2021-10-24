@@ -132,7 +132,9 @@ class BaseFeatureManager(ABC):
         with open(self.transformer_path, "wb") as pickle_file:
             pickle.dump(self.transformer_dict, pickle_file)
 
-    def compute_feature(self, feature_name: str, is_training: bool = True) -> None:
+    def compute_transforming_feature(
+        self, feature_name: str, is_training: bool = True
+    ) -> None:
         """Computes one feature column.
 
         This method should be used only when a new feature is added to the dataframe.
@@ -149,9 +151,11 @@ class BaseFeatureManager(ABC):
         )
         if not self.transforming_class_by_feature_name:
             self._get_transforming_class_by_name()
-        self._compute_feature(feature_name, is_training=is_training)
+        self._compute_transforming_feature(feature_name, is_training=is_training)
 
-    def _compute_feature(self, feature_name: str, is_training: bool = True) -> None:
+    def _compute_transforming_feature(
+        self, feature_name: str, is_training: bool = True
+    ) -> None:
         if self.dataframe is None:
             raise NotImplementedError(
                 "self.dataframe must be initialized in self.initialize_dataframe()"
@@ -173,10 +177,10 @@ class BaseFeatureManager(ABC):
                 series, dtype=PANDAS_DTYPE_MAPPING[dtype]
             )
 
-    def compute_all_transforming_features(
+    def compute_transforming_features(
         self, transforming_features: Union[List[str], None] = None, is_training=True
     ):
-        """Computes all transforming feature.
+        """Computes transforming features.
 
         Should be done occasionally. After the first time this method is called, it's
         expected that features are updated one by one or in a set of few features.
@@ -184,10 +188,10 @@ class BaseFeatureManager(ABC):
         if transforming_features is None:
             transforming_features = self.config_helper.transforming_feature_names
         for feature_name in transforming_features:
-            self.compute_feature(feature_name, is_training=is_training)
+            self.compute_transforming_feature(feature_name, is_training=is_training)
 
-    def update_feature(self, feature_name: str):
-        """Updates one feature in the dataframe.
+    def update_transforming_feature(self, feature_name: str):
+        """Updates one transforming feature in the dataframe.
 
         If this is an existing feature, all of its dependents should be computed.
         """
@@ -196,12 +200,12 @@ class BaseFeatureManager(ABC):
             self.config_helper.get_dependents_recursively(feature_name)
         )
         for _feature_name in features_to_compute:
-            self._compute_feature(_feature_name)
+            self._compute_transforming_feature(_feature_name)
 
     def run_all(self):
         self.load_raw_data()
         self.initialize_dataframe()
-        self.compute_all_transforming_features()
+        self.compute_transforming_features()
         self.save_dataframe()
         self.save_transformers()
 
@@ -224,7 +228,7 @@ class BaseFeatureManager(ABC):
                 )
                 if feature not in self.config_helper.base_feature_names
             ]
-        self.compute_all_transforming_features(
+        self.compute_transforming_features(
             transforming_features_and_dependencies, is_training=False
         )
         return self.dataframe
