@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import IO, Dict, Iterable, Tuple, Union
+from typing import Dict, Iterable, Tuple, Union
 
 import mlflow
 import numpy as np
@@ -291,9 +291,7 @@ def initialize_model_wrapper(
     return _model_wrapper
 
 
-def load_or_train_model(
-    model_path: Union[str, None], pipeline_config_path: Union[str, None] = None
-) -> BaseModelWrapper:
+def load_or_train_model(model_path, pipeline_config_path) -> BaseModelWrapper:
     """Loads or trains a model, returns a model wrapper."""
     if model_path is None and pipeline_config_path is None:
         raise ValueError(
@@ -310,10 +308,10 @@ def load_or_train_model(
             logger.info(
                 f"Searching for the last run dir with {pipeline_config_path} config."
             )
-            run_dir = ExperimentManger(pipeline_config).get_most_recent_run_dir()
+            run_dir = ExperimentManger(pipeline_config_path).get_most_recent_run_dir()
             # TODO: create a function/method in experiment_manager to find model_path
             # in run_dir.
-            model_path = Path(run_dir) / "model_0"
+            model_path = str(Path(run_dir) / "model_0")
         except IOError:
             import tabml.pipelines
 
