@@ -349,11 +349,11 @@ class ModelInferenceWithPreprocessedData:
     pipeline_config_path: Union[str, None] = None
 
     def __post_init__(self):
-        from tabml.model_wrappers import initialize_model_wrapper  # isort:skip
+        from tabml.model_wrappers import load_or_train_model  # isort:skip
 
         config = _get_config(self.pipeline_config_path, self.model_path)
-        self.model_wrapper = initialize_model_wrapper(
-            config.model_wrapper, self.model_path
+        self.model_wrapper = load_or_train_model(
+            self.model_path, self.pipeline_config_path
         )
         self.features_to_model = list(config.data_loader.features_to_model)
 
