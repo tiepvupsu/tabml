@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from pathlib import Path
 from typing import Dict, Iterable, Tuple, Union
 
 import mlflow
@@ -8,10 +9,12 @@ from catboost import CatBoostClassifier, CatBoostRegressor
 from lightgbm import LGBMClassifier, LGBMRegressor
 from xgboost import XGBClassifier, XGBRegressor
 
+from tabml.config_helpers import parse_pipeline_config
 from tabml.data_loaders import BaseDataLoader
+from tabml.experiment_manager import ExperimentManger
 from tabml.schemas import pipeline_config
 from tabml.utils import factory, utils
-from tabml.utils.logger import boosting_logger_eval
+from tabml.utils.logger import boosting_logger_eval, logger
 from tabml.utils.utils import save_as_pickle
 
 MLFLOW_AUTOLOG = {
@@ -27,6 +30,7 @@ class BaseModelWrapper(ABC):
 
     def __init__(self, params=pipeline_config.ModelWrapper()):
         self.model = None
+        self.save_model_name = None
         # Parameters for model instantiating
         self.model_params = params.model_params
         # Parameters for model training
@@ -285,6 +289,38 @@ def initialize_model_wrapper(
     if model_path:
         _model_wrapper.load_model(model_path)
     return _model_wrapper
+
+
+def load_or_train_model(model_path, pipeline_config_path) -> BaseModelWrapper:
+    """Loads or trains a model, returns a model wrapper."""
+    if model_path is None and pipeline_config_path is None:
+        raise ValueError(
+            "At least one of model_path and pipeline_config_path must be not None."
+        )
+
+    if pipeline_config_path is None:
+        pipeline_config_path = ExperimentManger.get_config_path_from_model_path(
+            model_path
+        )
+
+    if model_path is None:
+        try:
+            logger.info(
+                f"Searching for the last run dir with {pipeline_config_path} config."
+            )
+            run_dir = ExperimentManger(pipeline_config_path).get_most_recent_run_dir()
+            # TODO: create a function/method in experiment_manager to find model_path
+            # in run_dir.
+            model_path = str(Path(run_dir) / "model_0")
+        except IOError:
+            import tabml.pipelines
+
+            pipeline = tabml.pipelines.BasePipeline(pipeline_config_path)
+            pipeline.run()
+            return pipeline.model_wrapper
+
+    config = parse_pipeline_config(pipeline_config_path)
+    return initialize_model_wrapper(config.model_wrapper, model_path)
 
 
 if __name__ == "__main__":
