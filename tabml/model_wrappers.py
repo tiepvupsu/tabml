@@ -293,17 +293,17 @@ def initialize_model_wrapper(
 
 def load_or_train_model(model_path, pipeline_config_path) -> BaseModelWrapper:
     """Loads or trains a model, returns a model wrapper."""
-    if model_path is None and pipeline_config_path is None:
+    if not (model_path or pipeline_config_path):
         raise ValueError(
             "At least one of model_path and pipeline_config_path must be not None."
         )
 
-    if pipeline_config_path is None:
+    if not pipeline_config_path:
         pipeline_config_path = ExperimentManger.get_config_path_from_model_path(
             model_path
         )
 
-    if model_path is None:
+    if not model_path:
         try:
             logger.info(
                 f"Searching for the last run dir with {pipeline_config_path} config."

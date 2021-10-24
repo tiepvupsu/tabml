@@ -1,10 +1,13 @@
 import pickle
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 
+from tabml.config_helpers import parse_pipeline_config
+from tabml.experiment_manager import ExperimentManger
 from tabml.feature_config_helper import FeatureConfigHelper
 from tabml.schemas.feature_config import DType
 from tabml.utils.logger import logger
@@ -169,6 +172,10 @@ class BaseFeatureManager(ABC):
         series = transformer_object._transform(self.dataframe, transformer)
         if is_training:
             self.transformer_dict[feature_name] = transformer_object.transformer
+
+        self._update_dataframe(feature_name, series)
+
+    def _update_dataframe(self, feature_name, series):
         dtype = self.feature_metadata[feature_name].dtype
         if dtype == DType.DATETIME:
             self.dataframe.loc[:, feature_name] = pd.to_datetime(series)
@@ -208,6 +215,39 @@ class BaseFeatureManager(ABC):
         self.compute_transforming_features()
         self.save_dataframe()
         self.save_transformers()
+
+    def compute_prediction_features(
+        self, prediction_feature_names: Union[List[str], None] = None
+    ):
+        self.load_dataframe()
+        if prediction_feature_names is None:
+            prediction_feature_names = self.config_helper.prediction_feature_names
+        self._validate_prediction_feature_names(prediction_feature_names)
+        for prediction_feature_name in prediction_feature_names:
+            self._compute_prediction_feature(prediction_feature_name)
+        self.save_dataframe()
+
+    def _compute_prediction_feature(self, prediction_feature_name: str):
+        logger.info(f"Computing prediction feature {prediction_feature_name} ...")
+        metadata = self.feature_metadata[prediction_feature_name]
+        model_path = metadata.model_path
+        pipeline_config_path = metadata.pipeline_config_path
+        model_inference = ModelInferenceWithPreprocessedData(
+            model_path=model_path, pipeline_config_path=pipeline_config_path
+        )
+        preds = model_inference.predict(self.dataframe)
+        self._update_dataframe(prediction_feature_name, preds)
+
+    def _validate_prediction_feature_names(self, prediction_feature_names: List[str]):
+        undefined_features = [
+            feature
+            for feature in prediction_feature_names
+            if feature not in self.config_helper.prediction_feature_names
+        ]
+        if undefined_features:
+            raise ValueError(
+                f"Features {undefined_features} are not defined in feature config."
+            )
 
     def transform_new_samples(self, raw_data_samples, transforming_features):
         self.set_raw_data(raw_data_samples)
@@ -301,3 +341,30 @@ class BaseTransformingFeature(ABC):
     @abstractmethod
     def transform(self, df):
         pass
+
+
+@dataclass
+class ModelInferenceWithPreprocessedData:
+    model_path: str = ""
+    pipeline_config_path: Union[str, None] = None
+
+    def __post_init__(self):
+        from tabml.model_wrappers import load_or_train_model  # isort:skip
+
+        config = _get_config(self.pipeline_config_path, self.model_path)
+        self.model_wrapper = load_or_train_model(
+            self.model_path, self.pipeline_config_path
+        )
+        self.features_to_model = list(config.data_loader.features_to_model)
+
+    def predict(self, data):
+        return self.model_wrapper.predict(data[self.features_to_model])
+
+
+# TODO: move this and a similar function in inference.py to a common place
+def _get_config(pipeline_config_path, model_path):
+    pipeline_config_path = (
+        pipeline_config_path
+        or ExperimentManger.get_config_path_from_model_path(model_path)
+    )
+    return parse_pipeline_config(pipeline_config_path)

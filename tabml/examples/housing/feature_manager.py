@@ -188,5 +188,13 @@ def run():
     fm.run_all()
 
 
+def update_prediction_features():
+    feature_config_path = "configs/feature_config.yaml"
+    fm = FeatureManager(feature_config_path)
+    prediction_feature_names = ["pred_lgbm", "pred_catboost", "pred_xgboost"]
+    fm.compute_prediction_features(prediction_feature_names)
+
+
 if __name__ == "__main__":
-    run()
+    # run()
+    update_prediction_features()

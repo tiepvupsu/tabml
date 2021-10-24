@@ -1,20 +1,32 @@
 import copy
 from typing import Dict, List, Union
 
-from tabml import schemas
 from tabml.config_helpers import parse_feature_config
-from tabml.schemas.feature_config import BaseFeature, DType, TransformingFeature
+from tabml.schemas.feature_config import (
+    BaseFeature,
+    DType,
+    PredictionFeature,
+    TransformingFeature,
+)
 from tabml.utils.utils import check_uniqueness
 
 
 class FeatureMetadata:
     def __init__(
-        self, index: int, dtype: DType, dependencies: Union[List, None] = None
+        self,
+        index: int,
+        dtype: DType,
+        dependents=None,
+        dependencies=None,
+        model_path: str = "",
+        pipeline_config_path: str = "",
     ):
         self.index = index
-        self.dependents: List[str] = []
         self.dtype = dtype
+        self.dependents = dependents or []
         self.dependencies = dependencies or []
+        self.model_path = model_path
+        self.pipeline_config_path = pipeline_config_path
 
     @classmethod
     def from_base_feature(cls, feature: BaseFeature):
@@ -25,6 +37,15 @@ class FeatureMetadata:
     def from_transforming_feature(cls, feature: TransformingFeature):
         return cls(
             index=feature.index, dtype=feature.dtype, dependencies=feature.dependencies
+        )
+
+    @classmethod
+    def from_prediction_feature(cls, feature: PredictionFeature):
+        return cls(
+            index=feature.index,
+            dtype=feature.dtype,
+            model_path=feature.model_path,
+            pipeline_config_path=feature.pipeline_config_path,
         )
 
 
@@ -54,30 +75,22 @@ class FeatureConfigHelper:
         self.raw_data_dir = self.config.raw_data_dir
         self.dataset_name = self.config.dataset_name
         self.base_features = self.config.base_features
-        self.base_feature_names = self._get_base_feature_names()
-        self.transforming_features = self._get_sorted_transforming_features()
-        self.transforming_feature_names = self._get_transforming_feature_names()
+        self.base_feature_names = _get_feature_names(self.base_features)
+        self.transforming_features = _sort_features(self.config.transforming_features)
+        self.transforming_feature_names = _get_feature_names(self.transforming_features)
+        self.prediction_features = _sort_features(self.config.prediction_features)
+        self.prediction_feature_names = _get_feature_names(self.prediction_features)
         self.all_feature_names = self._get_all_feature_names()
         self._validate()
         self.feature_metadata: Dict[str, FeatureMetadata] = {}
         self._build_feature_metadata()
 
-    def _get_base_feature_names(self):
-        return [feature.name for feature in self.config.base_features]
-
-    def _get_sorted_transforming_features(
-        self,
-    ) -> List[schemas.feature_config.TransformingFeature]:
-        return sorted(self.config.transforming_features, key=lambda x: x.index)
-
-    def _get_transforming_feature_names(self):
-        return [
-            transforming_feature.name
-            for transforming_feature in self.transforming_features
-        ]
-
     def _get_all_feature_names(self):
-        return self.base_feature_names + self.transforming_feature_names
+        return (
+            self.base_feature_names
+            + self.transforming_feature_names
+            + self.prediction_feature_names
+        )
 
     def _validate(self):
         self._validate_indexes()
@@ -90,15 +103,7 @@ class FeatureConfigHelper:
             transforming_feature.index
             for transforming_feature in self.transforming_features
         ]
-        if not (
-            indexes[0] > 0
-            and all(
-                [
-                    index_i < index_ip1
-                    for (index_i, index_ip1) in zip(indexes[:-1], indexes[1:])
-                ]
-            )
-        ):
+        if not (indexes[0] > 0 and len(set(indexes)) == len(indexes)):
             raise ValueError(
                 "Feature indexes must be a list of increasing positive integers. "
                 f"Got indexes = {indexes}"
@@ -129,6 +134,11 @@ class FeatureConfigHelper:
             ] = FeatureMetadata.from_transforming_feature(feature)
             for dependency in feature.dependencies:
                 self.feature_metadata[dependency].dependents.append(feature.name)
+
+        for feature in self.prediction_features:
+            self.feature_metadata[
+                feature.name
+            ] = FeatureMetadata.from_prediction_feature(feature)
 
     def get_dependencies_recursively(self, features: List[str]) -> List[str]:
         """Gets all dependencies of a list of features recursively.
@@ -216,3 +226,15 @@ class FeatureConfigHelper:
             raise ValueError(
                 f"Features {invalid_features} are not in the original config."
             )
+
+
+def _get_feature_names(
+    features: Union[
+        List[BaseFeature], List[TransformingFeature], List[PredictionFeature]
+    ]
+) -> List[str]:
+    return [feature.name for feature in features]
+
+
+def _sort_features(features: Union[List[TransformingFeature], List[PredictionFeature]]):
+    return sorted(features, key=lambda x: x.index)

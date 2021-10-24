@@ -8,6 +8,13 @@ def test_feature_manager():
 
 
 @change_working_dir_pytest
+def test_feature_manager_with_prediction_feature():
+    feature_config_path = "configs/feature_config.yaml"
+    fm = feature_manager.FeatureManager(feature_config_path)
+    fm.compute_prediction_features(["pred_lgbm_for_test"])
+
+
+@change_working_dir_pytest
 def test_full_pipeline_lgbm():
     pipelines.train_lgbm()
 

@@ -24,7 +24,6 @@ class BaseFeature(pydantic.BaseModel):
 
 
 class TransformingFeature(pydantic.BaseModel):
-    # feature name, need to be unique in the FeatureConfig.
     name: str
 
     # The index of the feature in the dataset. Indexes should be unique, positive and
@@ -49,11 +48,11 @@ class PredictionFeature(pydantic.BaseModel):
     name: str
     index: int
     dtype: DType
-    model_path: str
+    model_path: str = ""
 
     # The list of dependencies can be found in
     # pipeline_config.data_loader.features_to_model.
-    pipeline_config_path: str
+    pipeline_config_path: str = ""
 
 
 class FeatureConfig(pydantic.BaseModel):
