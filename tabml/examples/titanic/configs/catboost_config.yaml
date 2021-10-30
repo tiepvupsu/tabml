@@ -1,4 +1,5 @@
 config_name: catboost
+skip_mlflow: true
 data_loader:
   cls_name: tabml.data_loaders.BaseDataLoader
   feature_config_path: configs/feature_config.yaml
