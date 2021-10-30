@@ -80,10 +80,10 @@ class ModelAnalysis:
         self._show_overall_flag = True
         self.training_size = params.training_size
 
-    def analyze(self):
+    def analyze(self, skip_mlflow=False):
         self._show_feature_importance()
-        self._analyze_metrics_one_dataset("train")
-        self._analyze_metrics_one_dataset("val")
+        self._analyze_metrics_one_dataset("train", skip_mlflow)
+        self._analyze_metrics_one_dataset("val", skip_mlflow)
 
     def _show_feature_importance(self):
         train_feature = self._get_dataset("train")[self.data_loader.features]
@@ -92,13 +92,17 @@ class ModelAnalysis:
         )
         utils.show_feature_importance(feature_importance_dict)
 
-    def _analyze_metrics_one_dataset(self, dataset_name: str):
+    def _analyze_metrics_one_dataset(
+        self, dataset_name: str, skip_mlflow: bool = False
+    ):
         self._show_overall_flag = True
         dataset = self._get_dataset(dataset_name)
         preds = self._get_predictions(dataset)
         df_with_pred = self._get_df_with_pred(dataset, preds)
         for feature_name in self.features_to_analyze:
-            self._analyze_on_feature(df_with_pred, feature_name, dataset_name)
+            self._analyze_on_feature(
+                df_with_pred, feature_name, dataset_name, skip_mlflow
+            )
 
     def _get_dataset(self, dataset_name: str):
         all_features = (
@@ -146,7 +150,11 @@ class ModelAnalysis:
         return df
 
     def _analyze_on_feature(
-        self, df_with_pred: pd.DataFrame, feature_name: str, dataset_name: str
+        self,
+        df_with_pred: pd.DataFrame,
+        feature_name: str,
+        dataset_name: str,
+        skip_mlflow: bool = False,
     ):
         """Analyzes the predictions based on one feature."""
         # get list of metric score dict for each value in feature_name
@@ -158,7 +166,7 @@ class ModelAnalysis:
         overall_scores = self._get_metric_dict(feature_name, "OVERALL", df_with_pred)
         list_of_group_dicts.append(overall_scores)
         if self._show_overall_flag:
-            self._show_and_log_overall_scores(overall_scores, dataset_name)
+            self._show_and_log_overall_scores(overall_scores, dataset_name, skip_mlflow)
             self._show_overall_flag = False
 
         df_group = pd.DataFrame(list_of_group_dicts).sort_values(
@@ -197,7 +205,10 @@ class ModelAnalysis:
         return dirname / f"{col}.csv"
 
     def _show_and_log_overall_scores(
-        self, overall_scores: Dict[str, Any], dataset_name: str
+        self,
+        overall_scores: Dict[str, Any],
+        dataset_name: str,
+        skip_mlflow: bool = False,
     ) -> None:
         logger.info("=" * 20 + f" OVERALL SCORES on {dataset_name} dataset " + "=" * 20)
         logger.info("{:<20}: {}".format("Num samples", overall_scores["sample_count"]))
@@ -205,7 +216,8 @@ class ModelAnalysis:
             if val == "OVERALL" or key == "sample_count":
                 continue
             logger.info("{:<20}: {}".format(key, val))
-            mlflow.log_metrics({key: val})
+            if not skip_mlflow:
+                mlflow.log_metrics({key: val})
 
 
 def _get_metrics(metric_names: List[str]) -> List[BaseMetric]:
