@@ -50,6 +50,9 @@ class ModelAnalysis(pydantic.BaseModel):
 
 class PipelineConfig(pydantic.BaseModel):
     config_name: str
+
+    # Some models are not supported by mlflow yet, we have option to skip mlflow.
+    skip_mlflow: bool = False
     data_loader: DataLoader
     model_wrapper: ModelWrapper
     model_analysis: ModelAnalysis
