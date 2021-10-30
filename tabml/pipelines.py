@@ -41,11 +41,15 @@ class BasePipeline(ABC):
 
     def run(self):
         self.exp_manager.create_new_run_dir()
-        self._init_mlflow()
-        with mlflow.start_run():
-            self._log_to_mlflow()
+        if self.config.skip_mlflow:
             self.train()
             self.analyze_model()
+        else:
+            self._init_mlflow()
+            with mlflow.start_run():
+                self._log_to_mlflow()
+                self.train()
+                self.analyze_model()
 
     def _init_mlflow(self):
         model_type = self.model_wrapper.mlflow_model_type
@@ -91,4 +95,4 @@ class BasePipeline(ABC):
             model_wrapper=self.model_wrapper,
             params=self.config.model_analysis,
             output_dir=self.exp_manager.get_model_analysis_dir(),
-        ).analyze()
+        ).analyze(skip_mlflow=self.config.skip_mlflow)
