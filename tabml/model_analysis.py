@@ -106,6 +106,7 @@ class ModelAnalysis:
             + self.data_loader.features
             + [self.label_to_analyze]
         )
+        all_features = list(set(all_features))
         if dataset_name == "train":
             df = self.data_loader.feature_manager.extract_dataframe(
                 features_to_select=all_features, filters=self.data_loader.train_filters
