@@ -40,3 +40,4 @@ model_analysis:
   by_features:
     - Sex
     - Pclass
+    - coded_sex
