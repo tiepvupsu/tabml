@@ -14,7 +14,7 @@ class BaseDataLoader:
 
     def __init__(self, params=pipeline_config.DataLoader()):
         self.label_col = params.label_col
-        self.features = params.features_to_model
+        self.features = params.features_to_model.copy()
         self.features_and_label = self.features + [self.label_col]
         self.feature_manager = BaseFeatureManager(params.feature_config_path)
         self.feature_manager.load_dataframe()
