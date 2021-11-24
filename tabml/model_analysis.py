@@ -45,7 +45,6 @@ class ModelAnalysis:
         need_predict:
             A bool value to tell if method self.model_wrapper.predict is needed.
         need_predict_proba:
-
             A bool value to tell if method self.model_wrapper.predict_proba is needed.
             Some metrics are computed based on probabilities.
         training_size: int or None
@@ -102,15 +101,12 @@ class ModelAnalysis:
             self._analyze_on_feature(df_with_pred, feature_name, dataset_name)
 
     def _get_dataset(self, dataset_name: str):
-        all_features = list(
-            set(
-                (
-                    list(self.features_to_analyze)
-                    + self.data_loader.features
-                    + [self.label_to_analyze]
-                )
-            )
+        all_features = (
+            list(self.features_to_analyze)
+            + self.data_loader.features
+            + [self.label_to_analyze]
         )
+        all_features = list(set(all_features))
         if dataset_name == "train":
             df = self.data_loader.feature_manager.extract_dataframe(
                 features_to_select=all_features, filters=self.data_loader.train_filters
