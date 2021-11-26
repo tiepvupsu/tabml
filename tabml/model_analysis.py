@@ -96,7 +96,7 @@ class ModelAnalysis:
         self._show_overall_flag = True
         dataset = self._get_dataset(dataset_name)
         preds = self._get_predictions(dataset)
-        df_with_pred = self._get_df_with_pred(dataset, preds)
+        df_with_pred = self._get_df_with_pred(dataset, dataset_name, preds)
         for feature_name in self.features_to_analyze:
             self._analyze_on_feature(df_with_pred, feature_name, dataset_name)
 
@@ -134,7 +134,7 @@ class ModelAnalysis:
             )
         return res
 
-    def _get_df_with_pred(self, df, preds) -> pd.DataFrame:
+    def _get_df_with_pred(self, df, dataset_name, preds) -> pd.DataFrame:
         """Appends prediction column to the dataframe."""
         assert (
             self.pred_col not in df.columns
@@ -143,7 +143,7 @@ class ModelAnalysis:
             df[self.pred_col] = preds[self.pred_col]
         if self.need_predict_proba:
             df[self.pred_proba_col] = preds[self.pred_proba_col]
-        df.to_csv(self._get_df_pred_csv_path(), index=False)
+        df.to_csv(self._get_df_pred_csv_path(dataset_name), index=False)
         return df
 
     def _analyze_on_feature(
@@ -187,8 +187,8 @@ class ModelAnalysis:
                 res.update(metric.compute_scores(labels, df_with_pred[self.pred_col]))
         return res
 
-    def _get_df_pred_csv_path(self):
-        return Path(self.output_dir).joinpath("prediction.csv")
+    def _get_df_pred_csv_path(self, dataset_name):
+        return Path(self.output_dir) / dataset_name / "prediction.csv"
 
     def _get_df_feature_metric_csv_path(self, dataset_name: str, col: str):
         dirname = Path(self.output_dir) / dataset_name
