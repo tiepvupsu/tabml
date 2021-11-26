@@ -188,13 +188,13 @@ class ModelAnalysis:
         return res
 
     def _get_df_pred_csv_path(self, dataset_name):
+        dirname = Path(self.output_dir) / dataset_name
+        if not dirname.exists():
+            dirname.mkdir()
         return Path(self.output_dir) / dataset_name / "prediction.csv"
 
     def _get_df_feature_metric_csv_path(self, dataset_name: str, col: str):
         dirname = Path(self.output_dir) / dataset_name
-        if not dirname.exists():
-            dirname.mkdir()
-
         return dirname / f"{col}.csv"
 
     def _show_and_log_overall_scores(
