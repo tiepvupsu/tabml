@@ -62,7 +62,7 @@ class BaseModelWrapper(ABC):
         Most of models are supported by SHAP (https://github.com/slundberg/shap). For
         unsupported models, please override this method by a workable solution.
         """
-        explainer = shap.Explainer(self.model)
+        explainer = shap.Explainer(self.model.predict, input_data)
         shap_values = explainer(input_data)
 
         def _get_shap_values_one_sample(shap_values, index: int):
