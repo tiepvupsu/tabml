@@ -70,8 +70,8 @@ class FeatureConfigHelper:
             This is useful when finding all dependents of one feature.
     """
 
-    def __init__(self, config_path: str):
-        self.config = parse_feature_config(config_path)
+    def __init__(self, config):
+        self.config = config
         self.raw_data_dir = self.config.raw_data_dir
         self.dataset_name = self.config.dataset_name
         self.base_features = self.config.base_features
@@ -84,6 +84,11 @@ class FeatureConfigHelper:
         self._validate()
         self.feature_metadata: Dict[str, FeatureMetadata] = {}
         self._build_feature_metadata()
+
+    @classmethod
+    def from_config_path(cls, config_path: str):
+        feature_config = parse_feature_config(config_path)
+        return cls(feature_config)
 
     def _get_all_feature_names(self):
         return (
