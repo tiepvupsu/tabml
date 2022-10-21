@@ -1,6 +1,7 @@
 import pickle
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from os import mkdir
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
@@ -133,6 +134,9 @@ class BaseFeatureManager(ABC):
         logger.info(f"Saving transformers to {self.transformer_path}")
         with open(self.transformer_path, "wb") as pickle_file:
             pickle.dump(self.transformer_dict, pickle_file)
+
+    def save_feature_config_and_transformers(self):
+        ...
 
     def compute_transforming_feature(
         self, feature_name: str, is_training: bool = True
