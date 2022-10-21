@@ -147,3 +147,8 @@ def change_working_dir_pytest(func):
         os.chdir(request.config.invocation_dir)
 
     return apply
+
+
+def mkdir_if_needed(path: Path):
+    if not path.exists():
+        path.mkdir(parents=True)
