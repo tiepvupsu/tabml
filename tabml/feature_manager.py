@@ -54,9 +54,16 @@ class BaseFeatureManager(ABC):
             it's loaded and does the transformations.
         transformer_path:
             pickle path to save transformers.
+        config_and_transformers_path:
+            pickle path to save both feature config and transformer
     """
 
-    def __init__(self, config_path: str, transformer_path: Union[str, None] = None):
+    def __init__(
+        self,
+        config_path: str,
+        transformer_path: Union[str, None] = None,
+        config_and_transformers_path: Union[str, None] = None,
+    ):
         self.config_helper = FeatureConfigHelper.from_config_path(config_path)
         self.raw_data_dir = self.config_helper.raw_data_dir
         self.dataset_name = self.config_helper.dataset_name
@@ -68,12 +75,18 @@ class BaseFeatureManager(ABC):
         self.transforming_class_by_feature_name: Dict[str, Any] = {}
         self.transformer_dict: Dict[str, Any] = {}
         self.transformer_path = transformer_path or self.get_transformer_path()
+        self.config_and_transformers_path = (
+            config_and_transformers_path or self.get_config_and_transformer_path()
+        )
 
     def get_dataset_path(self):
         return Path(self.raw_data_dir) / "features" / f"{self.dataset_name}.csv"
 
     def get_transformer_path(self):
         return Path(self.raw_data_dir) / "features" / "transformers.pickle"
+
+    def get_config_and_transformer_path(self):
+        return Path(self.raw_data_dir) / "features" / "config_and_transformers.pickle"
 
     def _get_base_transforming_class(self):
         raise NotImplementedError
@@ -129,6 +142,7 @@ class BaseFeatureManager(ABC):
         self.dataframe.to_csv(self.dataset_path, index=False)
 
     def save_transformers(self):
+        # TODO: deprecate this method in favor of save_feature_config_and_transformers
         """Saves the transformers to disk."""
         mkdir_if_needed(self.dataset_path.parent)
         logger.info(f"Saving transformers to {self.transformer_path}")
@@ -136,7 +150,15 @@ class BaseFeatureManager(ABC):
             pickle.dump(self.transformer_dict, pickle_file)
 
     def save_feature_config_and_transformers(self):
-        ...
+        data = {
+            "feature_config": self.config_helper.config,
+            "transformers": self.transformer_dict,
+        }
+        mkdir_if_needed(self.dataset_path.parent)
+        save_path = self.config_and_transformers_path
+        logger.info(f"Saving feature config and transformers to {save_path}")
+        with open(save_path, "wb") as pickle_file:
+            pickle.dump(data, pickle_file)
 
     def compute_transforming_feature(
         self, feature_name: str, is_training: bool = True
@@ -217,7 +239,8 @@ class BaseFeatureManager(ABC):
         self.initialize_dataframe()
         self.compute_transforming_features()
         self.save_dataframe()
-        self.save_transformers()
+        # self.save_transformers()
+        self.save_feature_config_and_transformers()
 
     def compute_prediction_features(
         self, prediction_feature_names: Union[List[str], None] = None
