@@ -56,7 +56,7 @@ class BaseFeatureManager(ABC):
     """
 
     def __init__(self, config_path: str, transformer_path: Union[str, None] = None):
-        self.config_helper = FeatureConfigHelper(config_path)
+        self.config_helper = FeatureConfigHelper.from_config_path(config_path)
         self.raw_data_dir = self.config_helper.raw_data_dir
         self.dataset_name = self.config_helper.dataset_name
         self.feature_metadata = self.config_helper.feature_metadata
