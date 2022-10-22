@@ -28,7 +28,7 @@ class ModelInferenceCompact:
         self.model_wrapper = initialize_model_wrapper_from_bundle(
             self.pipeline_config_and_model_path
         )
-        self.features_to_model = list(pipeline_config.data_loader.feature_to_model)
+        self.features_to_model = list(pipeline_config.data_loader.features_to_model)
 
     def predict(self, raw_data: List[Dict[str, Any]]) -> Iterable[Any]:
         """Makes prediction for new samples.
