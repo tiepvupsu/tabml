@@ -1,12 +1,10 @@
 import pickle
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from os import mkdir
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
-from msilib.schema import Feature
 
 from tabml.config_helpers import parse_pipeline_config
 from tabml.experiment_manager import ExperimentManger
@@ -25,8 +23,6 @@ PANDAS_DTYPE_MAPPING = {
     # DATETIME will be converted to datetime parse_date https://tinyurl.com/y4waw6np
     DType.DATETIME: "datetime64[ns]",
 }
-
-CONFIG_AND_TRANSFORMERS_FILENAME
 
 
 class BaseFeatureManager(ABC):
@@ -253,7 +249,7 @@ class BaseFeatureManager(ABC):
         self.initialize_dataframe()
         self.compute_transforming_features()
         self.save_dataframe()
-        # self.save_transformers()
+        self.save_transformers()
         self.save_feature_config_and_transformers()
 
     def compute_prediction_features(
