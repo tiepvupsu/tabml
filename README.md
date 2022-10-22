@@ -14,6 +14,8 @@
     - [Add path to this repo](#add-path-to-this-repo)
     - [Create the environment](#create-the-environment)
     - [Check that everthing is working](#check-that-everthing-is-working)
+    - [Author's notes](#authors-notes)
+      - [How to release a new version](#how-to-release-a-new-version)
     - [Common errors](#common-errors)
 
 ## Introduction
@@ -108,6 +110,24 @@ by running test
 ```shell
 2tabml
 python3 -m pytest ./tests ./examples
+```
+
+### Author's notes
+
+#### How to release a new version
+
+1. Increase `version` in `setup.py` as in [this PR example](https://github.com/tiepvupsu/tabml/pull/220).
+
+2. Generate tar file:
+
+```shell
+python setup.py sdist
+```
+
+3. Upload tar file:
+
+```shell
+twine upload dist/tabml-x.x.xx.tar.gz
 ```
 
 ### Common errors
