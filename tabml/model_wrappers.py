@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Dict, Iterable, Tuple, Union
+from typing import Any, Dict, Iterable, Optional, Tuple, Union
 
 import mlflow
 import numpy as np
@@ -15,7 +15,7 @@ from tabml.experiment_manager import ExperimentManger
 from tabml.schemas import pipeline_config
 from tabml.utils import factory, utils
 from tabml.utils.logger import boosting_logger_eval, logger
-from tabml.utils.utils import save_as_pickle
+from tabml.utils.utils import load_pickle, save_as_pickle
 
 MLFLOW_AUTOLOG = {
     "sklearn": mlflow.sklearn.autolog(),
@@ -279,16 +279,30 @@ def write_model_wrapper_subclasses_to_file(
 
 
 def initialize_model_wrapper(
-    params: pipeline_config.ModelWrapper, model_path: Union[str, None] = None
+    params: pipeline_config.ModelWrapper,
+    model_path: Union[str, None] = None,
+    model: Optional[Any] = None,
 ):
     """Initializes model wrapper from params."""
+    if model_path and model:
+        raise ValueError("Only one of {model_path, model} is allowed to be not None.")
+
     model_wrapper_cls = factory.create(params.cls_name)
     if not issubclass(model_wrapper_cls, BaseModelWrapper):
         raise ValueError(f"{model_wrapper_cls} is not a subclass of BaseModelWrapper")
     _model_wrapper = model_wrapper_cls(params)
     if model_path:
         _model_wrapper.load_model(model_path)
+    if model:
+        _model_wrapper.model = model
     return _model_wrapper
+
+
+def initialize_model_wrapper_from_bundle(pipeline_config_and_model_path: str):
+    pipeline_data = load_pickle(pipeline_config_and_model_path)
+    pipeline_config = pipeline_data["pipeline_config"]
+    model = pipeline_data["model"]
+    return initialize_model_wrapper(params=pipeline_config.model_wrapper, model=model)
 
 
 def load_or_train_model(model_path, pipeline_config_path) -> BaseModelWrapper:

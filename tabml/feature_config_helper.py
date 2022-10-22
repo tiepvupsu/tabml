@@ -1,4 +1,5 @@
 import copy
+from pathlib import Path
 from typing import Dict, List, Union
 
 from tabml.config_helpers import parse_feature_config
@@ -86,7 +87,7 @@ class FeatureConfigHelper:
         self._build_feature_metadata()
 
     @classmethod
-    def from_config_path(cls, config_path: str):
+    def from_config_path(cls, config_path: Union[str, Path]):
         feature_config = parse_feature_config(config_path)
         return cls(feature_config)
 

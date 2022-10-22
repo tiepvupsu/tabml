@@ -23,6 +23,7 @@ class ExperimentManger:
     log_filename = "run.log"
     config_filename = "config.yaml"
     _model_analysis_dir = "model_analysis"
+    config_and_model_filename = "pipeline_config_and_model.pickle"
 
     def __init__(
         self,
@@ -67,6 +68,9 @@ class ExperimentManger:
 
     def get_config_path(self):
         return self._make_path_under_run_dir(self.config_filename)
+
+    def get_config_and_model_path(self):
+        return self._make_path_under_run_dir(self.config_and_model_filename)
 
     def get_model_analysis_dir(self):
         res = self._make_path_under_run_dir(self._model_analysis_dir)
