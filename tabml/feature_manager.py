@@ -9,9 +9,9 @@ import pandas as pd
 from tabml.config_helpers import parse_pipeline_config
 from tabml.experiment_manager import ExperimentManger
 from tabml.feature_config_helper import FeatureConfigHelper
-from tabml.schemas.feature_config import DType
+from tabml.schemas.feature_config import DType, FeatureConfig
 from tabml.utils.logger import logger
-from tabml.utils.utils import check_uniqueness, mkdir_if_needed
+from tabml.utils.utils import check_uniqueness, load_pickle, mkdir_if_needed
 
 PANDAS_DTYPE_MAPPING = {
     DType.BOOL: "bool",
@@ -23,6 +23,9 @@ PANDAS_DTYPE_MAPPING = {
     # DATETIME will be converted to datetime parse_date https://tinyurl.com/y4waw6np
     DType.DATETIME: "datetime64[ns]",
 }
+
+CONFIG_AND_TRANSFORMERS_FILENAME = "config_and_transformers.pickle"
+TRANSFORMERS_FILENAME = "transformers.pickle"
 
 
 class BaseFeatureManager(ABC):
@@ -53,10 +56,21 @@ class BaseFeatureManager(ABC):
             it's loaded and does the transformations.
         transformer_path:
             pickle path to save transformers.
+        config_and_transformers_path:
+            pickle path to save both feature config and transformer
     """
 
-    def __init__(self, config_path: str, transformer_path: Union[str, None] = None):
-        self.config_helper = FeatureConfigHelper.from_config_path(config_path)
+    def __init__(
+        self,
+        config: Union[str, Path, FeatureConfig],
+        # config: Union[str, FeatureConfig],
+        transformer_path: Union[str, None] = None,
+        config_and_transformers_path: Union[str, None] = None,
+    ):
+        if isinstance(config, str) or isinstance(config, Path):
+            self.config_helper = FeatureConfigHelper.from_config_path(config)
+        elif isinstance(config, FeatureConfig):
+            self.config_helper = FeatureConfigHelper(config)
         self.raw_data_dir = self.config_helper.raw_data_dir
         self.dataset_name = self.config_helper.dataset_name
         self.feature_metadata = self.config_helper.feature_metadata
@@ -67,12 +81,37 @@ class BaseFeatureManager(ABC):
         self.transforming_class_by_feature_name: Dict[str, Any] = {}
         self.transformer_dict: Dict[str, Any] = {}
         self.transformer_path = transformer_path or self.get_transformer_path()
+        self.config_and_transformers_path = (
+            config_and_transformers_path or self.get_config_and_transformer_path()
+        )
+
+    @classmethod
+    def from_config_and_transformers_path(cls, config_and_transformer_path):
+        data = load_pickle(config_and_transformer_path)
+        config = data["feature_config"]
+        fm = cls(config)
+        fm.transformer_dict = data["transformers"]
+        return fm
+
+    def save_feature_config_and_transformers(self):
+        data = {
+            "feature_config": self.config_helper.config,
+            "transformers": self.transformer_dict,
+        }
+        mkdir_if_needed(self.dataset_path.parent)
+        save_path = self.config_and_transformers_path
+        logger.info(f"Saving feature config and transformers to {save_path}")
+        with open(save_path, "wb") as pickle_file:
+            pickle.dump(data, pickle_file)
 
     def get_dataset_path(self):
         return Path(self.raw_data_dir) / "features" / f"{self.dataset_name}.csv"
 
     def get_transformer_path(self):
-        return Path(self.raw_data_dir) / "features" / "transformers.pickle"
+        return Path(self.raw_data_dir) / "features" / TRANSFORMERS_FILENAME
+
+    def get_config_and_transformer_path(self):
+        return Path(self.raw_data_dir) / "features" / CONFIG_AND_TRANSFORMERS_FILENAME
 
     def _get_base_transforming_class(self):
         raise NotImplementedError
@@ -128,6 +167,7 @@ class BaseFeatureManager(ABC):
         self.dataframe.to_csv(self.dataset_path, index=False)
 
     def save_transformers(self):
+        # TODO: deprecate this method in favor of save_feature_config_and_transformers
         """Saves the transformers to disk."""
         mkdir_if_needed(self.dataset_path.parent)
         logger.info(f"Saving transformers to {self.transformer_path}")
@@ -214,6 +254,7 @@ class BaseFeatureManager(ABC):
         self.compute_transforming_features()
         self.save_dataframe()
         self.save_transformers()
+        self.save_feature_config_and_transformers()
 
     def compute_prediction_features(
         self, prediction_feature_names: Union[List[str], None] = None
