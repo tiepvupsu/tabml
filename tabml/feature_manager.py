@@ -24,6 +24,9 @@ PANDAS_DTYPE_MAPPING = {
     DType.DATETIME: "datetime64[ns]",
 }
 
+CONFIG_AND_TRANSFORMERS_FILENAME = "config_and_transformers.pickle"
+TRANSFORMERS_FILENAME = "transformers.pickle"
+
 
 class BaseFeatureManager(ABC):
     """A Base class for feature manager.
@@ -104,10 +107,10 @@ class BaseFeatureManager(ABC):
         return Path(self.raw_data_dir) / "features" / f"{self.dataset_name}.csv"
 
     def get_transformer_path(self):
-        return Path(self.raw_data_dir) / "features" / "transformers.pickle"
+        return Path(self.raw_data_dir) / "features" / TRANSFORMERS_FILENAME
 
     def get_config_and_transformer_path(self):
-        return Path(self.raw_data_dir) / "features" / "config_and_transformers.pickle"
+        return Path(self.raw_data_dir) / "features" / CONFIG_AND_TRANSFORMERS_FILENAME
 
     def _get_base_transforming_class(self):
         raise NotImplementedError
