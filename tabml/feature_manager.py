@@ -11,7 +11,7 @@ from tabml.experiment_manager import ExperimentManger
 from tabml.feature_config_helper import FeatureConfigHelper
 from tabml.schemas.feature_config import DType
 from tabml.utils.logger import logger
-from tabml.utils.utils import check_uniqueness
+from tabml.utils.utils import check_uniqueness, mkdir_if_needed
 
 PANDAS_DTYPE_MAPPING = {
     DType.BOOL: "bool",
@@ -129,8 +129,7 @@ class BaseFeatureManager(ABC):
 
     def save_transformers(self):
         """Saves the transformers to disk."""
-        if not self.dataset_path.parent.exists():
-            self.dataset_path.parent.mkdir(parents=True)
+        mkdir_if_needed(self.dataset_path.parent)
         logger.info(f"Saving transformers to {self.transformer_path}")
         with open(self.transformer_path, "wb") as pickle_file:
             pickle.dump(self.transformer_dict, pickle_file)

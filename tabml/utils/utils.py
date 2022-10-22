@@ -136,10 +136,19 @@ def is_gpu_available():
 
 
 def change_working_dir_pytest(func):
-    # https://stackoverflow.com/a/62055409/11871829
+    """Forces pytest to run from the folder where the test starts.
+
+    Ref: https://stackoverflow.com/a/62055409/11871829
+    """
+
     def apply(request):
         os.chdir(request.fspath.dirname)
         func()
         os.chdir(request.config.invocation_dir)
 
     return apply
+
+
+def mkdir_if_needed(path: Path):
+    if not path.exists():
+        path.mkdir(parents=True)
