@@ -62,7 +62,8 @@ class BaseFeatureManager(ABC):
 
     def __init__(
         self,
-        config: Union[str, FeatureConfig],
+        config: Union[str, Path, FeatureConfig],
+        # config: Union[str, FeatureConfig],
         transformer_path: Union[str, None] = None,
         config_and_transformers_path: Union[str, None] = None,
     ):
