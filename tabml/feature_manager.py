@@ -66,7 +66,7 @@ class BaseFeatureManager(ABC):
         transformer_path: Union[str, None] = None,
         config_and_transformers_path: Union[str, None] = None,
     ):
-        if isinstance(config, str):
+        if isinstance(config, str) or isinstance(config, Path):
             self.config_helper = FeatureConfigHelper.from_config_path(config)
         elif isinstance(config, FeatureConfig):
             self.config_helper = FeatureConfigHelper(config)
