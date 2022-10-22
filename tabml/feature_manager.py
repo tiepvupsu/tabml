@@ -1,7 +1,6 @@
 import pickle
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from os import mkdir
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
