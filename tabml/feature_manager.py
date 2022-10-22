@@ -6,13 +6,14 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
+from msilib.schema import Feature
 
 from tabml.config_helpers import parse_pipeline_config
 from tabml.experiment_manager import ExperimentManger
 from tabml.feature_config_helper import FeatureConfigHelper
-from tabml.schemas.feature_config import DType
+from tabml.schemas.feature_config import DType, FeatureConfig
 from tabml.utils.logger import logger
-from tabml.utils.utils import check_uniqueness, mkdir_if_needed
+from tabml.utils.utils import check_uniqueness, load_pickle, mkdir_if_needed
 
 PANDAS_DTYPE_MAPPING = {
     DType.BOOL: "bool",
@@ -24,6 +25,8 @@ PANDAS_DTYPE_MAPPING = {
     # DATETIME will be converted to datetime parse_date https://tinyurl.com/y4waw6np
     DType.DATETIME: "datetime64[ns]",
 }
+
+CONFIG_AND_TRANSFORMERS_FILENAME
 
 
 class BaseFeatureManager(ABC):
@@ -60,11 +63,14 @@ class BaseFeatureManager(ABC):
 
     def __init__(
         self,
-        config_path: str,
+        config: Union[str, FeatureConfig],
         transformer_path: Union[str, None] = None,
         config_and_transformers_path: Union[str, None] = None,
     ):
-        self.config_helper = FeatureConfigHelper.from_config_path(config_path)
+        if isinstance(config, str):
+            self.config_helper = FeatureConfigHelper.from_config_path(config)
+        elif isinstance(config, FeatureConfig):
+            self.config_helper = FeatureConfigHelper(config)
         self.raw_data_dir = self.config_helper.raw_data_dir
         self.dataset_name = self.config_helper.dataset_name
         self.feature_metadata = self.config_helper.feature_metadata
@@ -78,6 +84,25 @@ class BaseFeatureManager(ABC):
         self.config_and_transformers_path = (
             config_and_transformers_path or self.get_config_and_transformer_path()
         )
+
+    @classmethod
+    def from_config_and_transformers_path(cls, config_and_transformer_path):
+        data = load_pickle(config_and_transformer_path)
+        config = data["feature_config"]
+        fm = cls(config)
+        fm.transformer_dict = data["transformers"]
+        return fm
+
+    def save_feature_config_and_transformers(self):
+        data = {
+            "feature_config": self.config_helper.config,
+            "transformers": self.transformer_dict,
+        }
+        mkdir_if_needed(self.dataset_path.parent)
+        save_path = self.config_and_transformers_path
+        logger.info(f"Saving feature config and transformers to {save_path}")
+        with open(save_path, "wb") as pickle_file:
+            pickle.dump(data, pickle_file)
 
     def get_dataset_path(self):
         return Path(self.raw_data_dir) / "features" / f"{self.dataset_name}.csv"
@@ -148,17 +173,6 @@ class BaseFeatureManager(ABC):
         logger.info(f"Saving transformers to {self.transformer_path}")
         with open(self.transformer_path, "wb") as pickle_file:
             pickle.dump(self.transformer_dict, pickle_file)
-
-    def save_feature_config_and_transformers(self):
-        data = {
-            "feature_config": self.config_helper.config,
-            "transformers": self.transformer_dict,
-        }
-        mkdir_if_needed(self.dataset_path.parent)
-        save_path = self.config_and_transformers_path
-        logger.info(f"Saving feature config and transformers to {save_path}")
-        with open(save_path, "wb") as pickle_file:
-            pickle.dump(data, pickle_file)
 
     def compute_transforming_feature(
         self, feature_name: str, is_training: bool = True

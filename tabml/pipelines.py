@@ -1,3 +1,4 @@
+import pickle
 from abc import ABC
 from pathlib import Path
 
@@ -46,6 +47,14 @@ class BasePipeline(ABC):
             self._log_to_mlflow()
             self.train()
             self.analyze_model()
+        self.save_config_and_model()
+
+    def save_config_and_model(self):
+        data = {"pipeline_config": self.config, "model": self.model_wrapper.model}
+        save_path = self.exp_manager.get_config_and_model_path()
+        logger.info(f"Saving pipeline config and trained model to {save_path}")
+        with open(save_path, "wb") as pickle_file:
+            pickle.dump(data, pickle_file)
 
     def _init_mlflow(self):
         model_type = self.model_wrapper.mlflow_model_type
