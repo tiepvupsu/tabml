@@ -11,7 +11,7 @@ from tabml.experiment_manager import ExperimentManger
 from tabml.feature_config_helper import FeatureConfigHelper
 from tabml.schemas.feature_config import DType, FeatureConfig
 from tabml.utils.logger import logger
-from tabml.utils.utils import check_uniqueness, load_pickle, mkdir_if_needed
+from tabml.utils.utils import check_uniqueness, mkdir_if_needed
 
 PANDAS_DTYPE_MAPPING = {
     DType.BOOL: "bool",
@@ -63,7 +63,6 @@ class BaseFeatureManager(ABC):
     def __init__(
         self,
         config: Union[str, Path, FeatureConfig],
-        # config: Union[str, FeatureConfig],
         transformer_path: Union[str, None] = None,
         config_and_transformers_path: Union[str, None] = None,
     ):
@@ -86,11 +85,10 @@ class BaseFeatureManager(ABC):
         )
 
     @classmethod
-    def from_config_and_transformers_path(cls, config_and_transformer_path):
-        data = load_pickle(config_and_transformer_path)
-        config = data["feature_config"]
-        fm = cls(config)
-        fm.transformer_dict = data["transformers"]
+    def from_full_pipeline_data(cls, full_pipeline_data):
+        feature_config = full_pipeline_data["feature_config"]
+        fm = cls(feature_config)
+        fm.transformer_dict = full_pipeline_data["transformers"]
         return fm
 
     def save_feature_config_and_transformers(self):

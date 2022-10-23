@@ -15,7 +15,7 @@ from tabml.experiment_manager import ExperimentManger
 from tabml.schemas import pipeline_config
 from tabml.utils import factory, utils
 from tabml.utils.logger import boosting_logger_eval, logger
-from tabml.utils.utils import load_pickle, save_as_pickle
+from tabml.utils.utils import save_as_pickle
 
 MLFLOW_AUTOLOG = {
     "sklearn": mlflow.sklearn.autolog(),
@@ -272,7 +272,9 @@ def write_model_wrapper_subclasses_to_file(
     while stack:
         node, level = stack.pop()
         lines.append("    " * level + f"- {node}\n")
-        stack.extend((child, level + 1) for child in node.__subclasses__())
+        stack.extend(
+            (child, level + 1) for child in node.__subclasses__()
+        )  # type: ignore
 
     with open(md_path, "w") as f:
         f.writelines(lines)
@@ -298,10 +300,9 @@ def initialize_model_wrapper(
     return _model_wrapper
 
 
-def initialize_model_wrapper_from_bundle(pipeline_config_and_model_path: str):
-    pipeline_data = load_pickle(pipeline_config_and_model_path)
-    pipeline_config = pipeline_data["pipeline_config"]
-    model = pipeline_data["model"]
+def initialize_model_wrapper_from_full_pipeline_pickle(full_pipeline_data):
+    pipeline_config = full_pipeline_data["pipeline_config"]
+    model = full_pipeline_data["model"]
     return initialize_model_wrapper(params=pipeline_config.model_wrapper, model=model)
 
 
