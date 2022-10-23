@@ -3,7 +3,6 @@ from pathlib import Path
 
 from tabml.examples.titanic import feature_manager, pipelines
 from tabml.experiment_manager import ExperimentManger
-from tabml.feature_manager import CONFIG_AND_TRANSFORMERS_FILENAME
 from tabml.inference import ModelInference, ModelInferenceCompact
 from tabml.utils.utils import change_working_dir_pytest
 
@@ -61,7 +60,7 @@ def _test_inference_compact(config_path):
     )
     model_inference = ModelInferenceCompact(
         # FIXME: typing
-        feature_manager_cls=feature_manager.FeatureManager,
+        feature_manager_cls=feature_manager.FeatureManager,  # type: ignore
         full_pipeline_path=full_pipeline_path,
     )
     model_inference.predict(RAW_DATA_SAMPLES)
