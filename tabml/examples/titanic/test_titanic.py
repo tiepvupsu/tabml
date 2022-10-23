@@ -1,5 +1,6 @@
 import tempfile
 from pathlib import Path
+from typing import Union
 
 from tabml.examples.titanic import feature_manager, pipelines
 from tabml.experiment_manager import ExperimentManger
@@ -36,7 +37,9 @@ RAW_DATA_SAMPLES = [
 
 
 def _test_inference(
-    config_path, test_custom_pipeline_config_path=False, transformer_path=None
+    config_path,
+    test_custom_pipeline_config_path=False,
+    transformer_path=Union[None, str],
 ):
     feature_config_path = "./configs/feature_config.yaml"
     last_model_run_dir = ExperimentManger(config_path).get_most_recent_run_dir()

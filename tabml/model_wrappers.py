@@ -100,7 +100,7 @@ class BaseSklearnModelWrapper(BaseModelWrapper):
         self.save_model_name = "model_0"
         self.model = factory.create(params.sklearn_cls)(**self.model_params)
 
-    def fit(self, data_loader: BaseDataLoader, model_dir: str):
+    def fit(self, data_loader: BaseDataLoader, model_dir: Union[str, Path]):
         assert (
             data_loader.label_col is not None
         ), "data_loader.label_col must be declared in BaseDataLoader subclasses."
@@ -137,7 +137,7 @@ class BaseBoostingModelWrapper(BaseModelWrapper):
     def _get_fit_params(self, train_data: Tuple, val_data: Tuple) -> Dict:
         pass
 
-    def fit(self, data_loader: BaseDataLoader, model_dir: str):
+    def fit(self, data_loader: BaseDataLoader, model_dir: Union[str, Path]):
         assert (
             data_loader.label_col is not None
         ), "data_loader.label_col must be declared in BaseDataLoader subclasses."
