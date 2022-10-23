@@ -11,7 +11,7 @@ from tabml.experiment_manager import ExperimentManger
 from tabml.feature_config_helper import FeatureConfigHelper
 from tabml.schemas.feature_config import DType, FeatureConfig
 from tabml.utils.logger import logger
-from tabml.utils.utils import check_uniqueness, load_pickle, mkdir_if_needed
+from tabml.utils.utils import check_uniqueness, mkdir_if_needed
 
 PANDAS_DTYPE_MAPPING = {
     DType.BOOL: "bool",

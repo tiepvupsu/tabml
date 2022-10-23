@@ -9,7 +9,6 @@ from tabml.experiment_manager import ExperimentManger
 from tabml.feature_manager import BaseFeatureManager
 from tabml.model_wrappers import (
     initialize_model_wrapper,
-    initialize_model_wrapper_from_bundle,
     initialize_model_wrapper_from_full_pipeline_pickle,
 )
 from tabml.utils.utils import load_pickle
