@@ -24,6 +24,7 @@ class ExperimentManger:
     config_filename = "config.yaml"
     _model_analysis_dir = "model_analysis"
     config_and_model_filename = "pipeline_config_and_model.pickle"
+    full_pipeline_filename = "full_pipeline.pickle"
 
     def __init__(
         self,
@@ -57,6 +58,7 @@ class ExperimentManger:
         return self.exp_root_dir.joinpath(self.run_prefix + _get_time_stamp())
 
     def create_new_run_dir(self):
+        # FIXME:typing
         _make_dir_if_needed(self.run_dir)
         self._copy_config_file()
 
@@ -72,12 +74,16 @@ class ExperimentManger:
     def get_config_and_model_path(self):
         return self._make_path_under_run_dir(self.config_and_model_filename)
 
+    def get_full_pipeline_path(self):
+        return self._make_path_under_run_dir(self.full_pipeline_filename)
+
     def get_model_analysis_dir(self):
         res = self._make_path_under_run_dir(self._model_analysis_dir)
         _make_dir_if_needed(res)
         return res
 
     def _make_path_under_run_dir(self, sub_path: str) -> str:
+        # FIXME:typing
         return self.run_dir.joinpath(sub_path)
 
     def get_most_recent_run_dir(self):

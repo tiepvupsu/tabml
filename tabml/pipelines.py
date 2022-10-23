@@ -7,9 +7,11 @@ import mlflow
 from tabml import experiment_manager, model_wrappers
 from tabml.config_helpers import parse_pipeline_config
 from tabml.data_loaders import BaseDataLoader
+from tabml.feature_manager import BaseFeatureManager
 from tabml.model_analysis import ModelAnalysis
 from tabml.utils import factory
 from tabml.utils.logger import logger
+from tabml.utils.utils import load_pickle
 
 
 class BasePipeline(ABC):
@@ -47,12 +49,28 @@ class BasePipeline(ABC):
             self._log_to_mlflow()
             self.train()
             self.analyze_model()
-        self.save_config_and_model()
+        self.save_full_pipeline_pickle()
 
     def save_config_and_model(self):
         data = {"pipeline_config": self.config, "model": self.model_wrapper.model}
         save_path = self.exp_manager.get_config_and_model_path()
         logger.info(f"Saving pipeline config and trained model to {save_path}")
+        with open(save_path, "wb") as pickle_file:
+            pickle.dump(data, pickle_file)
+
+    def save_full_pipeline_pickle(self):
+        feature_config_and_transformer_path = BaseFeatureManager(
+            self.config.data_loader.feature_config_path
+        ).get_config_and_transformer_path()
+        feature_data = load_pickle(feature_config_and_transformer_path)
+        data = {
+            "feature_config": feature_data["feature_config"],
+            "transformers": feature_data["transformers"],
+            "pipeline_config": self.config,
+            "model": self.model_wrapper.model,
+        }
+        save_path = self.exp_manager.get_full_pipeline_path()
+        logger.info(f"Saving full pipeline to {save_path}")
         with open(save_path, "wb") as pickle_file:
             pickle.dump(data, pickle_file)
 
@@ -74,6 +92,7 @@ class BasePipeline(ABC):
     def train(self):
         model_dir = self.exp_manager.run_dir
         logger.info("Start training the model.")
+        # FIXME:typing
         self.model_wrapper.fit(self.data_loader, model_dir)
 
     def _get_data_loader(self) -> BaseDataLoader:
