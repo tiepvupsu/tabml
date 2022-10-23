@@ -43,6 +43,7 @@ def _test_inference(
     last_model_run_dir = ExperimentManger(config_path).get_most_recent_run_dir()
     model_path = Path(last_model_run_dir) / "model_0"
     pipeline_config_path = config_path if test_custom_pipeline_config_path else None
+    # FIXME: typing
     model_inference = ModelInference(
         feature_manager_cls=feature_manager.FeatureManager,
         feature_config_path=feature_config_path,
@@ -54,17 +55,14 @@ def _test_inference(
 
 
 def _test_inference_compact(config_path):
-    feature_config_and_transformers_path = (
-        Path("./data/features") / CONFIG_AND_TRANSFORMERS_FILENAME
-    )
-    pipeline_config_and_model_path = (
+    full_pipeline_path = (
         ExperimentManger(config_path).get_most_recent_run_dir()
-        / ExperimentManger.config_and_model_filename
+        / ExperimentManger.full_pipeline_filename
     )
     model_inference = ModelInferenceCompact(
+        # FIXME: typing
         feature_manager_cls=feature_manager.FeatureManager,
-        feature_config_and_transformers_path=feature_config_and_transformers_path,
-        pipeline_config_and_model_path=pipeline_config_and_model_path,
+        full_pipeline_path=full_pipeline_path,
     )
     model_inference.predict(RAW_DATA_SAMPLES)
 
