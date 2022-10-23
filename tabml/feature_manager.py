@@ -63,7 +63,6 @@ class BaseFeatureManager(ABC):
     def __init__(
         self,
         config: Union[str, Path, FeatureConfig],
-        # config: Union[str, FeatureConfig],
         transformer_path: Union[str, None] = None,
         config_and_transformers_path: Union[str, None] = None,
     ):
@@ -84,15 +83,6 @@ class BaseFeatureManager(ABC):
         self.config_and_transformers_path = (
             config_and_transformers_path or self.get_config_and_transformer_path()
         )
-
-    # TODO: deprecate after fully testing from_full_pipeline_data
-    @classmethod
-    def from_config_and_transformers_path(cls, config_and_transformer_path):
-        data = load_pickle(config_and_transformer_path)
-        config = data["feature_config"]
-        fm = cls(config)
-        fm.transformer_dict = data["transformers"]
-        return fm
 
     @classmethod
     def from_full_pipeline_data(cls, full_pipeline_data):

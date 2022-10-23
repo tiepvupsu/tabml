@@ -46,27 +46,6 @@ class ModelInferenceCompact:
 
 
 @dataclass
-class ModelInferenceCompactLegacy:
-    feature_manager_cls: BaseFeatureManager
-    feature_config_and_transformers_path: str
-    pipeline_config_and_model_path: str
-
-    def __post_init__(self):
-        self.fm = self.feature_manager_cls.from_config_and_transformers_path(
-            self.feature_config_and_transformers_path
-        )
-        pipeline_data = load_pickle(self.pipeline_config_and_model_path)
-        pipeline_config = pipeline_data["pipeline_config"]
-        self.model_wrapper = initialize_model_wrapper_from_bundle(
-            self.pipeline_config_and_model_path
-        )
-        self.features_to_model = list(pipeline_config.data_loader.features_to_model)
-
-    def predict(self, raw_data: List[Dict[str, Any]]) -> Iterable[Any]:
-        return _predict(self.fm, self.model_wrapper, self.features_to_model, raw_data)
-
-
-@dataclass
 class ModelInference:
     feature_manager_cls: BaseFeatureManager
     feature_config_path: str
