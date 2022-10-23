@@ -51,13 +51,6 @@ class BasePipeline(ABC):
             self.analyze_model()
         self.save_full_pipeline_pickle()
 
-    def save_config_and_model(self):
-        data = {"pipeline_config": self.config, "model": self.model_wrapper.model}
-        save_path = self.exp_manager.get_config_and_model_path()
-        logger.info(f"Saving pipeline config and trained model to {save_path}")
-        with open(save_path, "wb") as pickle_file:
-            pickle.dump(data, pickle_file)
-
     def save_full_pipeline_pickle(self):
         feature_config_and_transformer_path = BaseFeatureManager(
             self.config.data_loader.feature_config_path
