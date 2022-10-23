@@ -78,8 +78,7 @@ class ExperimentManger:
         _make_dir_if_needed(res)
         return res
 
-    def _make_path_under_run_dir(self, sub_path: str) -> str:
-        # FIXME:typing
+    def _make_path_under_run_dir(self, sub_path: str) -> Path:
         return self.run_dir.joinpath(sub_path)
 
     def get_most_recent_run_dir(self):
@@ -113,7 +112,7 @@ class ExperimentManger:
         return str(run_dir / cls.config_filename)
 
 
-def _make_dir_if_needed(dir_path: str):
+def _make_dir_if_needed(dir_path: Union[str, Path]):
     if not Path(dir_path).exists():
         Path(dir_path).mkdir(parents=True)
 
