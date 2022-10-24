@@ -39,7 +39,7 @@ RAW_DATA_SAMPLES = [
 def _test_inference(
     config_path,
     test_custom_pipeline_config_path=False,
-    transformer_path=Union[None, str],
+    transformer_path: Union[Path, str] = "",
 ):
     feature_config_path = "./configs/feature_config.yaml"
     last_model_run_dir = ExperimentManger(config_path).get_most_recent_run_dir()

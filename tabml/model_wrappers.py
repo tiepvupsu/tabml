@@ -53,7 +53,7 @@ class BaseModelWrapper(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def load_model(self, model_path: str):
+    def load_model(self, model_path: Union[str, Path]):
         pass
 
     def get_feature_importance(self, input_data) -> Dict[str, float]:
@@ -271,7 +271,7 @@ def write_model_wrapper_subclasses_to_file(
 
 def initialize_model_wrapper(
     params: pipeline_config.ModelWrapper,
-    model_path: Union[str, None] = None,
+    model_path: Union[str, Path, None] = None,
     model: Optional[Any] = None,
 ):
     """Initializes model wrapper from params."""
