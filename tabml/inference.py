@@ -46,10 +46,10 @@ class ModelInferenceCompact:
 
 @dataclass
 class ModelInference:
-    feature_manager_cls: BaseFeatureManager
-    feature_config_path: str
-    transformer_path: str
-    model_path: str = ""
+    feature_manager_cls: Any
+    feature_config_path: Union[str, Path]
+    transformer_path: Union[str, Path]
+    model_path: Union[str, Path] = ""
     pipeline_config_path: Union[str, None] = None
 
     def __post_init__(self):

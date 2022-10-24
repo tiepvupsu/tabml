@@ -7,7 +7,7 @@ import tempfile
 import typing
 from collections import Counter
 from pathlib import Path
-from typing import Any, Collection
+from typing import Any, Collection, Union
 
 import GPUtil
 
@@ -90,7 +90,7 @@ def show_feature_importance(data: typing.Dict[str, float]) -> None:
     logger.info(subprocess.getoutput(f"termgraph {tmp_file.name}"))
 
 
-def save_as_pickle(an_object: Any, path: str, filename: str) -> None:
+def save_as_pickle(an_object: Any, path: Union[str, Path], filename: str) -> None:
     """Saves an object as a pickle file.
 
     Args:

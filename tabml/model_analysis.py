@@ -164,8 +164,7 @@ class ModelAnalysis:
 
         df_group = pd.DataFrame(list_of_group_dicts).sort_values(
             by=self.metrics[0].score_names[0],
-            # FIXME: typing
-            ascending=self.metrics[0].is_higher_better,
+            ascending=self.metrics[0].is_higher_better,  # type: ignore
         )
         saved_path = self._get_df_feature_metric_csv_path(dataset_name, feature_name)
         df_group.to_csv(saved_path, index=False)

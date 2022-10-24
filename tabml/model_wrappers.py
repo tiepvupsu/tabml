@@ -36,7 +36,7 @@ class BaseModelWrapper(ABC):
         # Parameters for model training
         self.fit_params = params.fit_params
 
-    def fit(self, data_loader: BaseDataLoader, model_dir: str):
+    def fit(self, data_loader: BaseDataLoader, model_dir: Union[str, Path]):
         pass
 
     @abstractmethod
@@ -53,7 +53,7 @@ class BaseModelWrapper(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def load_model(self, model_path: str):
+    def load_model(self, model_path: Union[str, Path]):
         pass
 
     def get_feature_importance(self, input_data) -> Dict[str, float]:
@@ -100,7 +100,7 @@ class BaseSklearnModelWrapper(BaseModelWrapper):
         self.save_model_name = "model_0"
         self.model = factory.create(params.sklearn_cls)(**self.model_params)
 
-    def fit(self, data_loader: BaseDataLoader, model_dir: str):
+    def fit(self, data_loader: BaseDataLoader, model_dir: Union[str, Path]):
         assert (
             data_loader.label_col is not None
         ), "data_loader.label_col must be declared in BaseDataLoader subclasses."
@@ -109,7 +109,7 @@ class BaseSklearnModelWrapper(BaseModelWrapper):
         self.model.fit(X=train_feature, y=train_label, **self.fit_params)
         save_as_pickle(self.model, model_dir, self.save_model_name)
 
-    def load_model(self, model_path: str):
+    def load_model(self, model_path: Union[str, Path]):
         self.model = utils.load_pickle(model_path)
 
     def predict(self, data):
@@ -127,12 +127,17 @@ class BaseBoostingModelWrapper(BaseModelWrapper):
     def __init__(self, params=pipeline_config.ModelWrapper()):
         super().__init__(params)
         self.save_model_name = "model_0"
+        self.build_model()
+
+    @abstractmethod
+    def build_model(self):
+        pass
 
     @abstractmethod
     def _get_fit_params(self, train_data: Tuple, val_data: Tuple) -> Dict:
         pass
 
-    def fit(self, data_loader: BaseDataLoader, model_dir: str):
+    def fit(self, data_loader: BaseDataLoader, model_dir: Union[str, Path]):
         assert (
             data_loader.label_col is not None
         ), "data_loader.label_col must be declared in BaseDataLoader subclasses."
@@ -141,7 +146,6 @@ class BaseBoostingModelWrapper(BaseModelWrapper):
 
         fit_params = self._get_fit_params((train_feature, train_label), val_data)
 
-        # breakpoint()
         self.model.fit(X=train_feature, y=train_label, **fit_params)
         save_as_pickle(self.model, model_dir, self.save_model_name)
 
@@ -151,16 +155,11 @@ class BaseLgbmModelWrapper(BaseBoostingModelWrapper):
 
     def __init__(self, params=pipeline_config.ModelWrapper()):
         super().__init__(params)
-        self.model = self.build_model()
-
-    @abstractmethod
-    def build_model(self):
-        pass
 
     def predict(self, data):
         return self.model.predict(data)
 
-    def load_model(self, model_path: str):
+    def load_model(self, model_path: Union[str, Path]):
         self.model = utils.load_pickle(model_path)
 
     def _get_fit_params(self, train_data: Tuple, val_data: Tuple) -> Dict:
@@ -175,7 +174,7 @@ class BaseLgbmModelWrapper(BaseBoostingModelWrapper):
 
 class LgbmClassifierModelWrapper(BaseLgbmModelWrapper):
     def build_model(self):
-        return LGBMClassifier(**self.model_params)
+        self.model = LGBMClassifier(**self.model_params)
 
     def predict_proba(self, data) -> Iterable:
         return self.model.predict_proba(data)[:, 1]
@@ -183,25 +182,20 @@ class LgbmClassifierModelWrapper(BaseLgbmModelWrapper):
 
 class LgbmRegressorModelWrapper(BaseLgbmModelWrapper):
     def build_model(self):
-        return LGBMRegressor(**self.model_params)
+        self.model = LGBMRegressor(**self.model_params)
 
 
 class BaseXGBoostModelWrapper(BaseBoostingModelWrapper):
     mlflow_model_type = "xgboost"
+    tree_method = "gpu_hist" if utils.is_gpu_available() else "auto"
 
-    def __init__(self, params=pipeline_config.ModelWrapper):
+    def __init__(self, params=pipeline_config.ModelWrapper()):
         super().__init__(params)
-        self.tree_method = "gpu_hist" if utils.is_gpu_available() else "auto"
-        self.model = self.build_model()
-
-    @abstractmethod
-    def build_model(self):
-        pass
 
     def predict(self, data):
         return self.model.predict(data)
 
-    def load_model(self, model_path: str):
+    def load_model(self, model_path: Union[str, Path]):
         self.model = utils.load_pickle(model_path)
 
     def _get_fit_params(self, train_data, val_data):
@@ -215,12 +209,12 @@ class BaseXGBoostModelWrapper(BaseBoostingModelWrapper):
 
 class XGBoostRegressorModelWrapper(BaseXGBoostModelWrapper):
     def build_model(self):
-        return XGBRegressor(tree_method=self.tree_method, **self.model_params)
+        self.model = XGBRegressor(tree_method=self.tree_method, **self.model_params)
 
 
 class XGBoostClassifierModelWrapper(BaseXGBoostModelWrapper):
     def build_model(self):
-        return XGBClassifier(tree_method=self.tree_method, **self.model_params)
+        self.model = XGBClassifier(tree_method=self.tree_method, **self.model_params)
 
     def predict_proba(self, data) -> Iterable:
         return self.model.predict_proba(data)[:, 1]
@@ -228,20 +222,15 @@ class XGBoostClassifierModelWrapper(BaseXGBoostModelWrapper):
 
 class BaseCatBoostModelWrapper(BaseBoostingModelWrapper):
     mlflow_model_type = "catboost"
+    task_type = "GPU" if utils.is_gpu_available() else "CPU"
 
     def __init__(self, params=pipeline_config.ModelWrapper()):
         super().__init__(params)
-        self.task_type = "GPU" if utils.is_gpu_available() else "CPU"
-        self.model = self.build_model()
-
-    @abstractmethod
-    def build_model(self):
-        pass
 
     def predict(self, data):
         return self.model.predict(data)
 
-    def load_model(self, model_path: str):
+    def load_model(self, model_path: Union[str, Path]):
         self.model = utils.load_pickle(model_path)
 
     def _get_fit_params(self, train_data, val_data):
@@ -252,7 +241,7 @@ class BaseCatBoostModelWrapper(BaseBoostingModelWrapper):
 
 class CatBoostClassifierModelWrapper(BaseCatBoostModelWrapper):
     def build_model(self):
-        return CatBoostClassifier(**self.model_params)
+        self.model = CatBoostClassifier(**self.model_params)
 
     def predict_proba(self, data) -> Iterable:
         return self.model.predict_proba(data)[:, 1]
@@ -260,7 +249,7 @@ class CatBoostClassifierModelWrapper(BaseCatBoostModelWrapper):
 
 class CatBoostRegressorModelWrapper(BaseCatBoostModelWrapper):
     def build_model(self):
-        return CatBoostRegressor(task_type=self.task_type, **self.model_params)
+        self.model = CatBoostRegressor(task_type=self.task_type, **self.model_params)
 
 
 def write_model_wrapper_subclasses_to_file(
@@ -282,7 +271,7 @@ def write_model_wrapper_subclasses_to_file(
 
 def initialize_model_wrapper(
     params: pipeline_config.ModelWrapper,
-    model_path: Union[str, None] = None,
+    model_path: Union[str, Path, None] = None,
     model: Optional[Any] = None,
 ):
     """Initializes model wrapper from params."""
