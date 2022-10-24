@@ -85,7 +85,6 @@ class BasePipeline(ABC):
     def train(self):
         model_dir = self.exp_manager.run_dir
         logger.info("Start training the model.")
-        # FIXME:typing
         self.model_wrapper.fit(self.data_loader, model_dir)
 
     def _get_data_loader(self) -> BaseDataLoader:

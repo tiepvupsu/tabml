@@ -57,7 +57,6 @@ class ExperimentManger:
         return self.exp_root_dir.joinpath(self.run_prefix + _get_time_stamp())
 
     def create_new_run_dir(self):
-        # FIXME:typing
         _make_dir_if_needed(self.run_dir)
         self._copy_config_file()
 

@@ -45,7 +45,6 @@ def _test_inference(
     last_model_run_dir = ExperimentManger(config_path).get_most_recent_run_dir()
     model_path = Path(last_model_run_dir) / "model_0"
     pipeline_config_path = config_path if test_custom_pipeline_config_path else None
-    # FIXME: typing
     model_inference = ModelInference(
         feature_manager_cls=feature_manager.FeatureManager,
         feature_config_path=feature_config_path,
@@ -62,7 +61,6 @@ def _test_inference_compact(config_path):
         / ExperimentManger.full_pipeline_filename
     )
     model_inference = ModelInferenceCompact(
-        # FIXME: typing
         feature_manager_cls=feature_manager.FeatureManager,  # type: ignore
         full_pipeline_path=full_pipeline_path,
     )
