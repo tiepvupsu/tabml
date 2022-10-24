@@ -63,7 +63,7 @@ class BaseFeatureManager(ABC):
     def __init__(
         self,
         config: Union[str, Path, FeatureConfig],
-        transformer_path: Union[str, None] = None,
+        transformer_path: Union[str, Path, None] = None,
         config_and_transformers_path: Union[str, None] = None,
     ):
         if isinstance(config, str) or isinstance(config, Path):
