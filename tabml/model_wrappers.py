@@ -182,7 +182,7 @@ class LgbmClassifierModelWrapper(BaseLgbmModelWrapper):
 
 class LgbmRegressorModelWrapper(BaseLgbmModelWrapper):
     def build_model(self):
-        return LGBMRegressor(**self.model_params)
+        self.model = LGBMRegressor(**self.model_params)
 
 
 class BaseXGBoostModelWrapper(BaseBoostingModelWrapper):
@@ -222,10 +222,10 @@ class XGBoostClassifierModelWrapper(BaseXGBoostModelWrapper):
 
 class BaseCatBoostModelWrapper(BaseBoostingModelWrapper):
     mlflow_model_type = "catboost"
+    task_type = "GPU" if utils.is_gpu_available() else "CPU"
 
     def __init__(self, params=pipeline_config.ModelWrapper()):
         super().__init__(params)
-        self.task_type = "GPU" if utils.is_gpu_available() else "CPU"
 
     def predict(self, data):
         return self.model.predict(data)
