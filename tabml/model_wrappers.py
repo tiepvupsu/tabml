@@ -109,7 +109,7 @@ class BaseSklearnModelWrapper(BaseModelWrapper):
         self.model.fit(X=train_feature, y=train_label, **self.fit_params)
         save_as_pickle(self.model, model_dir, self.save_model_name)
 
-    def load_model(self, model_path: str):
+    def load_model(self, model_path: Union[str, Path]):
         self.model = utils.load_pickle(model_path)
 
     def predict(self, data):
@@ -159,7 +159,7 @@ class BaseLgbmModelWrapper(BaseBoostingModelWrapper):
     def predict(self, data):
         return self.model.predict(data)
 
-    def load_model(self, model_path: str):
+    def load_model(self, model_path: Union[str, Path]):
         self.model = utils.load_pickle(model_path)
 
     def _get_fit_params(self, train_data: Tuple, val_data: Tuple) -> Dict:
@@ -195,7 +195,7 @@ class BaseXGBoostModelWrapper(BaseBoostingModelWrapper):
     def predict(self, data):
         return self.model.predict(data)
 
-    def load_model(self, model_path: str):
+    def load_model(self, model_path: Union[str, Path]):
         self.model = utils.load_pickle(model_path)
 
     def _get_fit_params(self, train_data, val_data):
@@ -230,7 +230,7 @@ class BaseCatBoostModelWrapper(BaseBoostingModelWrapper):
     def predict(self, data):
         return self.model.predict(data)
 
-    def load_model(self, model_path: str):
+    def load_model(self, model_path: Union[str, Path]):
         self.model = utils.load_pickle(model_path)
 
     def _get_fit_params(self, train_data, val_data):
