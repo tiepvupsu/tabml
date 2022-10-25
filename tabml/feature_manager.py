@@ -25,7 +25,6 @@ PANDAS_DTYPE_MAPPING = {
 }
 
 CONFIG_AND_TRANSFORMERS_FILENAME = "config_and_transformers.pickle"
-TRANSFORMERS_FILENAME = "transformers.pickle"
 
 
 class BaseFeatureManager(ABC):
@@ -54,8 +53,6 @@ class BaseFeatureManager(ABC):
             A dictionary of {feature_name: its transformer}. This transformer_dict is
             formed and saved to a pickle in the "training" stage. In "serving" stage,
             it's loaded and does the transformations.
-        transformer_path:
-            pickle path to save transformers.
         config_and_transformers_path:
             pickle path to save both feature config and transformer
     """
@@ -63,7 +60,6 @@ class BaseFeatureManager(ABC):
     def __init__(
         self,
         config: Union[str, Path, FeatureConfig],
-        transformer_path: Union[str, Path, None] = None,
         config_and_transformers_path: Union[str, None] = None,
     ):
         if isinstance(config, str) or isinstance(config, Path):
@@ -79,7 +75,6 @@ class BaseFeatureManager(ABC):
         self.dataframe: pd.DataFrame = pd.DataFrame()
         self.transforming_class_by_feature_name: Dict[str, Any] = {}
         self.transformer_dict: Dict[str, Any] = {}
-        self.transformer_path = transformer_path or self.get_transformer_path()
         self.config_and_transformers_path = (
             config_and_transformers_path or self.get_config_and_transformer_path()
         )
@@ -104,9 +99,6 @@ class BaseFeatureManager(ABC):
 
     def get_dataset_path(self):
         return Path(self.raw_data_dir) / "features" / f"{self.dataset_name}.csv"
-
-    def get_transformer_path(self):
-        return Path(self.raw_data_dir) / "features" / TRANSFORMERS_FILENAME
 
     def get_config_and_transformer_path(self):
         return Path(self.raw_data_dir) / "features" / CONFIG_AND_TRANSFORMERS_FILENAME
@@ -163,14 +155,6 @@ class BaseFeatureManager(ABC):
             self.dataset_path.parent.mkdir(parents=True)
         logger.info(f"Saving dataframe to {self.dataset_path}")
         self.dataframe.to_csv(self.dataset_path, index=False)
-
-    def save_transformers(self):
-        # TODO: deprecate this method in favor of save_feature_config_and_transformers
-        """Saves the transformers to disk."""
-        mkdir_if_needed(self.dataset_path.parent)
-        logger.info(f"Saving transformers to {self.transformer_path}")
-        with open(self.transformer_path, "wb") as pickle_file:
-            pickle.dump(self.transformer_dict, pickle_file)
 
     def compute_transforming_feature(
         self, feature_name: str, is_training: bool = True
@@ -251,7 +235,6 @@ class BaseFeatureManager(ABC):
         self.initialize_dataframe()
         self.compute_transforming_features()
         self.save_dataframe()
-        self.save_transformers()
         self.save_feature_config_and_transformers()
 
     def compute_prediction_features(
