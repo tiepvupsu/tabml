@@ -8,8 +8,8 @@ from tabml.feature_manager import BaseFeatureManager, BaseTransformingFeature
 
 
 class FeatureManager(BaseFeatureManager):
-    def __init__(self, feature_config_path, transformer_path=None):
-        super().__init__(feature_config_path, transformer_path=transformer_path)
+    def __init__(self, feature_config_path):
+        super().__init__(feature_config_path)
 
     def _get_base_transforming_class(self):
         return BaseTitanicTransformingFeature
@@ -166,9 +166,9 @@ class FeatureMinMaxScaledAge(BaseTitanicTransformingFeature):
         return self.transformer.transform(df[["imputed_age"]]).reshape(-1)
 
 
-def run(transformer_path=None):
+def run():
     feature_config_path = "configs/feature_config.yaml"
-    fm = FeatureManager(feature_config_path, transformer_path)
+    fm = FeatureManager(feature_config_path)
     fm.run_all()
 
 
