@@ -26,7 +26,7 @@ def _predict(fm, model_wrapper, features_to_model, raw_data):
 
 
 @dataclass
-class ModelInferenceCompact:
+class ModelInference:
     feature_manager_cls: BaseFeatureManager
     full_pipeline_path: Union[str, Path]
 
@@ -39,33 +39,6 @@ class ModelInferenceCompact:
         pipeline_config = data["pipeline_config"]
         self.model_wrapper = initialize_model_wrapper_from_full_pipeline_pickle(data)
         self.features_to_model = list(pipeline_config.data_loader.features_to_model)
-
-    def predict(self, raw_data: List[Dict[str, Any]]) -> Iterable[Any]:
-        return _predict(self.fm, self.model_wrapper, self.features_to_model, raw_data)
-
-
-@dataclass
-class ModelInference:
-    feature_manager_cls: Any
-    feature_config_path: Union[str, Path]
-    transformer_path: Union[str, Path]
-    model_path: Union[str, Path] = ""
-    pipeline_config_path: Union[str, None] = None
-
-    def __post_init__(self):
-        self._init_feature_manager()
-        config = _get_config(self.pipeline_config_path, self.model_path)
-        self.model_wrapper = initialize_model_wrapper(
-            config.model_wrapper, self.model_path
-        )
-        self.features_to_model = list(config.data_loader.features_to_model)
-
-    def _init_feature_manager(self):
-        # FIXMY: typing
-        self.fm = self.feature_manager_cls(
-            self.feature_config_path, transformer_path=self.transformer_path
-        )  # type: ignore
-        self.fm.load_transformers()
 
     def predict(self, raw_data: List[Dict[str, Any]]) -> Iterable[Any]:
         return _predict(self.fm, self.model_wrapper, self.features_to_model, raw_data)
