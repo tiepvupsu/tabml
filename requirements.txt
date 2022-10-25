@@ -1,4 +1,4 @@
-catboost==1.0.4
+catboost==1.1
 flake8==3.9.0
 gputil==1.4.0
 isort==4.3.21
