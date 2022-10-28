@@ -16,3 +16,11 @@ def parse_pipeline_config(yaml_path: Union[str, Path]):
     with open(yaml_path) as f:
         config = yaml.safe_load(f)
         return pipeline_config.PipelineConfig(**config)
+
+
+def save_yaml_config_to_file(
+    yaml_config: Union[pipeline_config.PipelineConfig, feature_config.FeatureConfig],
+    yaml_path: Union[str, Path],
+):
+    with open(yaml_path, "w") as yaml_file:
+        yaml.dump(yaml_config, yaml_file, default_flow_style=False)
