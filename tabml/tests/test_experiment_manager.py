@@ -10,7 +10,7 @@ from tabml.utils.utils import write_str_to_file
 class TestExperimentManager:
     @pytest.fixture(autouse=True)
     def setup_class(self, tmp_path):
-        pb_str = """
+        yaml_str = """
             config_name: "foo"
             data_loader:
               cls_name: "bar"
@@ -26,7 +26,7 @@ class TestExperimentManager:
               by_features: ["b"]
         """
         self.pipeline_config_path = tmp_path / "pipeline_config.yaml"
-        write_str_to_file(pb_str, self.pipeline_config_path)
+        write_str_to_file(yaml_str, self.pipeline_config_path)
 
     def test_not_create_new_run_dir(self, tmp_path):
         exp_root_dir = Path(tmp_path) / "exp"
