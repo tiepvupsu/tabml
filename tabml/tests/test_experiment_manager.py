@@ -30,11 +30,11 @@ class TestExperimentManager:
 
     def test_not_create_new_run_dir(self, tmp_path):
         exp_root_dir = Path(tmp_path) / "exp"
-        exp_manager = experiment_manager.ExperimentManger(
+        exp_manager = experiment_manager.ExperimentManager(
             self.pipeline_config_path, exp_root_dir=exp_root_dir
         )
         exp_manager.create_new_run_dir()
-        experiment_manager.ExperimentManger(
+        experiment_manager.ExperimentManager(
             self.pipeline_config_path,
             should_create_new_run_dir=False,
             exp_root_dir=exp_root_dir,
@@ -45,7 +45,7 @@ class TestExperimentManager:
         Path(exp_root_dir).mkdir(parents=True)
 
         with AssertRaises(IOError) as assert_raises:
-            experiment_manager.ExperimentManger(
+            experiment_manager.ExperimentManager(
                 self.pipeline_config_path,
                 should_create_new_run_dir=False,
                 exp_root_dir=exp_root_dir,

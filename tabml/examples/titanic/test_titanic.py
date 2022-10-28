@@ -1,5 +1,5 @@
 from tabml.examples.titanic import feature_manager, pipelines
-from tabml.experiment_manager import ExperimentManger
+from tabml.experiment_manager import ExperimentManager
 from tabml.inference import ModelInference
 from tabml.utils.utils import change_working_dir_pytest
 
@@ -34,8 +34,8 @@ RAW_DATA_SAMPLES = [
 
 def _test_inference(config_path):
     full_pipeline_path = (
-        ExperimentManger(config_path).get_most_recent_run_dir()
-        / ExperimentManger.full_pipeline_filename
+        ExperimentManager(config_path).get_most_recent_run_dir()
+        / ExperimentManager.full_pipeline_filename
     )
     model_inference = ModelInference(
         feature_manager_cls=feature_manager.FeatureManager,  # type: ignore

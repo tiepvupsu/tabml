@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional, Union
 import pandas as pd
 
 from tabml.config_helpers import parse_pipeline_config
-from tabml.experiment_manager import ExperimentManger
+from tabml.experiment_manager import ExperimentManager
 from tabml.feature_config_helper import FeatureConfigHelper
 from tabml.schemas.feature_config import DType, FeatureConfig
 from tabml.utils.logger import logger
@@ -386,6 +386,6 @@ class ModelInferenceWithPreprocessedData:
 def _get_config(pipeline_config_path, model_path):
     pipeline_config_path = (
         pipeline_config_path
-        or ExperimentManger.get_config_path_from_model_path(model_path)
+        or ExperimentManager.get_config_path_from_model_path(model_path)
     )
     return parse_pipeline_config(pipeline_config_path)
