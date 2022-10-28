@@ -1,6 +1,5 @@
 import pandas as pd
 import pytest
-from qcore.asserts import assert_eq
 
 from tabml import data_processing
 from tabml.utils.utils import write_str_to_file
@@ -27,7 +26,7 @@ class TestFindBoxPlotBoundaries:
         got = data_processing.find_boxplot_boundaries(df["val"])
         # Q1 = 1.75, Q3 = 3.25, IQR = 1.5
         expected = -0.5, 5.5
-        assert_eq(expected, got)
+        assert expected == got
 
     def test_2(self):
         df = pd.DataFrame(
