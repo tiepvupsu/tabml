@@ -1,7 +1,6 @@
 import numpy as np
-from qcore.asserts import assert_eq
 
-from tabml.utils import embedding
+from tabml.utils.embedding import NearestNeighbor
 
 
 class TestNearestNeighbor:
@@ -15,17 +14,6 @@ class TestNearestNeighbor:
             ]
         )
 
-        assert_eq(
-            embedding.NearestNeighbor(items, "l2").find_nearest_neighbors(query, 1)[0],
-            0,
-        )
-        assert_eq(
-            embedding.NearestNeighbor(items, "dot").find_nearest_neighbors(query, 1)[0],
-            1,
-        )
-        assert_eq(
-            embedding.NearestNeighbor(items, "cosine").find_nearest_neighbors(query, 1)[
-                0
-            ],
-            2,
-        )
+        assert NearestNeighbor(items, "l2").find_nearest_neighbors(query, 1)[0] == 0
+        assert NearestNeighbor(items, "dot").find_nearest_neighbors(query, 1)[0] == 1
+        assert NearestNeighbor(items, "cosine").find_nearest_neighbors(query, 1)[0] == 2
