@@ -15,7 +15,7 @@ class TestBaseDataLoader:
     def setup_class(self, tmp_path):
         # feature manager config
         dataset_dir = tmp_path / "dataset"
-        fm_pb_str = f"""
+        fm_yaml_str = f"""
         raw_data_dir: "{dataset_dir}"
         dataset_name: "dummy"
         base_features:
@@ -36,7 +36,7 @@ class TestBaseDataLoader:
             dtype: BOOL
         """
         fm_pb_path = tmp_path / "feature_config.yaml"
-        write_str_to_file(fm_pb_str, fm_pb_path)
+        write_str_to_file(fm_yaml_str, fm_pb_path)
 
         # create fake data
         df = pd.DataFrame(
