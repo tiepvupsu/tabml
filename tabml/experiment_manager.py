@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 from typing import Union
 
-from tabml.config_helpers import save_yaml_config_to_file
+from tabml.config_helpers import parse_pipeline_config, save_yaml_config_to_file
 from tabml.schemas.pipeline_config import PipelineConfig
 
 
@@ -49,6 +49,17 @@ class ExperimentManager:
             self.run_dir = self._get_run_dir(should_create_new_run_dir)
         else:
             self.run_dir = custom_run_dir
+
+    @classmethod
+    def from_config_path(
+        cls,
+        config_path: Union[str, Path],
+        should_create_new_run_dir: bool = True,
+        exp_root_dir: Path = Path("./experiments"),
+        custom_run_dir: Union[None, Path] = None,
+    ):
+        config = parse_pipeline_config(yaml_path=config_path)
+        return cls(config, should_create_new_run_dir, exp_root_dir, custom_run_dir)
 
     def _get_run_dir(self, should_create_new_run_dir):
         if not should_create_new_run_dir:
