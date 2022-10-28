@@ -1,5 +1,4 @@
 import pytest
-from qcore.asserts import AssertRaises, assert_eq
 
 from tabml import feature_config_helper
 from tabml.config_helpers import parse_feature_config
@@ -66,16 +65,12 @@ class TestFeatureConfigHelper:
         """
         config_path = tmp_path / "tmp.yaml"
         write_str_to_file(invalid_index_STRING, config_path)
-        with AssertRaises(ValueError) as assert_raises:
+        with pytest.raises(ValueError) as excinfo:
             feature_config_helper.FeatureConfigHelper.from_config_path(config_path)
 
-        error_message = assert_raises.expected_exception_found
-        assert_eq(
-            True,
-            error_message.args[0].startswith(
-                "Feature indexes must be a list of increasing positive integers. "
-                "Got indexes = [1, 1]"
-            ),
+        assert str(excinfo.value).startswith(
+            "Feature indexes must be a list of increasing positive integers. "
+            "Got indexes = [1, 1]"
         )
 
     def test_raise_assertion_error_with_duplicate_features(self, tmp_path):
@@ -97,16 +92,11 @@ class TestFeatureConfigHelper:
         """
         config_path = tmp_path / "tmp.yaml"
         write_str_to_file(config_STRING, config_path)
-        # feature_config = yaml.load(config_STRING)
-        with AssertRaises(AssertionError) as assert_raises:
+        with pytest.raises(Exception) as excinfo:
             feature_config_helper.FeatureConfigHelper.from_config_path(config_path)
 
-        error_message = assert_raises.expected_exception_found
-        assert_eq(
-            True,
-            error_message.args[0].startswith(
-                "There are duplicate objects in the list: "
-            ),
+        assert str(excinfo.value).startswith(
+            "There are duplicate objects in the list: "
         )
 
     def test_raise_value_error_with_invalid_dependencies(self, tmp_path):
@@ -125,29 +115,25 @@ class TestFeatureConfigHelper:
         """
         config_path = tmp_path / "tmp.yaml"
         write_str_to_file(invalid_dependency_STRING, config_path)
-        with AssertRaises(AssertionError) as assert_raises:
+        with pytest.raises(Exception) as excinfo:
             feature_config_helper.FeatureConfigHelper.from_config_path(config_path)
 
-        error_message = assert_raises.expected_exception_found
-        assert_eq(
-            True,
-            error_message.args[0].startswith(
-                "Feature weekday depends on feature date that is undefined."
-            ),
+        assert str(excinfo.value).startswith(
+            "Feature weekday depends on feature date that is undefined."
         )
 
     def test_get_dependents_recursively(self, tmp_path):
         got_1 = self.fm_helper.get_dependents_recursively("a")
         expected_1 = ["b", "c", "d", "e"]
-        assert_eq(expected_1, got_1)
+        assert expected_1 == got_1
 
         got_2 = self.fm_helper.get_dependents_recursively("b")
         expected_2 = ["c", "e"]
-        assert_eq(expected_2, got_2)
+        assert expected_2 == got_2
 
         got_3 = self.fm_helper.get_dependents_recursively("d")
         expected_3 = []
-        assert_eq(expected_3, got_3)
+        assert expected_3 == got_3
 
     def test_extract_config_1(self, tmp_path):
         subset_features = ["e"]
@@ -178,7 +164,7 @@ class TestFeatureConfigHelper:
         new_config_path = str(tmp_path / "new_tmp.yaml")
         write_str_to_file(expected_STRING, new_config_path)
         new_config = self.fm_helper.extract_config(selected_features=subset_features)
-        assert_eq(parse_feature_config(new_config_path), new_config)
+        assert parse_feature_config(new_config_path) == new_config
 
     def test_extract_config_2(self, tmp_path):
         subset_features = ["d"]
@@ -198,14 +184,13 @@ class TestFeatureConfigHelper:
         new_config_path = str(tmp_path / "new_tmp.yaml")
         write_str_to_file(expected_STRING, new_config_path)
         new_config = self.fm_helper.extract_config(selected_features=subset_features)
-        assert_eq(parse_feature_config(new_config_path), new_config)
+        assert parse_feature_config(new_config_path) == new_config
 
     def test_raise_value_error_with_invalid_feature_to_extract(self, tmp_path):
         subset_features = ["a", "y", "z"]
-        with AssertRaises(ValueError) as assert_raises:
+        with pytest.raises(ValueError) as excinfo:
             self.fm_helper.extract_config(selected_features=subset_features)
 
-        error_message = assert_raises.expected_exception_found
-        assert_eq(
-            error_message.args[0], "Features ['y', 'z'] are not in the original config."
+        assert (
+            str(excinfo.value) == "Features ['y', 'z'] are not in the original config."
         )
