@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import pytest
-from qcore.asserts import AssertRaises, assert_eq
 
 from tabml import experiment_manager
 from tabml.utils.utils import write_str_to_file
@@ -44,17 +43,13 @@ class TestExperimentManager:
         exp_root_dir = Path(tmp_path) / "exp2"
         Path(exp_root_dir).mkdir(parents=True)
 
-        with AssertRaises(IOError) as assert_raises:
+        with pytest.raises(IOError) as excinfo:
             experiment_manager.ExperimentManager(
                 self.pipeline_config_path,
                 should_create_new_run_dir=False,
                 exp_root_dir=exp_root_dir,
             )
 
-        error_message = assert_raises.expected_exception_found
-        assert_eq(
-            True,
-            error_message.args[0].startswith(
-                "Could not find any run directory starting with"
-            ),
+        assert str(excinfo.value).startswith(
+            "Could not find any run directory starting with"
         )
