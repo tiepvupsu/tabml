@@ -1,10 +1,9 @@
 import datetime
 import re
-import shutil
 from pathlib import Path
 from typing import Union
 
-from tabml.config_helpers import parse_pipeline_config, save_yaml_config_to_file
+from tabml.config_helpers import save_yaml_config_to_file
 from tabml.schemas.pipeline_config import PipelineConfig
 
 
