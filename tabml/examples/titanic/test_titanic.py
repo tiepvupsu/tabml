@@ -1,3 +1,4 @@
+from tabml.config_helpers import parse_pipeline_config
 from tabml.examples.titanic import feature_manager, pipelines
 from tabml.experiment_manager import ExperimentManager
 from tabml.inference import ModelInference
@@ -33,8 +34,9 @@ RAW_DATA_SAMPLES = [
 
 
 def _test_inference(config_path):
+    config = parse_pipeline_config(yaml_path=config_path)
     full_pipeline_path = (
-        ExperimentManager(config_path).get_most_recent_run_dir()
+        ExperimentManager(config).get_most_recent_run_dir()
         / ExperimentManager.full_pipeline_filename
     )
     model_inference = ModelInference(
