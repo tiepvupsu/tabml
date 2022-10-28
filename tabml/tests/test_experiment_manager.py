@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from tabml import experiment_manager
-from tabml.utils.utils import write_str_to_file
+from tabml.config_helpers import parse_pipeline_config
 
 
 class TestExperimentManager:
@@ -24,19 +24,16 @@ class TestExperimentManager:
               metrics: ["a"]
               by_features: ["b"]
         """
-        self.pipeline_config_path = tmp_path / "pipeline_config.yaml"
-        write_str_to_file(yaml_str, self.pipeline_config_path)
+        self.config = parse_pipeline_config(yaml_str=yaml_str)
 
     def test_not_create_new_run_dir(self, tmp_path):
         exp_root_dir = Path(tmp_path) / "exp"
         exp_manager = experiment_manager.ExperimentManager(
-            self.pipeline_config_path, exp_root_dir=exp_root_dir
+            self.config, exp_root_dir=exp_root_dir
         )
         exp_manager.create_new_run_dir()
         experiment_manager.ExperimentManager(
-            self.pipeline_config_path,
-            should_create_new_run_dir=False,
-            exp_root_dir=exp_root_dir,
+            self.config, should_create_new_run_dir=False, exp_root_dir=exp_root_dir
         )
 
     def test_not_creat_run_dir_not_exist(self, tmp_path):
@@ -45,9 +42,7 @@ class TestExperimentManager:
 
         with pytest.raises(IOError) as excinfo:
             experiment_manager.ExperimentManager(
-                self.pipeline_config_path,
-                should_create_new_run_dir=False,
-                exp_root_dir=exp_root_dir,
+                self.config, should_create_new_run_dir=False, exp_root_dir=exp_root_dir
             )
 
         assert str(excinfo.value).startswith(

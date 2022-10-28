@@ -12,8 +12,8 @@ DATA_URL = (
 
 
 class FeatureManager(BaseFeatureManager):
-    def __init__(self, feature_config_path):
-        super().__init__(feature_config_path)
+    def __init__(self, config):
+        super().__init__(config)
 
     def _get_base_transforming_class(self):
         return BaseHousingTransformingFeature

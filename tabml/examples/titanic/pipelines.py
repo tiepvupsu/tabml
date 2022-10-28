@@ -2,7 +2,7 @@ from tabml.pipelines import BasePipeline
 
 
 def run(pipeline_config_path: str):
-    pipeline = BasePipeline(pipeline_config_path)
+    pipeline = BasePipeline.from_config_path(pipeline_config_path)
     pipeline.run()
 
 

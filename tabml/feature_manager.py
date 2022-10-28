@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 
-from tabml.config_helpers import parse_pipeline_config
+from tabml.config_helpers import parse_feature_config, parse_pipeline_config
 from tabml.experiment_manager import ExperimentManager
 from tabml.feature_config_helper import FeatureConfigHelper
 from tabml.schemas.feature_config import DType, FeatureConfig
@@ -78,6 +78,11 @@ class BaseFeatureManager(ABC):
         self.config_and_transformers_path = (
             config_and_transformers_path or self.get_config_and_transformer_path()
         )
+
+    @classmethod
+    def from_config_path(cls, config_path: Union[str, Path]):
+        config = parse_feature_config(yaml_path=config_path)
+        return cls(config)
 
     @classmethod
     def from_full_pipeline_data(cls, full_pipeline_data):

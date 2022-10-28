@@ -1,10 +1,10 @@
 import datetime
 import re
-import shutil
 from pathlib import Path
 from typing import Union
 
-from tabml.config_helpers import parse_pipeline_config
+from tabml.config_helpers import parse_pipeline_config, save_yaml_config_to_file
+from tabml.schemas.pipeline_config import PipelineConfig
 
 
 class ExperimentManager:
@@ -27,7 +27,7 @@ class ExperimentManager:
 
     def __init__(
         self,
-        path_to_config: str,
+        config: PipelineConfig,
         should_create_new_run_dir: bool = True,
         exp_root_dir: Path = Path("./experiments"),
         custom_run_dir: Union[None, Path] = None,
@@ -41,15 +41,25 @@ class ExperimentManager:
             run_dir: run dir name (exp_root_dir/run_prefix + timestamp)
             custom_run_dir: custom run dir that user can specify
         """
-        self._path_to_config = path_to_config
-        self._config = parse_pipeline_config(self._path_to_config)
+        self.config = config
         self.exp_root_dir = exp_root_dir
-        self.run_prefix = self._config.config_name + "_"
+        self.run_prefix = self.config.config_name + "_"
         self.custom_run_dir = custom_run_dir
         if not custom_run_dir or not custom_run_dir.name:
             self.run_dir = self._get_run_dir(should_create_new_run_dir)
         else:
             self.run_dir = custom_run_dir
+
+    @classmethod
+    def from_config_path(
+        cls,
+        config_path: Union[str, Path],
+        should_create_new_run_dir: bool = True,
+        exp_root_dir: Path = Path("./experiments"),
+        custom_run_dir: Union[None, Path] = None,
+    ):
+        config = parse_pipeline_config(yaml_path=config_path)
+        return cls(config, should_create_new_run_dir, exp_root_dir, custom_run_dir)
 
     def _get_run_dir(self, should_create_new_run_dir):
         if not should_create_new_run_dir:
@@ -58,10 +68,10 @@ class ExperimentManager:
 
     def create_new_run_dir(self):
         _make_dir_if_needed(self.run_dir)
-        self._copy_config_file()
+        self._save_config_to_file()
 
-    def _copy_config_file(self):
-        shutil.copyfile(self._path_to_config, self.get_config_path())
+    def _save_config_to_file(self):
+        save_yaml_config_to_file(self.config, self.get_config_path())
 
     def get_log_path(self):
         return self._make_path_under_run_dir(self.log_filename)
