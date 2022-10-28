@@ -7,7 +7,7 @@ from typing import Union
 from tabml.config_helpers import parse_pipeline_config
 
 
-class ExperimentManger:
+class ExperimentManager:
     """Class managing folder structure of an experiment.
 
     For each experiment, there will be one run_dir under exp_root_dir that contains

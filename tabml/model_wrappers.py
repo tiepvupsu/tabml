@@ -11,7 +11,7 @@ from xgboost import XGBClassifier, XGBRegressor
 
 from tabml.config_helpers import parse_pipeline_config
 from tabml.data_loaders import BaseDataLoader
-from tabml.experiment_manager import ExperimentManger
+from tabml.experiment_manager import ExperimentManager
 from tabml.schemas import pipeline_config
 from tabml.utils import factory, utils
 from tabml.utils.logger import boosting_logger_eval, logger
@@ -303,7 +303,7 @@ def load_or_train_model(model_path, pipeline_config_path) -> BaseModelWrapper:
         )
 
     if not pipeline_config_path:
-        pipeline_config_path = ExperimentManger.get_config_path_from_model_path(
+        pipeline_config_path = ExperimentManager.get_config_path_from_model_path(
             model_path
         )
 
@@ -312,7 +312,7 @@ def load_or_train_model(model_path, pipeline_config_path) -> BaseModelWrapper:
             logger.info(
                 f"Searching for the last run dir with {pipeline_config_path} config."
             )
-            run_dir = ExperimentManger(pipeline_config_path).get_most_recent_run_dir()
+            run_dir = ExperimentManager(pipeline_config_path).get_most_recent_run_dir()
             # TODO: create a function/method in experiment_manager to find model_path
             # in run_dir.
             model_path = str(Path(run_dir) / "model_0")
