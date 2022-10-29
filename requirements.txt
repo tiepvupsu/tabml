@@ -7,7 +7,7 @@ lightgbm==2.3.1
 loguru==0.5.1
 mlflow==1.20.1
 mypy==0.910
-numpy==1.18.5
+numpy==1.23.0
 pandas==1.4.3
 pandas-profiling==2.9.0
 pre-commit==2.2.0
@@ -16,10 +16,8 @@ pydantic==1.8.2
 pytest==5.3.5
 pyyaml==6.0
 scikit-learn==1.1.2
-# scikit-optimize==0.7.4
-scipy==1.6.2
+scipy==1.9.3
 shap==0.39.0
-# pytorch-tabnet==3.1.1
 termgraph==0.4.2
 types-six==1.16.1
 xgboost==1.5.2
