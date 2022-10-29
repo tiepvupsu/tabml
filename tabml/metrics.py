@@ -1,5 +1,5 @@
 import abc
-from typing import Collection, Dict, List, Union
+from typing import Dict, List, Sequence, Union
 
 import numpy as np
 from sklearn import metrics as sk_metrics
@@ -28,7 +28,7 @@ class BaseMetric(abc.ABC):
     is_higher_better: Union[bool, None] = None
     need_pred_proba: bool = False
 
-    def compute_scores(self, labels: Collection, preds: Collection) -> Dict[str, float]:
+    def compute_scores(self, labels: Sequence, preds: Sequence) -> Dict[str, float]:
         if self.is_higher_better is None:
             raise ValueError("Subclasses must define is_higher_better.")
         if len(labels) != len(preds):
@@ -44,7 +44,7 @@ class BaseMetric(abc.ABC):
             )
         return dict(zip(self.score_names, scores))
 
-    def _compute_scores(self, labels: Collection, preds: Collection) -> List[float]:
+    def _compute_scores(self, labels: Sequence, preds: Sequence) -> List[float]:
         raise NotImplementedError
 
 
@@ -55,7 +55,7 @@ class MAE(BaseMetric):
     score_names = ["mae"]
     is_higher_better = False
 
-    def _compute_scores(self, labels: Collection, preds: Collection) -> List[float]:
+    def _compute_scores(self, labels: Sequence, preds: Sequence) -> List[float]:
         return [sk_metrics.mean_absolute_error(labels, preds)]
 
 
@@ -66,7 +66,7 @@ class RMSE(BaseMetric):
     score_names = ["rmse"]
     is_higher_better = False
 
-    def _compute_scores(self, labels: Collection, preds: Collection) -> List[float]:
+    def _compute_scores(self, labels: Sequence, preds: Sequence) -> List[float]:
         return [sk_metrics.mean_squared_error(labels, preds) ** 0.5]
 
 
@@ -77,7 +77,7 @@ class AccuracyScore(BaseMetric):
     score_names = ["accuracy_score"]
     is_higher_better = True
 
-    def _compute_scores(self, labels: Collection, preds: Collection) -> List[float]:
+    def _compute_scores(self, labels: Sequence, preds: Sequence) -> List[float]:
         return [sk_metrics.accuracy_score(labels, preds)]
 
 
@@ -89,7 +89,7 @@ class RocAreaUnderTheCurve(BaseMetric):
     is_higher_better = True
     need_pred_proba = True
 
-    def _compute_scores(self, labels: Collection, preds: Collection) -> List[float]:
+    def _compute_scores(self, labels: Sequence, preds: Sequence) -> List[float]:
         # In some small groups of samples, labels might be all 0 or 1, which might cause
         # ValueError when computing ROC AUC.
         try:
@@ -113,15 +113,15 @@ class F1Score(BaseMetric):
     is_higher_better = True
     need_pred_proba = False
 
-    def _compute_scores(self, labels: Collection, preds: Collection) -> List[float]:
+    def _compute_scores(self, labels: Sequence, preds: Sequence) -> List[float]:
         _check_binary_list(labels)
         _check_binary_list(preds)
-        labels = np.array(labels)
-        preds = np.array(preds)
+        labels_ = np.array(labels)
+        preds_ = np.array(preds)
         eps = 1e-8
-        tps = np.sum(np.logical_and(preds == 1, labels == 1))
-        fps = np.sum(np.logical_and(preds == 1, labels == 0))
-        fns = np.sum(np.logical_and(preds == 0, labels == 1))
+        tps = np.sum(np.logical_and(preds_ == 1, labels_ == 1))
+        fps = np.sum(np.logical_and(preds_ == 1, labels_ == 0))
+        fns = np.sum(np.logical_and(preds_ == 0, labels_ == 1))
         eps = 1e-8
         precision = tps / np.maximum(tps + fps, eps)
         recall = tps / np.maximum(tps + fns, eps)
@@ -137,11 +137,11 @@ class MaxF1(BaseMetric):
     is_higher_better = True
     need_pred_proba = True
 
-    def _compute_scores(self, labels: Collection, preds: Collection) -> List[float]:
+    def _compute_scores(self, labels: Sequence, preds: Sequence) -> List[float]:
         return compute_maxf1_stats(labels, preds)
 
 
-def compute_maxf1_stats(labels: Collection, preds: Collection) -> List[float]:
+def compute_maxf1_stats(labels: Sequence, preds: Sequence) -> List[float]:
     """Computes max f1 and the related stats for binary classification.
 
     Args:
@@ -156,14 +156,14 @@ def compute_maxf1_stats(labels: Collection, preds: Collection) -> List[float]:
         ValueError if labels contains non-binary values.
     """
     num_thresholds = 1000
-    labels = np.array(labels).reshape((-1, 1))  # shape (N, 1)
-    preds = np.clip(np.array(preds), 0, 1).reshape((-1, 1))  # shape (N, 1)
+    labels_ = np.array(labels).reshape((-1, 1))  # shape (N, 1)
+    preds_ = np.clip(np.array(preds), 0, 1).reshape((-1, 1))  # shape (N, 1)
     _check_binary_list(labels)
     thresholds = np.arange(start=0, stop=1, step=1.0 / num_thresholds)  # shape (T,)
-    binary_preds = preds >= thresholds  # shape (N, T) with T = num_thresholds
-    tps = np.sum(np.logical_and(binary_preds == 1, labels == 1), axis=0)
-    fps = np.sum(np.logical_and(binary_preds == 1, labels == 0), axis=0)
-    fns = np.sum(np.logical_and(binary_preds == 0, labels == 1), axis=0)
+    binary_preds = preds_ >= thresholds  # shape (N, T) with T = num_thresholds
+    tps = np.sum(np.logical_and(binary_preds == 1, labels_ == 1), axis=0)
+    fps = np.sum(np.logical_and(binary_preds == 1, labels_ == 0), axis=0)
+    fns = np.sum(np.logical_and(binary_preds == 0, labels_ == 1), axis=0)
     eps = 1e-8
     precisions = tps / np.maximum(tps + fps, eps)
     recalls = tps / np.maximum(tps + fns, eps)
@@ -181,10 +181,10 @@ class SMAPE(BaseMetric):
     score_names = ["smape"]
     is_higher_better = False
 
-    def _compute_scores(self, labels: Collection, preds: Collection) -> List[float]:
+    def _compute_scores(self, labels: Sequence, preds: Sequence) -> List[float]:
         nominator = 2 * np.abs(np.array(preds) - np.array(labels))
         denominator = np.abs(labels) + np.abs(preds)
-        return [100 * np.mean(np.divide(nominator, denominator))]
+        return [100 * np.mean(np.divide(nominator, denominator))]  # type: ignore
 
 
 class R2(BaseMetric):
@@ -192,8 +192,8 @@ class R2(BaseMetric):
     score_names = ["r2"]
     is_higher_better = True
 
-    def _compute_scores(self, labels: Collection, preds: Collection) -> List[float]:
-        return [sk_metrics.r2_score(labels, preds)]
+    def _compute_scores(self, labels: Sequence, preds: Sequence) -> List[float]:
+        return [sk_metrics.r2_score(labels, preds)]  # type: ignore
 
 
 def get_instantiated_metric_dict() -> Dict[str, BaseMetric]:
@@ -204,7 +204,7 @@ def get_instantiated_metric_dict() -> Dict[str, BaseMetric]:
     return res
 
 
-def _check_binary_list(nums: Collection) -> None:
+def _check_binary_list(nums: Sequence) -> None:
     """Checks if a list only contains binary values.
 
     Raises an error if not.
