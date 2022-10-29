@@ -1,3 +1,5 @@
+from typing import Union
+
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder, StandardScaler
@@ -12,8 +14,8 @@ DATA_URL = (
 
 
 class FeatureManager(BaseFeatureManager):
-    def __init__(self, config):
-        super().__init__(config)
+    def __init__(self, config, config_and_transformers_path: Union[str, None] = None):
+        super().__init__(config, config_and_transformers_path)
 
     def _get_base_transforming_class(self):
         return BaseHousingTransformingFeature
