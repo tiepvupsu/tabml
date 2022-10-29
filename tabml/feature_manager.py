@@ -11,7 +11,7 @@ from tabml.experiment_manager import ExperimentManager
 from tabml.feature_config_helper import FeatureConfigHelper
 from tabml.schemas.feature_config import DType, FeatureConfig
 from tabml.utils.logger import logger
-from tabml.utils.utils import check_uniqueness, mkdir_if_needed
+from tabml.utils.utils import check_uniqueness, load_pickle, mkdir_if_needed
 
 PANDAS_DTYPE_MAPPING = {
     DType.BOOL: "bool",
@@ -80,15 +80,27 @@ class BaseFeatureManager(ABC):
         )
 
     @classmethod
-    def from_config_path(cls, config_path: Union[str, Path]):
+    def from_config_path(
+        cls,
+        config_path: Union[str, Path],
+        config_and_transformers_path: Union[str, None] = None,
+    ):
         config = parse_feature_config(yaml_path=config_path)
-        return cls(config)
+        return cls(config, config_and_transformers_path)
 
     @classmethod
     def from_full_pipeline_data(cls, full_pipeline_data):
         feature_config = full_pipeline_data["feature_config"]
         fm = cls(feature_config)
         fm.transformer_dict = full_pipeline_data["transformers"]
+        return fm
+
+    @classmethod
+    def from_config_and_transformers_path(cls, config_and_transformers_path):
+        data = load_pickle(config_and_transformers_path)
+        feature_config = data["feature_config"]
+        fm = cls(feature_config)
+        fm.transformer_dict = data["transformers"]
         return fm
 
     def save_feature_config_and_transformers(self):
@@ -148,11 +160,6 @@ class BaseFeatureManager(ABC):
             },
             parse_dates=parse_dates,
         )
-
-    def load_transformers(self):
-        """Loads transformers from pickle."""
-        with open(self.transformer_path, "rb") as pickle_file:
-            self.transformer_dict = pickle.load(pickle_file)
 
     def save_dataframe(self):
         """Saves the dataframe to disk."""
