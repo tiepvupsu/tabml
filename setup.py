@@ -9,7 +9,7 @@ long_description = (this_directory / "README.md").read_text()
 setup(
     name="tabml",
     packages=setuptools.find_packages(),
-    version="0.2.0",
+    version="0.2.1",
     license="apache-2.0",
     description="A package for machine learning with tabular data",
     author="Tiep Vu",
