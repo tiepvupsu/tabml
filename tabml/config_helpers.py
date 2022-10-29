@@ -14,7 +14,7 @@ def _parse_yaml_as_config(config_cls, yaml_path: Union[str, Path], yaml_str: str
         with open(yaml_path) as f:
             config = yaml.safe_load(f)
     else:  # yaml_str is not None
-        config = yaml.load(yaml_str)
+        config = yaml.safe_load(yaml_str)
 
     return config_cls(**config)
 
