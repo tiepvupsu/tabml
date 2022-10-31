@@ -34,3 +34,4 @@ model_analysis:
     by_features: [ocean_proximity]
     by_label: median_house_value
     training_size: 500
+    show_feature_importance: False
