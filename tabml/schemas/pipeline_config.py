@@ -34,6 +34,10 @@ class ModelAnalysis(pydantic.BaseModel):
     # Each element must be the name of a subclass of tabml.metrics.BaseMetric
     metrics: List[str] = []
 
+    # run shap explainer or not. This is expensive, use with care. The default is True
+    # for backward compatibility.
+    show_feature_importance: bool = True
+
     # list of features for analysis
     by_features: List[str] = []
 
