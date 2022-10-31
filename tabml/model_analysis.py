@@ -80,8 +80,11 @@ class ModelAnalysis:
         self._show_overall_flag = True
         self.training_size = params.training_size
 
+        self.show_feature_importance = params.show_feature_importance
+
     def analyze(self):
-        self._show_feature_importance()
+        if self.show_feature_importance:
+            self._show_feature_importance()
         self._analyze_metrics_one_dataset("train")
         self._analyze_metrics_one_dataset("val")
 
