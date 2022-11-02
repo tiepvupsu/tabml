@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any, Dict, List
+from typing import List
 
 import pydantic
 
@@ -79,8 +79,3 @@ class FeatureConfig(pydantic.BaseModel):
     # features are not supported.
     # TODO: support transforming features those are dependent on prediciton features.
     prediction_features: List[PredictionFeature] = []
-
-
-class FeatureConfigAndTransformers(pydantic.BaseModel):
-    feature_config: FeatureConfig
-    transformers: Dict[str, Any]

@@ -10,9 +10,10 @@ from tabml.config_helpers import parse_feature_config, parse_pipeline_config
 from tabml.experiment_manager import ExperimentManager
 from tabml.feature_config_helper import FeatureConfigHelper
 from tabml.schemas.feature_config import (
-    DType, FeatureConfig, FeatureConfigAndTransformers
+    DType,
+    FeatureConfig,
 )
-from tabml.schemas.full_pipeline_data import FullPipelineData
+from tabml.schemas.bundles import FullPipelineBundle, FeatureBundle
 from tabml.utils.logger import logger
 from tabml.utils.utils import check_uniqueness, load_pickle, mkdir_if_needed
 
@@ -92,24 +93,23 @@ class BaseFeatureManager(ABC):
         return cls(config, config_and_transformers_path)
 
     @classmethod
-    def from_full_pipeline_data(cls, full_pipeline_data: FullPipelineData):
-        feature_config = full_pipeline_data.feature_config
+    def from_full_pipeline_bundle(cls, full_pipeline_bundle: FullPipelineBundle):
+        feature_config = full_pipeline_bundle.feature_bundle.feature_config
         fm = cls(feature_config)
-        fm.transformer_dict = full_pipeline_data.transformers
+        fm.transformer_dict = full_pipeline_bundle.feature_bundle.transformers
         return fm
 
     @classmethod
     def from_config_and_transformers_path(cls, config_and_transformers_path):
-        data: FeatureConfigAndTransformers = load_pickle(config_and_transformers_path)
-        feature_config = data.feature_config
+        feature_bundle: FeatureBundle = load_pickle(config_and_transformers_path)
+        feature_config = feature_bundle.feature_config
         fm = cls(feature_config)
-        fm.transformer_dict = data.transformers
+        fm.transformer_dict = feature_bundle.transformers
         return fm
 
-    def save_feature_config_and_transformers(self):
-        data = FeatureConfigAndTransformers(
-            feature_config=self.config_helper.config,
-            transformers=self.transformer_dict
+    def save_feature_bundle(self):
+        data = FeatureBundle(
+            feature_config=self.config_helper.config, transformers=self.transformer_dict
         )
         mkdir_if_needed(self.dataset_path.parent)
         save_path = self.config_and_transformers_path
@@ -250,7 +250,7 @@ class BaseFeatureManager(ABC):
         self.initialize_dataframe()
         self.compute_transforming_features()
         self.save_dataframe()
-        self.save_feature_config_and_transformers()
+        self.save_feature_bundle()
 
     def compute_prediction_features(
         self, prediction_feature_names: Union[List[str], None] = None

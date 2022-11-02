@@ -13,7 +13,7 @@ from tabml.config_helpers import parse_pipeline_config
 from tabml.data_loaders import BaseDataLoader
 from tabml.experiment_manager import ExperimentManager
 from tabml.schemas import pipeline_config
-from tabml.schemas.full_pipeline_data import FullPipelineData
+from tabml.schemas.bundles import FullPipelineBundle
 from tabml.utils import factory, utils
 from tabml.utils.logger import boosting_logger_eval, logger
 from tabml.utils.utils import save_as_pickle
@@ -291,9 +291,10 @@ def initialize_model_wrapper(
 
 
 def initialize_model_wrapper_from_full_pipeline_pickle(
-        full_pipeline_data: FullPipelineData):
-    pl_config = full_pipeline_data.pipeline_config
-    model = full_pipeline_data.model
+    full_pipeline_bundle: FullPipelineBundle,
+):
+    pl_config = full_pipeline_bundle.model_bundle.pipeline_config
+    model = full_pipeline_bundle.model_bundle.model
     return initialize_model_wrapper(params=pl_config.model_wrapper, model=model)
 
 
