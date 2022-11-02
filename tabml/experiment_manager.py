@@ -5,6 +5,7 @@ from typing import Union
 
 from tabml.config_helpers import parse_pipeline_config, save_yaml_config_to_file
 from tabml.schemas.pipeline_config import PipelineConfig
+from tabml.utils.utils import return_or_load
 
 
 class ExperimentManager:
@@ -27,21 +28,22 @@ class ExperimentManager:
 
     def __init__(
         self,
-        config: PipelineConfig,
+        config: Union[str, Path, PipelineConfig],
         should_create_new_run_dir: bool = True,
         exp_root_dir: Path = Path("./experiments"),
         custom_run_dir: Union[None, Path] = None,
     ):
         """
         Args:
-            path_to_config: path to pipeline config file.
+            config: PipelineConfig object or path to the yaml configuration.
             should_create_new_run_dir: create new experiment subfolder (True) or not
                 (False). If not, set the experiment subfolder to the most recent run.
             run_prefix: prefix of the run name subfolder inside exp_root_dir
             run_dir: run dir name (exp_root_dir/run_prefix + timestamp)
             custom_run_dir: custom run dir that user can specify
         """
-        self.config = config
+        self.config = return_or_load(config, PipelineConfig, parse_pipeline_config)
+
         self.exp_root_dir = exp_root_dir
         self.run_prefix = self.config.config_name + "_"
         self.custom_run_dir = custom_run_dir
@@ -49,17 +51,6 @@ class ExperimentManager:
             self.run_dir = self._get_run_dir(should_create_new_run_dir)
         else:
             self.run_dir = custom_run_dir
-
-    @classmethod
-    def from_config_path(
-        cls,
-        config_path: Union[str, Path],
-        should_create_new_run_dir: bool = True,
-        exp_root_dir: Path = Path("./experiments"),
-        custom_run_dir: Union[None, Path] = None,
-    ):
-        config = parse_pipeline_config(yaml_path=config_path)
-        return cls(config, should_create_new_run_dir, exp_root_dir, custom_run_dir)
 
     def _get_run_dir(self, should_create_new_run_dir):
         if not should_create_new_run_dir:
