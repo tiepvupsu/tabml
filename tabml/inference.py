@@ -21,8 +21,8 @@ class ModelInference:
             self.full_pipeline_bundle_path
         )
         # Initialize feature_manager
-        self.fm = self.feature_manager_cls.from_full_pipeline_bundle(
-            full_pipeline_bundle
+        self.fm = self.feature_manager_cls.from_feature_bundle(
+            full_pipeline_bundle.feature_bundle
         )
         # Initialize model_wrapper
         pipeline_config = full_pipeline_bundle.model_bundle.pipeline_config

@@ -11,9 +11,14 @@ from tabml.experiment_manager import ExperimentManager
 from tabml.feature_config_helper import FeatureConfigHelper
 from tabml.schemas.feature_config import DType, FeatureConfig
 
-from tabml.schemas.bundles import FullPipelineBundle, FeatureBundle
+from tabml.schemas.bundles import FeatureBundle
 from tabml.utils.logger import logger
-from tabml.utils.utils import check_uniqueness, load_pickle, mkdir_if_needed
+from tabml.utils.utils import (
+    check_uniqueness,
+    load_pickle,
+    mkdir_if_needed,
+    return_or_load,
+)
 
 PANDAS_DTYPE_MAPPING = {
     DType.BOOL: "bool",
@@ -55,19 +60,18 @@ class BaseFeatureManager(ABC):
             A dictionary of {feature_name: its transformer}. This transformer_dict is
             formed and saved to a pickle in the "training" stage. In "serving" stage,
             it's loaded and does the transformations.
-        feature_bundle_path:
+        custom_feature_bundle_path:
             pickle path to save both feature config and transformer
     """
 
     def __init__(
         self,
         config: Union[str, Path, FeatureConfig],
-        feature_bundle_path: Union[str, None] = None,
+        custom_feature_bundle_path: Union[str, None] = None,
     ):
-        if isinstance(config, str) or isinstance(config, Path):
-            self.config_helper = FeatureConfigHelper.from_config_path(config)
-        elif isinstance(config, FeatureConfig):
-            self.config_helper = FeatureConfigHelper(config)
+        _config = return_or_load(config, FeatureConfig, parse_feature_config)
+
+        self.config_helper = FeatureConfigHelper(_config)
         self.raw_data_dir = self.config_helper.raw_data_dir
         self.dataset_name = self.config_helper.dataset_name
         self.feature_metadata = self.config_helper.feature_metadata
@@ -77,30 +81,16 @@ class BaseFeatureManager(ABC):
         self.dataframe: pd.DataFrame = pd.DataFrame()
         self.transforming_class_by_feature_name: Dict[str, Any] = {}
         self.transformer_dict: Dict[str, Any] = {}
-        self.feature_bundle_path = feature_bundle_path or self.get_feature_bundle_path()
+        self.feature_bundle_path = (
+            custom_feature_bundle_path or self.get_feature_bundle_path()
+        )
 
     @classmethod
-    def from_config_path(
-        cls,
-        config_path: Union[str, Path],
-        feature_bundle_path: Union[str, None] = None,
-    ):
-        config = parse_feature_config(yaml_path=config_path)
-        return cls(config, feature_bundle_path)
-
-    @classmethod
-    def from_full_pipeline_bundle(cls, full_pipeline_bundle: FullPipelineBundle):
-        feature_config = full_pipeline_bundle.feature_bundle.feature_config
+    def from_feature_bundle(cls, feature_bundle: Union[str, FeatureBundle]):
+        _feature_bundle = return_or_load(feature_bundle, FeatureBundle, load_pickle)
+        feature_config = _feature_bundle.feature_config
         fm = cls(feature_config)
-        fm.transformer_dict = full_pipeline_bundle.feature_bundle.transformers
-        return fm
-
-    @classmethod
-    def from_feature_bundle_path(cls, feature_bundle_path):
-        feature_bundle: FeatureBundle = load_pickle(feature_bundle_path)
-        feature_config = feature_bundle.feature_config
-        fm = cls(feature_config)
-        fm.transformer_dict = feature_bundle.transformers
+        fm.transformer_dict = _feature_bundle.transformers
         return fm
 
     def save_feature_bundle(self):
