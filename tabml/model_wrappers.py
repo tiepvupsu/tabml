@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Dict, Iterable, Optional, Tuple, Union
+from typing import Dict, Iterable, Optional, Tuple, Union
 
 import mlflow
 import numpy as np
@@ -37,6 +37,7 @@ class BaseModelWrapper(ABC):
         # Parameters for model training
         self.fit_params = params.fit_params
 
+    @classmethod
     def from_model_bundle_path(cls, model_bundle_path: Union[str, Path]):
         model_bundle: ModelBundle = load_pickle(model_bundle_path)
         params = model_bundle.pipeline_config.model_wrapper
@@ -131,8 +132,8 @@ class BaseBoostingModelWrapper(BaseModelWrapper):
 
     Boosting models: LightGBM, XGBoost, CatBoost."""
 
-    def __init__(self, params=pipeline_config.ModelWrapper()):
-        super().__init__(params)
+    def __init__(self, params=pipeline_config.ModelWrapper(), model=None):
+        super().__init__(params, model)
         self.save_model_name = "model_0"
         self.build_model()
 
@@ -160,8 +161,8 @@ class BaseBoostingModelWrapper(BaseModelWrapper):
 class BaseLgbmModelWrapper(BaseBoostingModelWrapper):
     mlflow_model_type = "lightgbm"
 
-    def __init__(self, params=pipeline_config.ModelWrapper()):
-        super().__init__(params)
+    def __init__(self, params=pipeline_config.ModelWrapper(), model=None):
+        super().__init__(params, model)
 
     def predict(self, data):
         return self.model.predict(data)
@@ -277,31 +278,29 @@ def write_model_wrapper_subclasses_to_file(
 
 
 def initialize_model_wrapper(
-    params: pipeline_config.ModelWrapper,
-    model_path: Union[str, Path, None] = None,
-    model: Optional[Any] = None,
+    model_bundle: Optional[ModelBundle] = None,
+    model_bundle_path: Union[str, Path] = None,
 ):
-    """Initializes model wrapper from params."""
-    if model_path and model:
-        raise ValueError("Only one of {model_path, model} is allowed to be not None.")
+    """Initializes model wrapper from model_bundle_path."""
+    if not model_bundle and not model_bundle_path or model_bundle and model_bundle_path:
+        raise ValueError(
+            "Exactly one of model_bundle and model_bundle_path must be not None."
+        )
 
-    model_wrapper_cls = factory.create(params.cls_name)
+    if not model_bundle:
+        model_bundle = load_pickle(model_bundle_path)
+    model_wrapper_params = model_bundle.pipeline_config.model_wrapper
+
+    model_wrapper_cls = factory.create(model_wrapper_params.cls_name)
     if not issubclass(model_wrapper_cls, BaseModelWrapper):
         raise ValueError(f"{model_wrapper_cls} is not a subclass of BaseModelWrapper")
-    _model_wrapper = model_wrapper_cls(params)
-    if model_path:
-        _model_wrapper.load_model(model_path)
-    if model:
-        _model_wrapper.model = model
-    return _model_wrapper
+    return model_wrapper_cls(params=model_wrapper_params, model=model_bundle.model)
 
 
 def initialize_model_wrapper_from_full_pipeline_pickle(
     full_pipeline_bundle: FullPipelineBundle,
 ):
-    pl_config = full_pipeline_bundle.model_bundle.pipeline_config
-    model = full_pipeline_bundle.model_bundle.model
-    return initialize_model_wrapper(params=pl_config.model_wrapper, model=model)
+    return initialize_model_wrapper(model_bundle=full_pipeline_bundle.model_bundle)
 
 
 def load_or_train_model(model_path, pipeline_config_path) -> BaseModelWrapper:

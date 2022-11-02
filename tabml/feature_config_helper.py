@@ -19,15 +19,13 @@ class FeatureMetadata:
         dtype: DType,
         dependents=None,
         dependencies=None,
-        model_path: str = "",
-        pipeline_config_path: str = "",
+        model_bundle_path: str = "",
     ):
         self.index = index
         self.dtype = dtype
         self.dependents = dependents or []
         self.dependencies = dependencies or []
-        self.model_path = model_path
-        self.pipeline_config_path = pipeline_config_path
+        self.model_path = model_bundle_path
 
     @classmethod
     def from_base_feature(cls, feature: BaseFeature):
@@ -45,8 +43,7 @@ class FeatureMetadata:
         return cls(
             index=feature.index,
             dtype=feature.dtype,
-            model_path=feature.model_path,
-            pipeline_config_path=feature.pipeline_config_path,
+            model_bundle_path=feature.model_bundle_path,
         )
 
 

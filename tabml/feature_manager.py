@@ -13,7 +13,7 @@ from tabml.schemas.feature_config import (
     DType,
     FeatureConfig,
 )
-from tabml.schemas.bundles import FullPipelineBundle, FeatureBundle
+from tabml.schemas.bundles import FullPipelineBundle, FeatureBundle, ModelBundle
 from tabml.utils.logger import logger
 from tabml.utils.utils import check_uniqueness, load_pickle, mkdir_if_needed
 
@@ -266,11 +266,7 @@ class BaseFeatureManager(ABC):
     def _compute_prediction_feature(self, prediction_feature_name: str):
         logger.info(f"Computing prediction feature {prediction_feature_name} ...")
         metadata = self.feature_metadata[prediction_feature_name]
-        model_path = metadata.model_path
-        pipeline_config_path = metadata.pipeline_config_path
-        model_inference = ModelInferenceWithPreprocessedData(
-            model_path=model_path, pipeline_config_path=pipeline_config_path
-        )
+        model_inference = ModelInferenceWithPreprocessedData(metadata.model_bundle_path)
         preds = model_inference.predict(self.dataframe)
         self._update_dataframe(prediction_feature_name, preds)
 
@@ -381,17 +377,17 @@ class BaseTransformingFeature(ABC):
 
 @dataclass
 class ModelInferenceWithPreprocessedData:
-    model_path: str = ""
-    pipeline_config_path: Union[str, None] = None
+    model_bundle_path: str = ""
 
     def __post_init__(self):
-        from tabml.model_wrappers import load_or_train_model  # isort:skip
+        from tabml.model_wrappers import initialize_model_wrapper  # isort:skip
 
-        config = _get_config(self.pipeline_config_path, self.model_path)
-        self.model_wrapper = load_or_train_model(
-            self.model_path, self.pipeline_config_path
+        model_bundle: ModelBundle = load_pickle(self.model_bundle_path)
+
+        self.model_wrapper = initialize_model_wrapper(model_bundle=model_bundle)
+        self.features_to_model = list(
+            model_bundle.pipeline_config.data_loader.features_to_model
         )
-        self.features_to_model = list(config.data_loader.features_to_model)
 
     def predict(self, data):
         return self.model_wrapper.predict(data[self.features_to_model])

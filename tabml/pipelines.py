@@ -10,6 +10,7 @@ from tabml.config_helpers import parse_pipeline_config
 from tabml.data_loaders import BaseDataLoader
 from tabml.feature_manager import BaseFeatureManager
 from tabml.model_analysis import ModelAnalysis
+from tabml.schemas import pipeline_config
 from tabml.schemas.pipeline_config import PipelineConfig
 from tabml.schemas.bundles import FullPipelineBundle, ModelBundle
 from tabml.utils import factory
@@ -40,7 +41,7 @@ class BasePipeline(ABC):
         self.data_loader = self._get_data_loader()
         assert self.data_loader.label_col is not None, "label_col must be specified"
         self.model_wrapper = model_wrappers.initialize_model_wrapper(
-            self.config.model_wrapper
+            ModelBundle(pipeline_config=config, model=None)
         )
 
         logger.add(self.exp_manager.get_log_path())
@@ -64,7 +65,7 @@ class BasePipeline(ABC):
             self.config.data_loader.feature_config_path
         ).get_config_and_transformer_path()
         feature_bundle = load_pickle(feature_bundle_path)
-        data = FullPipelineBundle(
+        full_pipeline_bundle = FullPipelineBundle(
             feature_bundle=feature_bundle,
             model_bundle=ModelBundle(
                 pipeline_config=self.config,
@@ -74,7 +75,7 @@ class BasePipeline(ABC):
         save_path = self.exp_manager.get_full_pipeline_path()
         logger.info(f"Saving full pipeline to {save_path}")
         with open(save_path, "wb") as pickle_file:
-            pickle.dump(data, pickle_file)
+            pickle.dump(full_pipeline_bundle, pickle_file)
 
     def _init_mlflow(self):
         model_type = self.model_wrapper.mlflow_model_type
