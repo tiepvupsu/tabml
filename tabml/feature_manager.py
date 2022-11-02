@@ -78,7 +78,7 @@ class BaseFeatureManager(ABC):
         self.transforming_class_by_feature_name: Dict[str, Any] = {}
         self.transformer_dict: Dict[str, Any] = {}
         self.config_and_transformers_path = (
-            config_and_transformers_path or self.get_config_and_transformer_path()
+            config_and_transformers_path or self.get_feature_bundle_path()
         )
 
     @classmethod
@@ -118,7 +118,7 @@ class BaseFeatureManager(ABC):
     def get_dataset_path(self):
         return Path(self.raw_data_dir) / "features" / f"{self.dataset_name}.csv"
 
-    def get_config_and_transformer_path(self):
+    def get_feature_bundle_path(self):
         return Path(self.raw_data_dir) / "features" / CONFIG_AND_TRANSFORMERS_FILENAME
 
     def _get_base_transforming_class(self):

@@ -62,7 +62,7 @@ class BasePipeline(ABC):
     def save_full_pipeline_pickle(self):
         feature_bundle_path = BaseFeatureManager(
             self.config.data_loader.feature_config_path
-        ).get_config_and_transformer_path()
+        ).get_feature_bundle_path()
         feature_bundle = load_pickle(feature_bundle_path)
         data = FullPipelineBundle(
             feature_bundle=feature_bundle,
