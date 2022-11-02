@@ -4,7 +4,7 @@ import pydantic
 from typing import Dict, Any
 
 
-class FullPipelineData(pydantic.BaseModel):
+class FullPipelineBundle(pydantic.BaseModel):
     feature_config: FeatureConfig
     transformers: Dict[str, Any]
     pipeline_config: PipelineConfig

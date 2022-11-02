@@ -7,7 +7,7 @@ from typing import Any, Dict, Iterable, List, Union
 from tabml.feature_manager import BaseFeatureManager
 from tabml.model_wrappers import initialize_model_wrapper_from_full_pipeline_pickle
 from tabml.utils.utils import load_pickle
-from tabml.schemas.bundles import FullPipelineData
+from tabml.schemas.bundles import FullPipelineBundle
 
 
 @dataclass
@@ -17,9 +17,9 @@ class ModelInference:
 
     def __post_init__(self):
         # Load pickle
-        data: FullPipelineData = load_pickle(self.full_pipeline_path)
+        data: FullPipelineBundle = load_pickle(self.full_pipeline_path)
         # Initialize feature_manager
-        self.fm = self.feature_manager_cls.from_full_pipeline_data(data)
+        self.fm = self.feature_manager_cls.from_full_pipeline_bundle(data)
         # Initialize model_wrapper
         pipeline_config = data.pipeline_config
         self.model_wrapper = initialize_model_wrapper_from_full_pipeline_pickle(data)

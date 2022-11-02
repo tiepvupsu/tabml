@@ -11,7 +11,7 @@ from tabml.data_loaders import BaseDataLoader
 from tabml.feature_manager import BaseFeatureManager
 from tabml.model_analysis import ModelAnalysis
 from tabml.schemas.pipeline_config import PipelineConfig
-from tabml.schemas.bundles import FullPipelineData
+from tabml.schemas.bundles import FullPipelineBundle
 from tabml.utils import factory
 from tabml.utils.logger import logger
 from tabml.utils.utils import load_pickle
@@ -64,7 +64,7 @@ class BasePipeline(ABC):
             self.config.data_loader.feature_config_path
         ).get_config_and_transformer_path()
         feature_data = load_pickle(feature_config_and_transformer_path)
-        data = FullPipelineData(
+        data = FullPipelineBundle(
             feature_config=feature_data.feature_config,
             transformers=feature_data.transformers,
             pipeline_config=self.config,

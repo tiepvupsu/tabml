@@ -14,7 +14,7 @@ from tabml.schemas.feature_config import (
     FeatureConfig,
     FeatureConfigAndTransformers,
 )
-from tabml.schemas.bundles import FullPipelineData
+from tabml.schemas.bundles import FullPipelineBundle
 from tabml.utils.logger import logger
 from tabml.utils.utils import check_uniqueness, load_pickle, mkdir_if_needed
 
@@ -94,10 +94,10 @@ class BaseFeatureManager(ABC):
         return cls(config, config_and_transformers_path)
 
     @classmethod
-    def from_full_pipeline_data(cls, full_pipeline_data: FullPipelineData):
-        feature_config = full_pipeline_data.feature_config
+    def from_full_pipeline_bundle(cls, full_pipeline_bundle: FullPipelineBundle):
+        feature_config = full_pipeline_bundle.feature_config
         fm = cls(feature_config)
-        fm.transformer_dict = full_pipeline_data.transformers
+        fm.transformer_dict = full_pipeline_bundle.transformers
         return fm
 
     @classmethod
