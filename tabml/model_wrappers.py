@@ -30,7 +30,7 @@ class BaseModelWrapper(ABC):
 
     def __init__(self, params: pipeline_config.ModelWrapper, model=None):
         self.model = model
-        self.save_model_name = None
+        self.save_model_name = "model_0"
         # Parameters for model instantiating
         self.model_params = params.model_params
         # Parameters for model training
