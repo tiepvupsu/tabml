@@ -12,7 +12,7 @@ from tabml.feature_config_helper import FeatureConfigHelper
 from tabml.schemas.feature_config import (
     DType,
     FeatureConfig,
-    FeatureConfigAndTransformers,
+    FeatureBundle,
 )
 from tabml.schemas.bundles import FullPipelineBundle
 from tabml.utils.logger import logger
@@ -102,14 +102,14 @@ class BaseFeatureManager(ABC):
 
     @classmethod
     def from_config_and_transformers_path(cls, config_and_transformers_path):
-        data: FeatureConfigAndTransformers = load_pickle(config_and_transformers_path)
+        data: FeatureBundle = load_pickle(config_and_transformers_path)
         feature_config = data.feature_config
         fm = cls(feature_config)
         fm.transformer_dict = data.transformers
         return fm
 
-    def save_feature_config_and_transformers(self):
-        data = FeatureConfigAndTransformers(
+    def save_feature_bundle(self):
+        data = FeatureBundle(
             feature_config=self.config_helper.config, transformers=self.transformer_dict
         )
         mkdir_if_needed(self.dataset_path.parent)
@@ -251,7 +251,7 @@ class BaseFeatureManager(ABC):
         self.initialize_dataframe()
         self.compute_transforming_features()
         self.save_dataframe()
-        self.save_feature_config_and_transformers()
+        self.save_feature_bundle()
 
     def compute_prediction_features(
         self, prediction_feature_names: Union[List[str], None] = None

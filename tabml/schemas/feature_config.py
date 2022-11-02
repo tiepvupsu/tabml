@@ -81,6 +81,6 @@ class FeatureConfig(pydantic.BaseModel):
     prediction_features: List[PredictionFeature] = []
 
 
-class FeatureConfigAndTransformers(pydantic.BaseModel):
+class FeatureBundle(pydantic.BaseModel):
     feature_config: FeatureConfig
     transformers: Dict[str, Any]
