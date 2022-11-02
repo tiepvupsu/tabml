@@ -12,9 +12,8 @@ from tabml.feature_config_helper import FeatureConfigHelper
 from tabml.schemas.feature_config import (
     DType,
     FeatureConfig,
-    FeatureBundle,
 )
-from tabml.schemas.bundles import FullPipelineBundle
+from tabml.schemas.bundles import FullPipelineBundle, FeatureBundle
 from tabml.utils.logger import logger
 from tabml.utils.utils import check_uniqueness, load_pickle, mkdir_if_needed
 
