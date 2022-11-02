@@ -35,7 +35,7 @@ setup(
         "scipy>=1.9.3",
         "shap>=0.39.0",
         "termgraph>=0.4.2",
-        "xgboost>=1.5.2",
+        "xgboost>=1.5.2,<1.6",
     ],
     classifiers=[
         "Development Status :: 3 - Alpha",
