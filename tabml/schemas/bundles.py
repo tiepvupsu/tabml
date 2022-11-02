@@ -1,5 +1,5 @@
 from tabml.schemas.feature_config import FeatureConfig
-from tabml.schemas.pipeline_config import PipelineConfig
+from tabml.schemas.pipeline_config import ModelBundle
 import pydantic
 from typing import Dict, Any
 
@@ -7,11 +7,6 @@ from typing import Dict, Any
 class FeatureBundle(pydantic.BaseModel):
     feature_config: FeatureConfig
     transformers: Dict[str, Any]
-
-
-class ModelBundle(pydantic.BaseModel):
-    pipeline_config: PipelineConfig
-    model: Any
 
 
 class FullPipelineBundle(pydantic.BaseModel):

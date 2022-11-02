@@ -1,4 +1,4 @@
-from typing import Dict, List, Union
+from typing import Any, Dict, List, Union
 
 import pydantic
 
@@ -57,3 +57,8 @@ class PipelineConfig(pydantic.BaseModel):
     data_loader: DataLoader
     model_wrapper: ModelWrapper
     model_analysis: ModelAnalysis
+
+
+class ModelBundle(pydantic.BaseModel):
+    pipeline_config: PipelineConfig
+    model: Any

@@ -13,7 +13,8 @@ from tabml.config_helpers import parse_pipeline_config
 from tabml.data_loaders import BaseDataLoader
 from tabml.experiment_manager import ExperimentManager
 from tabml.schemas import pipeline_config
-from tabml.schemas.bundles import FullPipelineBundle, ModelBundle
+from tabml.schemas.bundles import FullPipelineBundle
+from tabml.schemas.pipeline_config import ModelBundle
 from tabml.utils import factory, utils
 from tabml.utils.logger import boosting_logger_eval, logger
 from tabml.utils.utils import load_pickle, save_as_pickle
