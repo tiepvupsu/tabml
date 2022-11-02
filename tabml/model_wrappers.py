@@ -13,10 +13,10 @@ from tabml.config_helpers import parse_pipeline_config
 from tabml.data_loaders import BaseDataLoader
 from tabml.experiment_manager import ExperimentManager
 from tabml.schemas import pipeline_config
-from tabml.schemas.bundles import FullPipelineBundle
+from tabml.schemas.bundles import FullPipelineBundle, ModelBundle
 from tabml.utils import factory, utils
 from tabml.utils.logger import boosting_logger_eval, logger
-from tabml.utils.utils import save_as_pickle
+from tabml.utils.utils import load_pickle, save_as_pickle
 
 MLFLOW_AUTOLOG = {
     "sklearn": mlflow.sklearn.autolog(),
@@ -36,6 +36,12 @@ class BaseModelWrapper(ABC):
         self.model_params = params.model_params
         # Parameters for model training
         self.fit_params = params.fit_params
+
+    def from_model_bundle_path(cls, model_bundle_path: Union[str, Path]):
+        model_bundle: ModelBundle = load_pickle(model_bundle_path)
+        params = model_bundle.pipeline_config.model_wrapper
+        model = model_bundle.model
+        return cls(params, model)
 
     def fit(self, data_loader: BaseDataLoader, model_dir: Union[str, Path]):
         pass
