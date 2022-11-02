@@ -94,17 +94,17 @@ class BaseFeatureManager(ABC):
 
     @classmethod
     def from_full_pipeline_bundle(cls, full_pipeline_bundle: FullPipelineBundle):
-        feature_config = full_pipeline_bundle.feature_config
+        feature_config = full_pipeline_bundle.feature_bundle.feature_config
         fm = cls(feature_config)
-        fm.transformer_dict = full_pipeline_bundle.transformers
+        fm.transformer_dict = full_pipeline_bundle.feature_bundle.transformers
         return fm
 
     @classmethod
     def from_config_and_transformers_path(cls, config_and_transformers_path):
-        data: FeatureBundle = load_pickle(config_and_transformers_path)
-        feature_config = data.feature_config
+        feature_bundle: FeatureBundle = load_pickle(config_and_transformers_path)
+        feature_config = feature_bundle.feature_config
         fm = cls(feature_config)
-        fm.transformer_dict = data.transformers
+        fm.transformer_dict = feature_bundle.transformers
         return fm
 
     def save_feature_bundle(self):

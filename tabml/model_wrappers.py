@@ -293,8 +293,8 @@ def initialize_model_wrapper(
 def initialize_model_wrapper_from_full_pipeline_pickle(
     full_pipeline_bundle: FullPipelineBundle,
 ):
-    pl_config = full_pipeline_bundle.pipeline_config
-    model = full_pipeline_bundle.model
+    pl_config = full_pipeline_bundle.model_bundle.pipeline_config
+    model = full_pipeline_bundle.model_bundle.model
     return initialize_model_wrapper(params=pl_config.model_wrapper, model=model)
 
 
