@@ -290,7 +290,7 @@ def initialize_model_wrapper(
     return _model_wrapper
 
 
-def initialize_model_wrapper_from_full_pipeline_pickle(
+def initialize_model_wrapper_from_full_pipeline_bundle(
     full_pipeline_bundle: FullPipelineBundle,
 ):
     pl_config = full_pipeline_bundle.model_bundle.pipeline_config
