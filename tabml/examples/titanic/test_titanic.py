@@ -35,13 +35,13 @@ RAW_DATA_SAMPLES = [
 
 def _test_inference(config_path):
     config = parse_pipeline_config(yaml_path=config_path)
-    full_pipeline_path = (
+    full_pipeline_bundle_path = (
         ExperimentManager(config).get_most_recent_run_dir()
         / ExperimentManager.full_pipeline_filename
     )
     model_inference = ModelInference(
         feature_manager_cls=feature_manager.FeatureManager,  # type: ignore
-        full_pipeline_path=full_pipeline_path,
+        full_pipeline_bundle_path=full_pipeline_bundle_path,
     )
     model_inference.predict(RAW_DATA_SAMPLES)
 

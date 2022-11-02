@@ -10,6 +10,8 @@ from tabml.config_helpers import parse_feature_config, parse_pipeline_config
 from tabml.experiment_manager import ExperimentManager
 from tabml.feature_config_helper import FeatureConfigHelper
 from tabml.schemas.feature_config import DType, FeatureConfig
+
+from tabml.schemas.bundles import FullPipelineBundle, FeatureBundle
 from tabml.utils.logger import logger
 from tabml.utils.utils import check_uniqueness, load_pickle, mkdir_if_needed
 
@@ -24,7 +26,7 @@ PANDAS_DTYPE_MAPPING = {
     DType.DATETIME: "datetime64[ns]",
 }
 
-CONFIG_AND_TRANSFORMERS_FILENAME = "config_and_transformers.pickle"
+FEATURE_BUNDLE_FILENAME = "config_and_transformers.pickle"
 
 
 class BaseFeatureManager(ABC):
@@ -53,14 +55,14 @@ class BaseFeatureManager(ABC):
             A dictionary of {feature_name: its transformer}. This transformer_dict is
             formed and saved to a pickle in the "training" stage. In "serving" stage,
             it's loaded and does the transformations.
-        config_and_transformers_path:
+        feature_bundle_path:
             pickle path to save both feature config and transformer
     """
 
     def __init__(
         self,
         config: Union[str, Path, FeatureConfig],
-        config_and_transformers_path: Union[str, None] = None,
+        feature_bundle_path: Union[str, None] = None,
     ):
         if isinstance(config, str) or isinstance(config, Path):
             self.config_helper = FeatureConfigHelper.from_config_path(config)
@@ -75,41 +77,38 @@ class BaseFeatureManager(ABC):
         self.dataframe: pd.DataFrame = pd.DataFrame()
         self.transforming_class_by_feature_name: Dict[str, Any] = {}
         self.transformer_dict: Dict[str, Any] = {}
-        self.config_and_transformers_path = (
-            config_and_transformers_path or self.get_config_and_transformer_path()
-        )
+        self.feature_bundle_path = feature_bundle_path or self.get_feature_bundle_path()
 
     @classmethod
     def from_config_path(
         cls,
         config_path: Union[str, Path],
-        config_and_transformers_path: Union[str, None] = None,
+        feature_bundle_path: Union[str, None] = None,
     ):
         config = parse_feature_config(yaml_path=config_path)
-        return cls(config, config_and_transformers_path)
+        return cls(config, feature_bundle_path)
 
     @classmethod
-    def from_full_pipeline_data(cls, full_pipeline_data):
-        feature_config = full_pipeline_data["feature_config"]
+    def from_full_pipeline_bundle(cls, full_pipeline_bundle: FullPipelineBundle):
+        feature_config = full_pipeline_bundle.feature_bundle.feature_config
         fm = cls(feature_config)
-        fm.transformer_dict = full_pipeline_data["transformers"]
+        fm.transformer_dict = full_pipeline_bundle.feature_bundle.transformers
         return fm
 
     @classmethod
-    def from_config_and_transformers_path(cls, config_and_transformers_path):
-        data = load_pickle(config_and_transformers_path)
-        feature_config = data["feature_config"]
+    def from_feature_bundle_path(cls, feature_bundle_path):
+        feature_bundle: FeatureBundle = load_pickle(feature_bundle_path)
+        feature_config = feature_bundle.feature_config
         fm = cls(feature_config)
-        fm.transformer_dict = data["transformers"]
+        fm.transformer_dict = feature_bundle.transformers
         return fm
 
-    def save_feature_config_and_transformers(self):
-        data = {
-            "feature_config": self.config_helper.config,
-            "transformers": self.transformer_dict,
-        }
+    def save_feature_bundle(self):
+        data = FeatureBundle(
+            feature_config=self.config_helper.config, transformers=self.transformer_dict
+        )
         mkdir_if_needed(self.dataset_path.parent)
-        save_path = self.config_and_transformers_path
+        save_path = self.feature_bundle_path
         logger.info(f"Saving feature config and transformers to {save_path}")
         with open(save_path, "wb") as pickle_file:
             pickle.dump(data, pickle_file)
@@ -117,8 +116,8 @@ class BaseFeatureManager(ABC):
     def get_dataset_path(self):
         return Path(self.raw_data_dir) / "features" / f"{self.dataset_name}.csv"
 
-    def get_config_and_transformer_path(self):
-        return Path(self.raw_data_dir) / "features" / CONFIG_AND_TRANSFORMERS_FILENAME
+    def get_feature_bundle_path(self):
+        return Path(self.raw_data_dir) / "features" / FEATURE_BUNDLE_FILENAME
 
     def _get_base_transforming_class(self):
         raise NotImplementedError
@@ -247,7 +246,7 @@ class BaseFeatureManager(ABC):
         self.initialize_dataframe()
         self.compute_transforming_features()
         self.save_dataframe()
-        self.save_feature_config_and_transformers()
+        self.save_feature_bundle()
 
     def compute_prediction_features(
         self, prediction_feature_names: Union[List[str], None] = None
