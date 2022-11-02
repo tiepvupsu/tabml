@@ -28,8 +28,8 @@ MLFLOW_AUTOLOG = {
 class BaseModelWrapper(ABC):
     mlflow_model_type = ""
 
-    def __init__(self, params: pipeline_config.ModelWrapper):
-        self.model = None
+    def __init__(self, params: pipeline_config.ModelWrapper, model=None):
+        self.model = model
         self.save_model_name = None
         # Parameters for model instantiating
         self.model_params = params.model_params
