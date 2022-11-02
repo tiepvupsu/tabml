@@ -13,10 +13,10 @@ from tabml.config_helpers import parse_pipeline_config
 from tabml.data_loaders import BaseDataLoader
 from tabml.experiment_manager import ExperimentManager
 from tabml.schemas import pipeline_config
-from tabml.schemas.bundles import FullPipelineBundle
+from tabml.schemas.bundles import FullPipelineBundle, ModelBundle
 from tabml.utils import factory, utils
 from tabml.utils.logger import boosting_logger_eval, logger
-from tabml.utils.utils import save_as_pickle
+from tabml.utils.utils import load_pickle, save_as_pickle
 
 MLFLOW_AUTOLOG = {
     "sklearn": mlflow.sklearn.autolog(),
@@ -287,6 +287,21 @@ def initialize_model_wrapper(
         _model_wrapper.load_model(model_path)
     if model:
         _model_wrapper.model = model
+    return _model_wrapper
+
+
+def initialize_model_wrapper_new(model_bundle: Union[str, Path, ModelBundle]):
+    _model_bundle = (
+        model_bundle
+        if isinstance(model_bundle, ModelBundle)
+        else load_pickle(model_bundle)
+    )
+    model_wrapper_params = _model_bundle.pipeline_config.model_wrapper
+    model_wrapper_cls = factory.create(model_wrapper_params.cls_name)
+    if not issubclass(model_wrapper_cls, BaseModelWrapper):
+        raise ValueError(f"{model_wrapper_cls} is not a subclass of BaseModelWrapper")
+    _model_wrapper = model_wrapper_cls(model_wrapper_params)
+    _model_wrapper.model = _model_bundle.model
     return _model_wrapper
 
 
