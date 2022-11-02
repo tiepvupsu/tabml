@@ -9,10 +9,8 @@ import pandas as pd
 from tabml.config_helpers import parse_feature_config, parse_pipeline_config
 from tabml.experiment_manager import ExperimentManager
 from tabml.feature_config_helper import FeatureConfigHelper
-from tabml.schemas.feature_config import (
-    DType,
-    FeatureConfig,
-)
+from tabml.schemas.feature_config import DType, FeatureConfig
+
 from tabml.schemas.bundles import FullPipelineBundle, FeatureBundle
 from tabml.utils.logger import logger
 from tabml.utils.utils import check_uniqueness, load_pickle, mkdir_if_needed
@@ -100,7 +98,7 @@ class BaseFeatureManager(ABC):
         return fm
 
     @classmethod
-    def from_config_and_transformers_path(cls, config_and_transformers_path):
+    def from_feature_bundle_path(cls, config_and_transformers_path):
         feature_bundle: FeatureBundle = load_pickle(config_and_transformers_path)
         feature_config = feature_bundle.feature_config
         fm = cls(feature_config)
