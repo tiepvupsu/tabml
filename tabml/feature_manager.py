@@ -55,14 +55,14 @@ class BaseFeatureManager(ABC):
             A dictionary of {feature_name: its transformer}. This transformer_dict is
             formed and saved to a pickle in the "training" stage. In "serving" stage,
             it's loaded and does the transformations.
-        config_and_transformers_path:
+        feature_bundle_path:
             pickle path to save both feature config and transformer
     """
 
     def __init__(
         self,
         config: Union[str, Path, FeatureConfig],
-        config_and_transformers_path: Union[str, None] = None,
+        feature_bundle_path: Union[str, None] = None,
     ):
         if isinstance(config, str) or isinstance(config, Path):
             self.config_helper = FeatureConfigHelper.from_config_path(config)
@@ -77,18 +77,16 @@ class BaseFeatureManager(ABC):
         self.dataframe: pd.DataFrame = pd.DataFrame()
         self.transforming_class_by_feature_name: Dict[str, Any] = {}
         self.transformer_dict: Dict[str, Any] = {}
-        self.config_and_transformers_path = (
-            config_and_transformers_path or self.get_feature_bundle_path()
-        )
+        self.feature_bundle_path = feature_bundle_path or self.get_feature_bundle_path()
 
     @classmethod
     def from_config_path(
         cls,
         config_path: Union[str, Path],
-        config_and_transformers_path: Union[str, None] = None,
+        feature_bundle_path: Union[str, None] = None,
     ):
         config = parse_feature_config(yaml_path=config_path)
-        return cls(config, config_and_transformers_path)
+        return cls(config, feature_bundle_path)
 
     @classmethod
     def from_full_pipeline_bundle(cls, full_pipeline_bundle: FullPipelineBundle):
@@ -98,8 +96,8 @@ class BaseFeatureManager(ABC):
         return fm
 
     @classmethod
-    def from_feature_bundle_path(cls, config_and_transformers_path):
-        feature_bundle: FeatureBundle = load_pickle(config_and_transformers_path)
+    def from_feature_bundle_path(cls, feature_bundle_path):
+        feature_bundle: FeatureBundle = load_pickle(feature_bundle_path)
         feature_config = feature_bundle.feature_config
         fm = cls(feature_config)
         fm.transformer_dict = feature_bundle.transformers
@@ -110,7 +108,7 @@ class BaseFeatureManager(ABC):
             feature_config=self.config_helper.config, transformers=self.transformer_dict
         )
         mkdir_if_needed(self.dataset_path.parent)
-        save_path = self.config_and_transformers_path
+        save_path = self.feature_bundle_path
         logger.info(f"Saving feature config and transformers to {save_path}")
         with open(save_path, "wb") as pickle_file:
             pickle.dump(data, pickle_file)
