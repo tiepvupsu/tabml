@@ -11,7 +11,7 @@ from tabml.data_loaders import BaseDataLoader
 from tabml.feature_manager import BaseFeatureManager
 from tabml.model_analysis import ModelAnalysis
 from tabml.schemas.pipeline_config import PipelineConfig
-from tabml.schemas.full_pipeline_data import FullPipelineData
+from tabml.schemas.bundles import FullPipelineData
 from tabml.utils import factory
 from tabml.utils.logger import logger
 from tabml.utils.utils import load_pickle

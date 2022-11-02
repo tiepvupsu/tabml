@@ -7,7 +7,7 @@ from typing import Any, Dict, Iterable, List, Union
 from tabml.feature_manager import BaseFeatureManager
 from tabml.model_wrappers import initialize_model_wrapper_from_full_pipeline_pickle
 from tabml.utils.utils import load_pickle
-from tabml.schemas.full_pipeline_data import FullPipelineData
+from tabml.schemas.bundles import FullPipelineData
 
 
 @dataclass

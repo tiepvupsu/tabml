@@ -10,9 +10,11 @@ from tabml.config_helpers import parse_feature_config, parse_pipeline_config
 from tabml.experiment_manager import ExperimentManager
 from tabml.feature_config_helper import FeatureConfigHelper
 from tabml.schemas.feature_config import (
-    DType, FeatureConfig, FeatureConfigAndTransformers
+    DType,
+    FeatureConfig,
+    FeatureConfigAndTransformers,
 )
-from tabml.schemas.full_pipeline_data import FullPipelineData
+from tabml.schemas.bundles import FullPipelineData
 from tabml.utils.logger import logger
 from tabml.utils.utils import check_uniqueness, load_pickle, mkdir_if_needed
 
@@ -108,8 +110,7 @@ class BaseFeatureManager(ABC):
 
     def save_feature_config_and_transformers(self):
         data = FeatureConfigAndTransformers(
-            feature_config=self.config_helper.config,
-            transformers=self.transformer_dict
+            feature_config=self.config_helper.config, transformers=self.transformer_dict
         )
         mkdir_if_needed(self.dataset_path.parent)
         save_path = self.config_and_transformers_path
