@@ -315,18 +315,14 @@ def load_or_train_model(model_path, pipeline_config_path) -> BaseModelWrapper:
             logger.info(
                 f"Searching for the last run dir with {pipeline_config_path} config."
             )
-            run_dir = ExperimentManager.from_config_path(
-                pipeline_config_path
-            ).get_most_recent_run_dir()
+            run_dir = ExperimentManager(pipeline_config_path).get_most_recent_run_dir()
             # TODO: create a function/method in experiment_manager to find model_path
             # in run_dir.
             model_path = str(Path(run_dir) / "model_0")
         except IOError:
             import tabml.pipelines
 
-            pipeline = tabml.pipelines.BasePipeline.from_config_path(
-                pipeline_config_path
-            )
+            pipeline = tabml.pipelines.BasePipeline(pipeline_config_path)
             pipeline.run()
             return pipeline.model_wrapper
 
