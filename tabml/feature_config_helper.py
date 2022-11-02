@@ -6,6 +6,7 @@ from tabml.config_helpers import parse_feature_config
 from tabml.schemas.feature_config import (
     BaseFeature,
     DType,
+    FeatureConfig,
     PredictionFeature,
     TransformingFeature,
 )
@@ -55,7 +56,7 @@ class FeatureConfigHelper:
 
     Attributes:
         config:
-            A feature_config object parsed from a yaml file.
+            A feature_config object
         raw_data_dir:
             A string of directory to raw data.
         dataset_name:
@@ -71,7 +72,7 @@ class FeatureConfigHelper:
             This is useful when finding all dependents of one feature.
     """
 
-    def __init__(self, config):
+    def __init__(self, config: FeatureConfig):
         self.config = config
         self.raw_data_dir = self.config.raw_data_dir
         self.dataset_name = self.config.dataset_name
