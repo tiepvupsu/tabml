@@ -14,7 +14,7 @@ from tabml.schemas.pipeline_config import PipelineConfig
 from tabml.schemas.bundles import FullPipelineBundle, ModelBundle
 from tabml.utils import factory
 from tabml.utils.logger import logger
-from tabml.utils.utils import load_pickle
+from tabml.utils.utils import load_pickle, return_or_load
 
 
 class BasePipeline(ABC):
@@ -22,20 +22,23 @@ class BasePipeline(ABC):
 
     Attributions:
         config:
-            A pipeline config object.
+            A pipeline config object or a path to config. If path, then parse the
+            pipeline config.
         data_loader:
             A data loader object, a subclass of base.data_loaders.BaseDataLoader.
         exp_manager:
             A base.experiment_manager.ExperimentManager object.
     """
 
-    def __init__(self, config: PipelineConfig, custom_run_dir: str = ""):
-        self.config = config
+    def __init__(
+        self, config: Union[str, Path, PipelineConfig], custom_run_dir: str = ""
+    ):
+        self.config = return_or_load(config, PipelineConfig, parse_pipeline_config)
         logger.info("=" * 80)
         logger.info(f"Running pipeline with config name {self.config.config_name}")
         logger.info("=" * 80)
         self.exp_manager = experiment_manager.ExperimentManager(
-            config, custom_run_dir=Path(custom_run_dir)
+            self.config, custom_run_dir=Path(custom_run_dir)
         )
         self.data_loader = self._get_data_loader()
         assert self.data_loader.label_col is not None, "label_col must be specified"
@@ -44,11 +47,6 @@ class BasePipeline(ABC):
         )
 
         logger.add(self.exp_manager.get_log_path())
-
-    @classmethod
-    def from_config_path(cls, config_path: Union[str, Path], custom_run_dir: str = ""):
-        config = parse_pipeline_config(config_path)
-        return cls(config, custom_run_dir)
 
     def run(self):
         self.exp_manager.create_new_run_dir()
