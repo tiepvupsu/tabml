@@ -152,3 +152,14 @@ def change_working_dir_pytest(func):
 def mkdir_if_needed(path: Path):
     if not path.exists():
         path.mkdir(parents=True)
+
+
+def return_or_load(object_or_path, object_type, load_func):
+    """Returns the input directly or load the object from file.
+
+    Returns the input if its type is object_type, otherwise load the object using the
+    load_func
+    """
+    if isinstance(object_or_path, object_type):
+        return object_or_path
+    return load_func(object_or_path)
