@@ -111,16 +111,3 @@ prediction_features:
   - name: pred_lgbm
     index: 14
     dtype: FLOAT
-
-  - name: pred_catboost
-    index: 15
-    dtype: FLOAT
-
-  - name: pred_xgboost
-    index: 16
-    dtype: FLOAT
-
-  - name: pred_lgbm_for_test
-    index: 17
-    dtype: FLOAT
-    pipeline_config_path: configs/lgbm_config.yaml
