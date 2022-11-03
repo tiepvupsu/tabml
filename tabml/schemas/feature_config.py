@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Union
 from pathlib import Path
-from tabml.schemas.bundles import ModelBundle
+from tabml.schemas.pipeline_config import ModelBundle
 
 import pydantic
 
