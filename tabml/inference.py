@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Union
 
 from tabml.feature_manager import BaseFeatureManager
-from tabml.model_wrappers import initialize_model_wrapper_new
+from tabml.model_wrappers import initialize_model_wrapper
 from tabml.utils.utils import load_pickle
 from tabml.schemas.bundles import FullPipelineBundle
 
@@ -26,9 +26,7 @@ class ModelInference:
         )
         # Initialize model_wrapper
         pipeline_config = full_pipeline_bundle.model_bundle.pipeline_config
-        self.model_wrapper = initialize_model_wrapper_new(
-            full_pipeline_bundle.model_bundle
-        )
+        self.model_wrapper = initialize_model_wrapper(full_pipeline_bundle.model_bundle)
         self.features_to_model = list(pipeline_config.data_loader.features_to_model)
 
     def predict(self, raw_data: List[Dict[str, Any]]) -> Iterable[Any]:

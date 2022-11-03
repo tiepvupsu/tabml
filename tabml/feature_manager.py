@@ -252,7 +252,7 @@ class BaseFeatureManager(ABC):
 
     def _compute_prediction_feature(self, prediction_feature_name: str):
         # import here to avoid circular imports
-        from tabml.model_wrappers import initialize_model_wrapper_new
+        from tabml.model_wrappers import initialize_model_wrapper
 
         logger.info(f"Computing prediction feature {prediction_feature_name} ...")
         metadata = self.feature_metadata[prediction_feature_name]
@@ -262,7 +262,7 @@ class BaseFeatureManager(ABC):
             if isinstance(model_bundle, ModelBundle)
             else load_pickle(model_bundle)
         )
-        _model_wrapper = initialize_model_wrapper_new(model_bundle)
+        _model_wrapper = initialize_model_wrapper(model_bundle)
         features_to_pred_model = (
             _model_bundle.pipeline_config.data_loader.features_to_model
         )
