@@ -9,7 +9,6 @@ import pandas as pd
 from tabml.config_helpers import parse_feature_config, parse_pipeline_config
 from tabml.experiment_manager import ExperimentManager
 from tabml.feature_config_helper import FeatureConfigHelper
-from tabml.model_wrappers import initialize_model_wrapper_new
 from tabml.schemas.feature_config import DType, FeatureConfig
 
 from tabml.schemas.bundles import FeatureBundle
@@ -251,6 +250,9 @@ class BaseFeatureManager(ABC):
         self.save_dataframe()
 
     def _compute_prediction_feature(self, prediction_feature_name: str):
+        # import here to avoid circular imports
+        from tabml.model_wrappers import initialize_model_wrapper_new
+
         logger.info(f"Computing prediction feature {prediction_feature_name} ...")
         metadata = self.feature_metadata[prediction_feature_name]
         model_bundle = metadata.model_bundle
