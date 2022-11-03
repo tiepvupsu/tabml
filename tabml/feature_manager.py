@@ -257,11 +257,7 @@ class BaseFeatureManager(ABC):
         logger.info(f"Computing prediction feature {prediction_feature_name} ...")
         metadata = self.feature_metadata[prediction_feature_name]
         model_bundle = metadata.model_bundle
-        _model_bundle = (
-            model_bundle
-            if isinstance(model_bundle, ModelBundle)
-            else load_pickle(model_bundle)
-        )
+        _model_bundle = return_or_load(model_bundle, ModelBundle, load_pickle)
         _model_wrapper = initialize_model_wrapper(model_bundle)
         features_to_pred_model = (
             _model_bundle.pipeline_config.data_loader.features_to_model
