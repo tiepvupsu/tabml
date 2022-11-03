@@ -302,7 +302,8 @@ def initialize_model_wrapper_new(model_bundle: Union[str, Path, ModelBundle]):
     if not issubclass(model_wrapper_cls, BaseModelWrapper):
         raise ValueError(f"{model_wrapper_cls} is not a subclass of BaseModelWrapper")
     _model_wrapper = model_wrapper_cls(model_wrapper_params)
-    _model_wrapper.model = _model_bundle.model
+    if _model_bundle.model:
+        _model_wrapper.model = _model_bundle.model
     return _model_wrapper
 
 
