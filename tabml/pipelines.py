@@ -42,8 +42,8 @@ class BasePipeline(ABC):
         )
         self.data_loader = self._get_data_loader()
         assert self.data_loader.label_col is not None, "label_col must be specified"
-        self.model_wrapper = model_wrappers.initialize_model_wrapper(
-            self.config.model_wrapper
+        self.model_wrapper = model_wrappers.initialize_model_wrapper_new(
+            ModelBundle(pipeline_config=self.config, model=None),
         )
 
         logger.add(self.exp_manager.get_log_path())
