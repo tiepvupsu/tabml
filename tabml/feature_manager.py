@@ -12,6 +12,7 @@ from tabml.feature_config_helper import FeatureConfigHelper
 from tabml.schemas.feature_config import DType, FeatureConfig
 
 from tabml.schemas.bundles import FeatureBundle
+from tabml.schemas.pipeline_config import ModelBundle
 from tabml.utils.logger import logger
 from tabml.utils.utils import (
     check_uniqueness,
@@ -256,9 +257,14 @@ class BaseFeatureManager(ABC):
         logger.info(f"Computing prediction feature {prediction_feature_name} ...")
         metadata = self.feature_metadata[prediction_feature_name]
         model_bundle = metadata.model_bundle
+        _model_bundle = (
+            model_bundle
+            if isinstance(model_bundle, ModelBundle)
+            else load_pickle(model_bundle)
+        )
         _model_wrapper = initialize_model_wrapper_new(model_bundle)
         features_to_pred_model = (
-            model_bundle.pipeline_config.data_loader.features_to_model
+            _model_bundle.pipeline_config.data_loader.features_to_model
         )
         preds = _model_wrapper.predict(self.dataframe[features_to_pred_model])
         self._update_dataframe(prediction_feature_name, preds)
