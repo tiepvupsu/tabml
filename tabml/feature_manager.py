@@ -9,6 +9,7 @@ import pandas as pd
 from tabml.config_helpers import parse_feature_config, parse_pipeline_config
 from tabml.experiment_manager import ExperimentManager
 from tabml.feature_config_helper import FeatureConfigHelper
+from tabml.model_wrappers import initialize_model_wrapper_new
 from tabml.schemas.feature_config import DType, FeatureConfig
 
 from tabml.schemas.bundles import FeatureBundle
@@ -252,12 +253,9 @@ class BaseFeatureManager(ABC):
     def _compute_prediction_feature(self, prediction_feature_name: str):
         logger.info(f"Computing prediction feature {prediction_feature_name} ...")
         metadata = self.feature_metadata[prediction_feature_name]
-        model_path = metadata.model_path
-        pipeline_config_path = metadata.pipeline_config_path
-        model_inference = ModelInferenceWithPreprocessedData(
-            model_path=model_path, pipeline_config_path=pipeline_config_path
-        )
-        preds = model_inference.predict(self.dataframe)
+        model_bundle = metadata.model_bundle
+        _model_wrapper = initialize_model_wrapper_new(model_bundle)
+        preds = _model_wrapper.predict(self.dataframe)
         self._update_dataframe(prediction_feature_name, preds)
 
     def _validate_prediction_feature_names(self, prediction_feature_names: List[str]):
