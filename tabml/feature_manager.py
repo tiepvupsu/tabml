@@ -257,7 +257,10 @@ class BaseFeatureManager(ABC):
         metadata = self.feature_metadata[prediction_feature_name]
         model_bundle = metadata.model_bundle
         _model_wrapper = initialize_model_wrapper_new(model_bundle)
-        preds = _model_wrapper.predict(self.dataframe)
+        features_to_pred_model = (
+            model_bundle.pipeline_config.data_loader.features_to_model
+        )
+        preds = _model_wrapper.predict(self.dataframe[features_to_pred_model])
         self._update_dataframe(prediction_feature_name, preds)
 
     def _validate_prediction_feature_names(self, prediction_feature_names: List[str]):
