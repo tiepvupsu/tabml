@@ -10,6 +10,7 @@ from tabml.schemas.feature_config import (
     PredictionFeature,
     TransformingFeature,
 )
+from tabml.schemas.bundles import ModelBundle
 from tabml.utils.utils import check_uniqueness
 
 
@@ -20,15 +21,13 @@ class FeatureMetadata:
         dtype: DType,
         dependents=None,
         dependencies=None,
-        model_path: str = "",
-        pipeline_config_path: str = "",
+        model_bundle: Union[str, Path, ModelBundle] = "",
     ):
         self.index = index
         self.dtype = dtype
         self.dependents = dependents or []
         self.dependencies = dependencies or []
-        self.model_path = model_path
-        self.pipeline_config_path = pipeline_config_path
+        self.model_bundle = model_bundle
 
     @classmethod
     def from_base_feature(cls, feature: BaseFeature):
@@ -44,10 +43,7 @@ class FeatureMetadata:
     @classmethod
     def from_prediction_feature(cls, feature: PredictionFeature):
         return cls(
-            index=feature.index,
-            dtype=feature.dtype,
-            model_path=feature.model_path,
-            pipeline_config_path=feature.pipeline_config_path,
+            index=feature.index, dtype=feature.dtype, model_bundle=feature.model_bundle
         )
 
 

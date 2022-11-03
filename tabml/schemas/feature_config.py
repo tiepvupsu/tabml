@@ -1,5 +1,7 @@
 from enum import Enum
-from typing import List
+from typing import List, Union
+from pathlib import Path
+from tabml.schemas.bundles import ModelBundle
 
 import pydantic
 
@@ -48,11 +50,7 @@ class PredictionFeature(pydantic.BaseModel):
     name: str
     index: int
     dtype: DType
-    model_path: str = ""
-
-    # The list of dependencies can be found in
-    # pipeline_config.data_loader.features_to_model.
-    pipeline_config_path: str = ""
+    model_bundle: Union[str, Path, ModelBundle] = ""
 
 
 class FeatureConfig(pydantic.BaseModel):
