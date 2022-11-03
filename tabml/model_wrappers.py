@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Dict, Iterable, Optional, Tuple, Union
+from typing import Dict, Iterable, Tuple, Union
 
 import mlflow
 import numpy as np
@@ -9,14 +9,11 @@ from catboost import CatBoostClassifier, CatBoostRegressor
 from lightgbm import LGBMClassifier, LGBMRegressor
 from xgboost import XGBClassifier, XGBRegressor
 
-from tabml.config_helpers import parse_pipeline_config
 from tabml.data_loaders import BaseDataLoader
-from tabml.experiment_manager import ExperimentManager
 from tabml.schemas import pipeline_config
-from tabml.schemas.bundles import FullPipelineBundle
 from tabml.schemas.pipeline_config import ModelBundle
 from tabml.utils import factory, utils
-from tabml.utils.logger import boosting_logger_eval, logger
+from tabml.utils.logger import boosting_logger_eval
 from tabml.utils.utils import load_pickle, save_as_pickle
 
 MLFLOW_AUTOLOG = {
@@ -271,27 +268,7 @@ def write_model_wrapper_subclasses_to_file(
         f.writelines(lines)
 
 
-def initialize_model_wrapper(
-    params: pipeline_config.ModelWrapper,
-    model_path: Union[str, Path, None] = None,
-    model: Optional[Any] = None,
-):
-    """Initializes model wrapper from params."""
-    if model_path and model:
-        raise ValueError("Only one of {model_path, model} is allowed to be not None.")
-
-    model_wrapper_cls = factory.create(params.cls_name)
-    if not issubclass(model_wrapper_cls, BaseModelWrapper):
-        raise ValueError(f"{model_wrapper_cls} is not a subclass of BaseModelWrapper")
-    _model_wrapper = model_wrapper_cls(params)
-    if model_path:
-        _model_wrapper.load_model(model_path)
-    if model:
-        _model_wrapper.model = model
-    return _model_wrapper
-
-
-def initialize_model_wrapper_new(model_bundle: Union[str, Path, ModelBundle]):
+def initialize_model_wrapper(model_bundle: Union[str, Path, ModelBundle]):
     _model_bundle = (
         model_bundle
         if isinstance(model_bundle, ModelBundle)
@@ -305,46 +282,6 @@ def initialize_model_wrapper_new(model_bundle: Union[str, Path, ModelBundle]):
     if _model_bundle.model:
         _model_wrapper.model = _model_bundle.model
     return _model_wrapper
-
-
-def initialize_model_wrapper_from_full_pipeline_bundle(
-    full_pipeline_bundle: FullPipelineBundle,
-):
-    pl_config = full_pipeline_bundle.model_bundle.pipeline_config
-    model = full_pipeline_bundle.model_bundle.model
-    return initialize_model_wrapper(params=pl_config.model_wrapper, model=model)
-
-
-def load_or_train_model(model_path, pipeline_config_path) -> BaseModelWrapper:
-    """Loads or trains a model, returns a model wrapper."""
-    if not (model_path or pipeline_config_path):
-        raise ValueError(
-            "At least one of model_path and pipeline_config_path must be not None."
-        )
-
-    if not pipeline_config_path:
-        pipeline_config_path = ExperimentManager.get_config_path_from_model_path(
-            model_path
-        )
-
-    if not model_path:
-        try:
-            logger.info(
-                f"Searching for the last run dir with {pipeline_config_path} config."
-            )
-            run_dir = ExperimentManager(pipeline_config_path).get_most_recent_run_dir()
-            # TODO: create a function/method in experiment_manager to find model_path
-            # in run_dir.
-            model_path = str(Path(run_dir) / "model_0")
-        except IOError:
-            import tabml.pipelines
-
-            pipeline = tabml.pipelines.BasePipeline(pipeline_config_path)
-            pipeline.run()
-            return pipeline.model_wrapper
-
-    config = parse_pipeline_config(pipeline_config_path)
-    return initialize_model_wrapper(config.model_wrapper, model_path)
 
 
 if __name__ == "__main__":
