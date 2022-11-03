@@ -37,8 +37,9 @@ class BasePipeline(ABC):
         logger.info("=" * 80)
         logger.info(f"Running pipeline with config name {self.config.config_name}")
         logger.info("=" * 80)
+        _custom_run_dir = Path(custom_run_dir) if custom_run_dir else None
         self.exp_manager = experiment_manager.ExperimentManager(
-            self.config, custom_run_dir=Path(custom_run_dir)
+            self.config, custom_run_dir=_custom_run_dir
         )
         self.data_loader = self._get_data_loader()
         assert self.data_loader.label_col is not None, "label_col must be specified"
