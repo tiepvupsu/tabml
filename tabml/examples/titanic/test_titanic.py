@@ -41,7 +41,7 @@ def _test_inference(config_path):
     )
     model_inference = ModelInference(
         feature_manager_cls=feature_manager.FeatureManager,  # type: ignore
-        full_pipeline_bundle_path=full_pipeline_bundle_path,
+        full_pipeline_bundle=full_pipeline_bundle_path,
     )
     model_inference.predict(RAW_DATA_SAMPLES)
 
