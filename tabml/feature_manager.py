@@ -32,7 +32,7 @@ PANDAS_DTYPE_MAPPING = {
     DType.DATETIME: "datetime64[ns]",
 }
 
-FEATURE_BUNDLE_FILENAME = "config_and_transformers.pickle"
+FEATURE_BUNDLE_FILENAME = "feature_bundle.pickle"
 
 
 class BaseFeatureManager(ABC):
@@ -100,7 +100,7 @@ class BaseFeatureManager(ABC):
         )
         mkdir_if_needed(self.dataset_path.parent)
         save_path = self.feature_bundle_path
-        logger.info(f"Saving feature config and transformers to {save_path}")
+        logger.info(f"Saving feature bundle to {save_path}")
         with open(save_path, "wb") as pickle_file:
             pickle.dump(data, pickle_file)
 
