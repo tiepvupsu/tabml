@@ -9,6 +9,6 @@ class FeatureBundle(pydantic.BaseModel):
     transformers: Dict[str, Any]
 
 
-class FullPipelineBundle(pydantic.BaseModel):
+class PipelineBundle(pydantic.BaseModel):
     feature_bundle: FeatureBundle
     model_bundle: ModelBundle
