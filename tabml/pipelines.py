@@ -11,7 +11,7 @@ from tabml.data_loaders import BaseDataLoader
 from tabml.feature_manager import BaseFeatureManager
 from tabml.model_analysis import ModelAnalysis
 from tabml.schemas.pipeline_config import PipelineConfig
-from tabml.schemas.bundles import FullPipelineBundle, ModelBundle
+from tabml.schemas.bundles import PipelineBundle, ModelBundle
 from tabml.utils import factory
 from tabml.utils.logger import logger
 from tabml.utils.utils import load_pickle, return_or_load
@@ -56,22 +56,22 @@ class BasePipeline(ABC):
             self._log_to_mlflow()
             self.train()
             self.analyze_model()
-        self.save_full_pipeline_pickle()
+        self.save_pipeline_bundle()
 
-    def save_full_pipeline_pickle(self):
+    def save_pipeline_bundle(self):
         feature_bundle_path = BaseFeatureManager(
             self.config.data_loader.feature_config_path
         ).get_feature_bundle_path()
         feature_bundle = load_pickle(feature_bundle_path)
-        data = FullPipelineBundle(
+        data = PipelineBundle(
             feature_bundle=feature_bundle,
             model_bundle=ModelBundle(
                 pipeline_config=self.config,
                 model=self.model_wrapper.model,
             ),
         )
-        save_path = self.exp_manager.get_full_pipeline_path()
-        logger.info(f"Saving full pipeline to {save_path}")
+        save_path = self.exp_manager.get_pipeline_bundle_path()
+        logger.info(f"Saving pipeline bundle to {save_path}")
         with open(save_path, "wb") as pickle_file:
             pickle.dump(data, pickle_file)
 

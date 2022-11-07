@@ -7,28 +7,26 @@ from typing import Any, Dict, Iterable, List, Union
 from tabml.feature_manager import BaseFeatureManager
 from tabml.model_wrappers import initialize_model_wrapper
 from tabml.utils.utils import return_or_load, load_pickle
-from tabml.schemas.bundles import FullPipelineBundle
+from tabml.schemas.bundles import PipelineBundle
 
 
 @dataclass
 class ModelInference:
     feature_manager_cls: BaseFeatureManager
-    full_pipeline_bundle: Union[str, Path, FullPipelineBundle]
+    pipeline_bundle: Union[str, Path, PipelineBundle]
 
     def __post_init__(self):
         # Load pickle
-        _full_pipeline_bundle: FullPipelineBundle = return_or_load(
-            self.full_pipeline_bundle, FullPipelineBundle, load_pickle
+        _pipeline_bundle: PipelineBundle = return_or_load(
+            self.pipeline_bundle, PipelineBundle, load_pickle
         )
         # Initialize feature_manager
         self.fm = self.feature_manager_cls.from_feature_bundle(
-            _full_pipeline_bundle.feature_bundle
+            _pipeline_bundle.feature_bundle
         )
         # Initialize model_wrapper
-        pipeline_config = _full_pipeline_bundle.model_bundle.pipeline_config
-        self.model_wrapper = initialize_model_wrapper(
-            _full_pipeline_bundle.model_bundle
-        )
+        pipeline_config = _pipeline_bundle.model_bundle.pipeline_config
+        self.model_wrapper = initialize_model_wrapper(_pipeline_bundle.model_bundle)
         self.features_to_model = list(pipeline_config.data_loader.features_to_model)
 
     def predict(self, raw_data: List[Dict[str, Any]]) -> Iterable[Any]:

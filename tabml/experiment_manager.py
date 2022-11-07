@@ -24,7 +24,7 @@ class ExperimentManager:
     log_filename = "run.log"
     config_filename = "config.yaml"
     _model_analysis_dir = "model_analysis"
-    full_pipeline_filename = "full_pipeline.pickle"
+    pipeline_bundle_filename = "full_pipeline.pickle"
 
     def __init__(
         self,
@@ -70,8 +70,8 @@ class ExperimentManager:
     def get_config_path(self):
         return self._make_path_under_run_dir(self.config_filename)
 
-    def get_full_pipeline_path(self):
-        return self._make_path_under_run_dir(self.full_pipeline_filename)
+    def get_pipeline_bundle_path(self):
+        return self._make_path_under_run_dir(self.pipeline_bundle_filename)
 
     def get_model_analysis_dir(self):
         res = self._make_path_under_run_dir(self._model_analysis_dir)
