@@ -192,7 +192,7 @@ class BaseFeatureManager(ABC):
             dependencies=self.config_helper.get_direct_dependencies(feature_name),
             raw_data=self.raw_data,
         )
-        series = transformer_object._transform(self.dataframe, transformer)
+        series = transformer_object._transform(self.dataframe, transformer, is_training)
         if is_training:
             self.transformer_dict[feature_name] = transformer_object.transformer
 
@@ -350,8 +350,10 @@ class BaseTransformingFeature(ABC):
         self.raw_data = raw_data
         self.transformer = None
 
-    def _transform(self, dataframe, transformer=None):
-        logger.info(f"Computing feature {self.name} in pandas ...")
+    def _transform(self, dataframe, transformer=None, is_training=True):
+        # only output messages in training mode
+        if is_training:
+            logger.info(f"Computing feature {self.name} in pandas ...")
         # This is to make sure that _transform_ methods do not use any columns other
         # than dependencies.
         df = dataframe[self.dependencies]
