@@ -28,8 +28,6 @@ Key features:
 
 - Parameters are specified in a config file as a config file. This config file is automatically saved into an experiment folder after each training for the reproducibility purpose.
 
-- TabML is integreated with [MLflow](https://mlflow.org/) which allows users to keep track all model parameters and metrics.
-
 - Support multiple ML packages for tabular data:
   - [x] [LightGBM](https://lightgbm.readthedocs.io/en/latest/)
   - [x] [XGBoost](https://xgboost.readthedocs.io/en/latest/)
@@ -71,7 +69,7 @@ python feature_manager.py  # to generate features
 python pipelines.py  # to train the model
 ```
 
-You can change some parameters in the config file, run `python pipelines.py` again then `mlflow ui` to see information about each run.
+You can change some parameters in the config file then run `python pipelines.py` again.
 
 In most project, users only need to focus their efforts on designing features. The feature dependecy is defined in a yaml config file and the feature implementation is stored in `feature_manager.py`.
 

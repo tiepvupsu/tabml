@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Union
 
-import mlflow
 import pandas as pd
 
 from tabml.data_loaders import BaseDataLoader
@@ -209,7 +208,6 @@ class ModelAnalysis:
             if val == "OVERALL" or key == "sample_count":
                 continue
             logger.info("{:<20}: {}".format(key, val))
-            mlflow.log_metrics({key: val})
 
 
 def _get_metrics(metric_names: List[str]) -> List[BaseMetric]:
