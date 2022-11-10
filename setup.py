@@ -22,7 +22,6 @@ setup(
     install_requires=[
         "catboost>=1.1",
         "GPUtil>=1.4.0",
-        "kaggle>=1.5.6",
         "lightgbm>=2.3.1",
         "loguru>=0.5.1",
         "numpy>=1.21,<1.23.0",
