@@ -3,8 +3,6 @@ from abc import ABC
 from pathlib import Path
 from typing import Union
 
-import mlflow
-
 from tabml import experiment_manager, model_wrappers
 from tabml.config_helpers import parse_pipeline_config
 from tabml.data_loaders import BaseDataLoader
@@ -31,7 +29,9 @@ class BasePipeline(ABC):
     """
 
     def __init__(
-        self, config: Union[str, Path, PipelineConfig], custom_run_dir: str = ""
+        self,
+        config: Union[str, Path, PipelineConfig],
+        custom_run_dir: str = "",
     ):
         self.config = return_or_load(config, PipelineConfig, parse_pipeline_config)
         logger.info("=" * 80)
@@ -51,11 +51,8 @@ class BasePipeline(ABC):
 
     def run(self):
         self.exp_manager.create_new_run_dir()
-        self._init_mlflow()
-        with mlflow.start_run():
-            self._log_to_mlflow()
-            self.train()
-            self.analyze_model()
+        self.train()
+        self.analyze_model()
         self.save_pipeline_bundle()
 
     def save_pipeline_bundle(self):
@@ -74,21 +71,6 @@ class BasePipeline(ABC):
         logger.info(f"Saving pipeline bundle to {save_path}")
         with open(save_path, "wb") as pickle_file:
             pickle.dump(data, pickle_file)
-
-    def _init_mlflow(self):
-        model_type = self.model_wrapper.mlflow_model_type
-        model_wrappers.MLFLOW_AUTOLOG[model_type]
-
-    def _log_to_mlflow(self):
-        model_type = self.model_wrapper.mlflow_model_type
-        mlflow.log_param("run_dir", self.exp_manager.run_dir)
-        mlflow.log_param("model_type", model_type)
-        mlflow.log_params(
-            {
-                "model_params": self.config.model_wrapper.model_params,
-                "fit_params": self.config.model_wrapper.fit_params,
-            }
-        )
 
     def train(self):
         model_dir = self.exp_manager.run_dir

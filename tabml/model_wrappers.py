@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Dict, Iterable, Tuple, Union
 
-import mlflow
 import numpy as np
 import shap
 from catboost import CatBoostClassifier, CatBoostRegressor
@@ -15,13 +14,6 @@ from tabml.schemas.pipeline_config import ModelBundle
 from tabml.utils import factory, utils
 from tabml.utils.logger import boosting_logger_eval
 from tabml.utils.utils import load_pickle
-
-MLFLOW_AUTOLOG = {
-    "sklearn": mlflow.sklearn.autolog(),
-    "lightgbm": mlflow.lightgbm.autolog(),
-    "xgboost": mlflow.xgboost.autolog(),
-    "catboost": None,
-}
 
 
 class BaseModelWrapper(ABC):
