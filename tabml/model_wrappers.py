@@ -14,7 +14,7 @@ from tabml.schemas import pipeline_config
 from tabml.schemas.pipeline_config import ModelBundle
 from tabml.utils import factory, utils
 from tabml.utils.logger import boosting_logger_eval
-from tabml.utils.utils import load_pickle, save_as_pickle
+from tabml.utils.utils import load_pickle
 
 MLFLOW_AUTOLOG = {
     "sklearn": mlflow.sklearn.autolog(),
@@ -106,7 +106,6 @@ class BaseSklearnModelWrapper(BaseModelWrapper):
         train_feature, train_label = data_loader.get_train_data_and_label()
 
         self.model.fit(X=train_feature, y=train_label, **self.fit_params)
-        save_as_pickle(self.model, model_dir, self.save_model_name)
 
     def load_model(self, model_path: Union[str, Path]):
         self.model = utils.load_pickle(model_path)
@@ -146,7 +145,6 @@ class BaseBoostingModelWrapper(BaseModelWrapper):
         fit_params = self._get_fit_params((train_feature, train_label), val_data)
 
         self.model.fit(X=train_feature, y=train_label, **fit_params)
-        save_as_pickle(self.model, model_dir, self.save_model_name)
 
 
 class BaseLgbmModelWrapper(BaseBoostingModelWrapper):
