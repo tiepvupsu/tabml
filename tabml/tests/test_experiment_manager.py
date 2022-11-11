@@ -36,9 +36,9 @@ class TestExperimentManager:
             self.config, should_create_new_run_dir=False, exp_root_dir=exp_root_dir
         )
 
-    def test_not_creat_run_dir_not_exist(self, tmp_path):
+    def test_not_created_run_dir_not_exist(self, tmp_path):
         exp_root_dir = Path(tmp_path) / "exp2"
-        Path(exp_root_dir).mkdir(parents=True)
+        (Path(exp_root_dir) / self.config.config_name).mkdir(parents=True)
 
         with pytest.raises(IOError) as excinfo:
             experiment_manager.ExperimentManager(
