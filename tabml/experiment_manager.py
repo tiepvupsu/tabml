@@ -17,8 +17,8 @@ class ExperimentManager:
 
     Attributes:
         exp_root_dir: root directory of all experiments.
-        run_prefix: prefix of the run name subfolder inside exp_root_dir.
-        run_dir: run dir name (run_prefix + timestamp).
+        config_name: config name
+        run_dir: run dir name (exp_root_dir/config_name/timestamp)
     """
 
     log_filename = "run.log"
@@ -38,14 +38,12 @@ class ExperimentManager:
             config: PipelineConfig object or path to the yaml configuration.
             should_create_new_run_dir: create new experiment subfolder (True) or not
                 (False). If not, set the experiment subfolder to the most recent run.
-            run_prefix: prefix of the run name subfolder inside exp_root_dir
-            run_dir: run dir name (exp_root_dir/run_prefix + timestamp)
             custom_run_dir: custom run dir that user can specify
         """
         self.config = return_or_load(config, PipelineConfig, parse_pipeline_config)
 
         self.exp_root_dir = exp_root_dir
-        self.run_prefix = self.config.config_name + "_"
+        self.config_name = self.config.config_name
         self.custom_run_dir = custom_run_dir
         if not custom_run_dir or not custom_run_dir.name:
             self.run_dir = self._get_run_dir(should_create_new_run_dir)
@@ -55,7 +53,7 @@ class ExperimentManager:
     def _get_run_dir(self, should_create_new_run_dir):
         if not should_create_new_run_dir:
             return self.get_most_recent_run_dir()
-        return self.exp_root_dir.joinpath(self.run_prefix + _get_time_stamp())
+        return self.exp_root_dir / self.config_name / _get_time_stamp()
 
     def create_new_run_dir(self):
         _make_dir_if_needed(self.run_dir)
@@ -92,17 +90,14 @@ class ExperimentManager:
         subfolders = sorted(
             [
                 sub
-                for sub in self.exp_root_dir.iterdir()
-                if sub.is_dir()
-                and sub.name.startswith(self.run_prefix)
-                and bool(re.match("[0-9]{6}_[0-9]{6}", sub.name[-13:]))
+                for sub in (self.exp_root_dir / self.config_name).iterdir()
+                if sub.is_dir() and bool(re.match("[0-9]{6}_[0-9]{6}", sub.name[-13:]))
             ],
-            key=lambda x: x.name[-13:],  # YYmmDD_HHMMSS
         )
         if not subfolders:
             raise IOError(
                 "Could not find any run directory starting with "
-                f"{self.exp_root_dir.joinpath(self.run_prefix)}"
+                f"{self.exp_root_dir.joinpath(self.config_name)}"
             )
         return subfolders[-1]
 
