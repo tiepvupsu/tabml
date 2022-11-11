@@ -24,7 +24,7 @@ class ExperimentManager:
     log_filename = "run.log"
     config_filename = "config.yaml"
     _model_analysis_dir = "model_analysis"
-    pipeline_bundle_filename = "full_pipeline.pickle"
+    pipeline_bundle_filename = "pipeline_bundle.pickle"
 
     def __init__(
         self,
