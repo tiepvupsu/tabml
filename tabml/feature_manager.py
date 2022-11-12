@@ -298,6 +298,17 @@ class BaseFeatureManager(ABC):
         self.compute_transforming_features(
             transforming_features_and_dependencies, is_training=False
         )
+
+        # convert types (defined iin feature_config)
+        for column in self.dataframe.columns:
+            dtype = self.feature_metadata[column].dtype
+            if dtype == DType.DATETIME:
+                self.dataframe[column] = pd.to_datetime(self.dataframe[column])
+            else:
+                self.dataframe[column] = self.dataframe[column].astype(
+                    PANDAS_DTYPE_MAPPING[dtype]
+                )
+
         return self.dataframe
 
     def set_raw_data(self, raw_data_samples: Any):
