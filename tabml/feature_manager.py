@@ -299,7 +299,7 @@ class BaseFeatureManager(ABC):
             transforming_features_and_dependencies, is_training=False
         )
 
-        # convert types (defined iin feature_config)
+        # convert types (defined in feature_config)
         for column in self.dataframe.columns:
             dtype = self.feature_metadata[column].dtype
             if dtype == DType.DATETIME:
