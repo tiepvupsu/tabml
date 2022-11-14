@@ -299,8 +299,11 @@ class BaseFeatureManager(ABC):
             transforming_features_and_dependencies, is_training=False
         )
 
-        # convert types (defined in feature_config)
-        for column in self.dataframe.columns:
+        # Convert types (defined in feature_config) for relevant columns/features.
+        # self.dataframe contains all base features in the code which might not exist
+        # when the feature manger was first ran. For that reason, we only care about
+        # the relevant columns, i.e. transforming_features_and_dependencies.
+        for column in transforming_features_and_dependencies:
             dtype = self.feature_metadata[column].dtype
             if dtype == DType.DATETIME:
                 self.dataframe[column] = pd.to_datetime(self.dataframe[column])
