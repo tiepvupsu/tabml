@@ -48,7 +48,7 @@ jobs:
         # python3 -m pytest -s --durations=0 . # https://stackoverflow.com/a/55095253
         python3 -m pytest -s --durations=0 --cov=./ --cov-report=xml tabml/
     - name: "Upload coverage to Codecov"
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v3
       with:
         fail_ci_if_error: true
         files: ./coverage.xml
