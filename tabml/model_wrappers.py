@@ -188,9 +188,9 @@ class BaseXGBoostModelWrapper(BaseBoostingModelWrapper):
         self.model = utils.load_pickle(model_path)
 
     def _get_fit_params(self, train_data, val_data):
+        # TODO: add callback to display train and validation metrics
         fit_params = {
             "eval_set": [train_data, val_data],
-            "callbacks": [boosting_logger_eval(model="xgboost")],
             **self.fit_params,
         }
         return fit_params
