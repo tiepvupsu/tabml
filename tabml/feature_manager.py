@@ -309,6 +309,10 @@ class BaseFeatureManager(ABC):
             dtype = self.feature_metadata[column].dtype
             if dtype == DType.DATETIME:
                 self.dataframe[column] = pd.to_datetime(self.dataframe[column])
+            elif dtype == DType.BOOL:
+                # well, when convert an object to bool, "False" is converted to True
+                # https://stackoverflow.com/a/48350163
+                self.dataframe[column] = self.dataframe[column] == "True"
             else:
                 self.dataframe[column] = self.dataframe[column].astype(
                     PANDAS_DTYPE_MAPPING[dtype]
