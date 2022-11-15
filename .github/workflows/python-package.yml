@@ -9,6 +9,9 @@ on:
   pull_request:
     branches: [ master, dev]
 
+env:
+  CODECOV_TOKEN: 5d7e1128-4fbe-4489-95ff-832d0863e04f
+
 jobs:
   build:
 
@@ -50,6 +53,7 @@ jobs:
     - name: "Upload coverage to Codecov"
       uses: codecov/codecov-action@v3
       with:
+        token: ${{ env.CODECOV_TOKEN }}
         fail_ci_if_error: true
         files: ./coverage.xml
         directory: ./coverage/reports/
