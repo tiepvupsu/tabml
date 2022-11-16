@@ -84,6 +84,7 @@ class ModelAnalysis:
     def analyze(self):
         if self.show_feature_importance:
             self._show_feature_importance()
+        # TODO: unhardcode "train" and "val"
         self._analyze_metrics_one_dataset("train")
         self._analyze_metrics_one_dataset("val")
 
