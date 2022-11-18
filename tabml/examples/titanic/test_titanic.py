@@ -39,8 +39,8 @@ RAW_DATA_SAMPLES = [
 def create_test_config(config_path: Union[str, Path]) -> PipelineConfig:
     config = parse_pipeline_config(config_path)
     config.model_wrapper.model_params["n_estimators"] = 10
-    config.model_analysis.explainer_train_size = 0.1
-    config.model_analysis.metric_train_size = 100
+    config.model_analysis.explainer_train_size = 50
+    config.model_analysis.metric_train_size = 10
     return config
 
 
@@ -74,6 +74,7 @@ def test_full_pipeline_lgbm():
 def test_full_pipeline_xgboost():
     pipeline_config_path = "./configs/xgboost_config.yaml"
     config = create_test_config(pipeline_config_path)
+    config.model_analysis.show_feature_importance = False
     pipelines.run(config)
     _test_inference(pipeline_config_path)
 
@@ -82,6 +83,7 @@ def test_full_pipeline_xgboost():
 def test_full_pipeline_catboost():
     pipeline_config_path = "./configs/catboost_config.yaml"
     config = create_test_config(pipeline_config_path)
+    config.model_analysis.show_feature_importance = False
     pipelines.run(config)
     _test_inference(pipeline_config_path)
 
@@ -90,5 +92,6 @@ def test_full_pipeline_catboost():
 def test_full_pipeline_randomforest():
     pipeline_config_path = "./configs/rf_config.yaml"
     config = create_test_config(pipeline_config_path)
+    config.model_analysis.show_feature_importance = False
     pipelines.run(config)
     _test_inference(pipeline_config_path)
