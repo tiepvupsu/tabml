@@ -54,6 +54,7 @@ class ModelAnalysis:
         self,
         data_loader: BaseDataLoader,
         model_wrapper: BaseModelWrapper,
+        # TODO: params:pipeline_config.ModelAnalysis?
         params=pipeline_config.ModelAnalysis(),
         output_dir: str = "",
         pred_col: str = "prediction",
@@ -77,7 +78,8 @@ class ModelAnalysis:
         # True at initialization, then to False right after printing the first overall
         # scores.
         self._show_overall_flag = True
-        self.training_size = params.training_size
+        self.metric_train_size = params.metric_train_size
+        self.explainer_train_size = params.explainer_train_size
 
         self.show_feature_importance = params.show_feature_importance
 
@@ -97,13 +99,15 @@ class ModelAnalysis:
 
     def _analyze_metrics_one_dataset(self, dataset_name: str):
         self._show_overall_flag = True
-        dataset = self._get_dataset(dataset_name)
+        dataset = self._get_dataset(dataset_name, dataset_size=self.metric_train_size)
         preds = self._get_predictions(dataset)
         df_with_pred = self._get_df_with_pred(dataset, dataset_name, preds)
         for feature_name in self.features_to_analyze:
             self._analyze_on_feature(df_with_pred, feature_name, dataset_name)
 
-    def _get_dataset(self, dataset_name: str):
+    def _get_dataset(
+        self, dataset_name: str, dataset_size: Union[int, float, None] = None
+    ):
         all_features = (
             list(self.features_to_analyze)
             + self.data_loader.features
@@ -114,8 +118,12 @@ class ModelAnalysis:
             df = self.data_loader.feature_manager.extract_dataframe(
                 features_to_select=all_features, filters=self.data_loader.train_filters
             )
-            if self.training_size:
-                return df.sample(n=min(int(self.training_size), len(df)))
+            if dataset_size is not None:
+                if isinstance(dataset_size, int):
+                    num_samples = dataset_size
+                else:  # float
+                    num_samples = int(dataset_size * len(df))
+                return df.sample(n=min(num_samples, len(df)))
             return df
 
         if dataset_name == "val":
