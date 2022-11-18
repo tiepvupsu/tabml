@@ -3,6 +3,9 @@ from tabml.examples.titanic import feature_manager, pipelines
 from tabml.experiment_manager import ExperimentManager
 from tabml.inference import ModelInference
 from tabml.utils.utils import change_working_dir_pytest
+from tabml.schemas.pipeline_config import PipelineConfig
+from typing import Union
+from pathlib import Path
 
 RAW_DATA_SAMPLES = [
     {
@@ -33,6 +36,14 @@ RAW_DATA_SAMPLES = [
 ]
 
 
+def create_test_config(config_path: Union[str, Path]) -> PipelineConfig:
+    config = parse_pipeline_config(config_path)
+    config.model_wrapper.model_params["n_estimators"] = 10
+    config.model_analysis.explainer_train_size = 0.1
+    config.model_analysis.metric_train_size = 100
+    return config
+
+
 def _test_inference(config_path):
     config = parse_pipeline_config(yaml_path=config_path)
     pipeline_bundle_path = (
@@ -53,24 +64,31 @@ def test_run():
 
 @change_working_dir_pytest
 def test_full_pipeline_lgbm():
-    pipelines.train_lgbm()
-    _test_inference("./configs/lgbm_config.yaml")
+    pipeline_config_path = "configs/lgbm_config.yaml"
+    config = create_test_config(pipeline_config_path)
+    pipelines.run(config)
+    _test_inference(pipeline_config_path)
 
 
 @change_working_dir_pytest
 def test_full_pipeline_xgboost():
-    pipelines.train_xgboost()
-    _test_inference("./configs/xgboost_config.yaml")
+    pipeline_config_path = "./configs/xgboost_config.yaml"
+    config = create_test_config(pipeline_config_path)
+    pipelines.run(config)
+    _test_inference(pipeline_config_path)
 
 
 @change_working_dir_pytest
 def test_full_pipeline_catboost():
-    pipelines.train_catboost()
-    _test_inference("./configs/catboost_config.yaml")
+    pipeline_config_path = "./configs/catboost_config.yaml"
+    config = create_test_config(pipeline_config_path)
+    pipelines.run(config)
+    _test_inference(pipeline_config_path)
 
 
 @change_working_dir_pytest
 def test_full_pipeline_randomforest():
-    config_path = "./configs/rf_config.yaml"
-    pipelines.run(config_path)
-    _test_inference(config_path)
+    pipeline_config_path = "./configs/rf_config.yaml"
+    config = create_test_config(pipeline_config_path)
+    pipelines.run(config)
+    _test_inference(pipeline_config_path)
