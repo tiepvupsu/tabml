@@ -50,6 +50,12 @@ class ModelAnalysis:
             Training sample size for the analysis.
     """
 
+    train_dataset_name = "train"
+    val_dataset_name = "val"
+    prediction_filename = "prediction.csv"
+    overall_name = "OVERALL"
+    sample_count_name = "sample_count"
+
     def __init__(
         self,
         data_loader: BaseDataLoader,
@@ -86,12 +92,13 @@ class ModelAnalysis:
     def analyze(self):
         if self.show_feature_importance:
             self._show_feature_importance()
-        # TODO: unhardcode "train" and "val"
-        self._analyze_metrics_one_dataset("train")
-        self._analyze_metrics_one_dataset("val")
+        self._analyze_metrics_one_dataset(self.train_dataset_name)
+        self._analyze_metrics_one_dataset(self.val_dataset_name)
 
     def _show_feature_importance(self):
-        train_feature = self._get_dataset("train")[self.data_loader.features]
+        train_feature = self._get_dataset(self.train_dataset_name)[
+            self.data_loader.features
+        ]
         feature_importance_dict = self.model_wrapper.get_feature_importance(
             train_feature
         )
@@ -114,7 +121,7 @@ class ModelAnalysis:
             + [self.label_to_analyze]
         )
         all_features = list(set(all_features))
-        if dataset_name == "train":
+        if dataset_name == self.train_dataset_name:
             df = self.data_loader.feature_manager.extract_dataframe(
                 features_to_select=all_features, filters=self.data_loader.train_filters
             )
@@ -126,12 +133,15 @@ class ModelAnalysis:
                 return df.sample(n=min(num_samples, len(df)))
             return df
 
-        if dataset_name == "val":
+        if dataset_name == self.val_dataset_name:
             return self.data_loader.feature_manager.extract_dataframe(
                 features_to_select=all_features,
                 filters=self.data_loader.validation_filters,
             )
-        raise ValueError(f"dataset_name ({dataset_name}) not in ('train', 'val')")
+        raise ValueError(
+            f"dataset_name ({dataset_name}) not in "
+            f"('{self.train_dataset_name}', '{self.val_dataset_name}')"
+        )
 
     def _get_predictions(self, dataset) -> Dict[str, Iterable]:
         res = {}
@@ -167,7 +177,9 @@ class ModelAnalysis:
             for feature_value, group in df_with_pred.groupby(feature_name)
         ]
         # add overall score
-        overall_scores = self._get_metric_dict(feature_name, "OVERALL", df_with_pred)
+        overall_scores = self._get_metric_dict(
+            feature_name, self.overall_name, df_with_pred
+        )
         list_of_group_dicts.append(overall_scores)
         if self._show_overall_flag:
             self._show_and_log_overall_scores(overall_scores, dataset_name)
@@ -188,7 +200,7 @@ class ModelAnalysis:
     ) -> Dict[str, Union[str, float]]:
         labels = df_with_pred[self.label_to_analyze]
 
-        res = {feature_name: feature_value, "sample_count": len(df_with_pred)}
+        res = {feature_name: feature_value, self.sample_count_name: len(df_with_pred)}
         for metric in self.metrics:
             if metric.need_pred_proba:
                 res.update(
@@ -202,7 +214,7 @@ class ModelAnalysis:
         dirname = Path(self.output_dir) / dataset_name
         if not dirname.exists():
             dirname.mkdir()
-        return Path(self.output_dir) / dataset_name / "prediction.csv"
+        return Path(self.output_dir) / dataset_name / self.prediction_filename
 
     def _get_df_feature_metric_csv_path(self, dataset_name: str, col: str):
         dirname = Path(self.output_dir) / dataset_name
@@ -214,7 +226,7 @@ class ModelAnalysis:
         logger.info("=" * 20 + f" OVERALL SCORES on {dataset_name} dataset " + "=" * 20)
         logger.info("{:<20}: {}".format("Num samples", overall_scores["sample_count"]))
         for key, val in overall_scores.items():
-            if val == "OVERALL" or key == "sample_count":
+            if val == self.overall_name or key == self.sample_count_name:
                 continue
             logger.info("{:<20}: {}".format(key, val))
 
