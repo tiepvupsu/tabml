@@ -60,8 +60,7 @@ class ModelAnalysis:
         self,
         data_loader: BaseDataLoader,
         model_wrapper: BaseModelWrapper,
-        # TODO: params:pipeline_config.ModelAnalysis?
-        params=pipeline_config.ModelAnalysis(),
+        params: pipeline_config.ModelAnalysis,
         output_dir: str = "",
         pred_col: str = "prediction",
         pred_proba_col: str = "prediction_probability",
