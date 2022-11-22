@@ -17,7 +17,7 @@ class DummyMetric1(metrics.BaseMetric):
 
 
 class DummyMetric2(metrics.BaseMetric):
-    name = "dummy1"
+    name = "dummy2"
     is_higher_better = True
     score_names = ["a"]
 
@@ -28,7 +28,7 @@ class DummyMetric2(metrics.BaseMetric):
 
 
 class DummyMetric3(metrics.BaseMetric):
-    name = "dummy1"
+    name = "dummy3"
     is_higher_better = True
     score_names = ["a"]
 
