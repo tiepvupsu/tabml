@@ -69,7 +69,7 @@ class ModelAnalysis:
         self.data_loader = data_loader
         self.model_wrapper = model_wrapper
         self.features_to_analyze = params.by_features
-        self.metrics = _get_metrics(params.metrics)
+        self.metrics = self._get_metrics(params.metrics)
         self.output_dir = output_dir
         self.label_to_analyze = params.by_label or self.data_loader.label_col
         self.pred_col = pred_col
@@ -229,7 +229,7 @@ class ModelAnalysis:
                 continue
             logger.info("{:<20}: {}".format(key, val))
 
-
-def _get_metrics(metric_names: List[str]) -> List[BaseMetric]:
-    metric_by_name = get_instantiated_metric_dict()
-    return [metric_by_name[metric_name] for metric_name in metric_names]
+    @staticmethod
+    def _get_metrics(metric_names: List[str]) -> List[BaseMetric]:
+        metric_by_name = get_instantiated_metric_dict()
+        return [metric_by_name[metric_name] for metric_name in metric_names]
