@@ -196,6 +196,43 @@ class R2(BaseMetric):
         return [sk_metrics.r2_score(labels, preds)]  # type: ignore
 
 
+class PinballMedian(BaseMetric):
+    "Pinball loss for quantile regression."
+
+    p = 0.5
+    name = "pinball_median"
+    score_names = ["pinball_median"]
+    is_higher_better = False
+    need_pred_proba = False
+
+    def _compute_scores(self, labels: Sequence, preds: Sequence) -> List[float]:
+        return [sk_metrics.mean_pinball_loss(labels, preds, alpha=self.p)]
+
+
+class PinballP1(PinballMedian):
+    p = 0.1
+    name = "pinball_p1"
+    score_names = ["pinball_p1"]
+
+
+class PinballP9(PinballMedian):
+    p = 0.9
+    name = "pinball_p9"
+    score_names = ["pinball_p9"]
+
+
+class PinballP05(PinballMedian):
+    p = 0.05
+    name = "pinball_p05"
+    score_names = ["pinball_p05"]
+
+
+class PinballP95(PinballMedian):
+    p = 0.95
+    name = "pinball_p95"
+    score_names = ["pinball_p95"]
+
+
 def get_instantiated_metric_dict() -> Dict[str, BaseMetric]:
     res = {}
     for sub_class in BaseMetric.__subclasses__():
