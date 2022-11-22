@@ -234,10 +234,20 @@ class PinballP95(PinballMedian):
 
 
 def get_instantiated_metric_dict() -> Dict[str, BaseMetric]:
-    res = {}
-    for sub_class in BaseMetric.__subclasses__():
-        metric = sub_class()
-        res[metric.name] = metric
+    res: Dict[str, BaseMetric] = {}
+    # DFS to get all subclasses
+    stack = [BaseMetric]
+    res = dict()
+    while stack:
+        metric = stack.pop()
+        name = metric.name if metric.name else "<empty>"
+        assert metric.name not in res, (
+            f"Metric {metric} has name {name} which is "
+            f"already defined in {res[metric.name]}."
+        )
+
+        res[metric.name] = metric()
+        stack.extend(sub_class for sub_class in metric.__subclasses__())
     return res
 
 
