@@ -92,14 +92,15 @@ transforming_features:
     index: 11
     dtype: STRING
     dependencies:
-      -  bucketized_latitude
+      - bucketized_latitude
       - bucketized_longitude
 
   - name: hashed_bucketized_latitude_X_bucketized_longitude
     index: 12
     dtype: INT32
     dependencies:
-      - bucketized_latitude_X_bucketized_longitude
+      - bucketized_latitude
+      - bucketized_longitude
 
   - name: encoded_ocean_proximity
     index:  13
