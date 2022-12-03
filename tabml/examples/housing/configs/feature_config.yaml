@@ -88,12 +88,6 @@ transforming_features:
     dtype: INT32
     dependencies:
       - latitude
-  - name: bucketized_latitude_X_bucketized_longitude
-    index: 11
-    dtype: STRING
-    dependencies:
-      - bucketized_latitude
-      - bucketized_longitude
 
   - name: hashed_bucketized_latitude_X_bucketized_longitude
     index: 12

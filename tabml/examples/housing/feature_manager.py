@@ -150,16 +150,6 @@ class FeatureBucketizedLongitude(BaseHousingTransformingFeature):
         return pd.qcut(df["longitude"], q=10, labels=False)
 
 
-class FeatureBucketizedLatitudeXBucketizedLongitude(BaseHousingTransformingFeature):
-    name = "bucketized_latitude_X_bucketized_longitude"
-
-    def transform(self, df):
-        # TODO make feature cross more generic
-        return data_processing.cross_columns(
-            df, cols=["bucketized_latitude", "bucketized_longitude"]
-        )
-
-
 class FeatureHasdedBucketizedLatitudeXBucketizedLongitude(
     BaseHousingTransformingFeature
 ):
