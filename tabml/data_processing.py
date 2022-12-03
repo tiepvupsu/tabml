@@ -138,3 +138,7 @@ def hash_modulo(val: Any, mod: int) -> int:
     md5 = hashlib.md5()
     md5.update(str(val).encode())
     return int(md5.hexdigest(), 16) % mod
+
+
+def hash_cross_columns(df: pd.DataFrame, cols: List[str], hash_bucket_size: int) -> int:
+    return cross_columns(df, cols).apply(lambda x: hash_modulo(x, hash_bucket_size))
