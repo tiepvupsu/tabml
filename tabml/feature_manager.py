@@ -369,6 +369,7 @@ class BaseTransformingFeature(ABC):
         self.dependencies = dependencies
         self.raw_data = raw_data
         self.transformer = None
+        self.is_training = True
 
     def _transform(self, dataframe, transformer=None, is_training=True):
         # only output messages in training mode
@@ -378,6 +379,7 @@ class BaseTransformingFeature(ABC):
         # than dependencies.
         df = dataframe[self.dependencies]
         self.transformer = transformer
+        self.is_training = is_training
         if transformer is None:
             self.fit(dataframe)
         return self.transform(df)
