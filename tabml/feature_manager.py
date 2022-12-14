@@ -276,7 +276,7 @@ class BaseFeatureManager(ABC):
                 f"Features {undefined_features} are not defined in feature config."
             )
 
-    def transform_new_samples(self, raw_data_samples, transforming_features):
+    def transform_new_samples(self, raw_data_samples, transforming_features=None):
         self.set_raw_data(raw_data_samples)
         self.initialize_dataframe()
         if transforming_features is None:
