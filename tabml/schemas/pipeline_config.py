@@ -20,6 +20,8 @@ class DataLoader(pydantic.BaseModel):
 
     # name of label column
     label_col: str = ""
+    # name of feature to create sample weight.
+    feature_to_create_weights: Union[str, None] = None
 
 
 class ModelWrapper(pydantic.BaseModel):
@@ -27,6 +29,7 @@ class ModelWrapper(pydantic.BaseModel):
     sklearn_cls: str = ""  # a sklearn-like model class
     model_params: Dict = {}
     fit_params: Dict = {}
+    weight_params: Dict = {}
 
 
 class ModelAnalysis(pydantic.BaseModel):
