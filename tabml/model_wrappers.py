@@ -209,6 +209,70 @@ class XGBoostClassifierModelWrapper(BaseXGBoostModelWrapper):
         return self.model.predict_proba(data)[:, 1]
 
 
+class BaseExponentialWeightLgbmModelWrapper(BaseLgbmModelWrapper):
+    def __init__(self, params=pipeline_config.ModelWrapper()):
+        super().__init__(params)
+        self._get_sample_weight_params(params)
+        self.sample_weights = None
+
+    def _get_sample_weight_params(self, params):
+        allowed_params = ["scale", "decay", "num_same_weight_samples"]
+        default_scale = 1
+        default_decay = 40
+        default_num_same_weight_sample = 1
+        weight_params = params.weight_params
+        if len(weight_params) > 0:
+            for param in weight_params.keys():
+                if param not in allowed_params:
+                    raise ValueError(
+                        f"weight_params only allows {allowed_params}. " f"Found {param}"
+                    )
+        self.scale = weight_params.get("scale", default_scale)
+        self.decay = weight_params.get("decay", default_decay)
+        self.num_same_weight_samples = weight_params.get(
+            "num_same_weight_samples", default_num_same_weight_sample
+        )
+
+    def _compute_exponential_weight(self, data_loader: BaseDataLoader):
+        feature_to_create_weights = data_loader.feature_to_create_weights
+        if feature_to_create_weights is None:
+            raise ValueError(
+                "Please define feature_to_create_weights in DataLoader config."
+            )
+        feature_to_create_weights_values = (
+            data_loader.feature_manager.extract_dataframe(
+                features_to_select=feature_to_create_weights,
+                filters=data_loader.train_filters,
+            )
+        )
+        max_feature_value = feature_to_create_weights_values.max()
+        weight = max_feature_value - feature_to_create_weights_values
+        weight = weight / self.num_same_weight_samples
+        weight = weight.astype("int")
+        weight = np.exp(-weight / self.decay)
+        weight = self.scale * weight
+        return weight
+
+    def fit(self, data_loader: BaseDataLoader, model_dir: Union[str, Path]):
+        self.sample_weights = self._compute_exponential_weight(data_loader)
+        self.fit_params["sample_weight"] = self.sample_weights
+        super(BaseExponentialWeightLgbmModelWrapper, self).fit(data_loader, model_dir)
+
+
+class ExponentialWeightLgbmClassifierModelWrapper(
+    BaseExponentialWeightLgbmModelWrapper, LgbmClassifierModelWrapper
+):
+    def __init__(self, params=pipeline_config.ModelWrapper()):
+        super().__init__(params)
+
+
+class ExponentialWeightLgbmRegressorModelWrapper(
+    BaseExponentialWeightLgbmModelWrapper, LgbmRegressorModelWrapper
+):
+    def __init__(self, params=pipeline_config.ModelWrapper()):
+        super().__init__(params)
+
+
 class BaseCatBoostModelWrapper(BaseBoostingModelWrapper):
     mlflow_model_type = "catboost"
     task_type = "GPU" if utils.is_gpu_available() else "CPU"
