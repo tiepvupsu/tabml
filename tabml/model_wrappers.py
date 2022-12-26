@@ -221,12 +221,14 @@ class BaseExponentialWeightLgbmModelWrapper(BaseLgbmModelWrapper):
         default_decay = 40
         default_num_same_weight_sample = 1
         weight_params = params.weight_params
-        if len(weight_params) > 0:
-            for param in weight_params.keys():
-                if param not in allowed_params:
-                    raise ValueError(
-                        f"weight_params only allows {allowed_params}. " f"Found {param}"
-                    )
+        invalid_params = [
+            param for param in weight_params.keys() if param not in allowed_params
+        ]
+        if invalid_params:
+            raise ValueError(
+                f"weight_params only allows {allowed_params}. "
+                f"Found {invalid_params}."
+            )
         self.scale = weight_params.get("scale", default_scale)
         self.decay = weight_params.get("decay", default_decay)
         self.num_same_weight_samples = weight_params.get(
@@ -241,9 +243,9 @@ class BaseExponentialWeightLgbmModelWrapper(BaseLgbmModelWrapper):
             )
         feature_to_create_weights_values = (
             data_loader.feature_manager.extract_dataframe(
-                features_to_select=feature_to_create_weights,
+                features_to_select=[feature_to_create_weights],
                 filters=data_loader.train_filters,
-            )
+            )[feature_to_create_weights]
         )
         max_feature_value = feature_to_create_weights_values.max()
         weight = max_feature_value - feature_to_create_weights_values
