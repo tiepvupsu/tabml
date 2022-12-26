@@ -99,20 +99,18 @@ class ModelAnalysis:
     def _save_sample_weight(self):
         save_path = Path(self.output_dir) / "sample_weight.csv"
         feature_to_create_weights = self.data_loader.feature_to_create_weights
-        feature_values = self.data_loader.feature_manager.extract_dataframe(
-            features_to_select=feature_to_create_weights,
+        feature_df = self.data_loader.feature_manager.extract_dataframe(
+            features_to_select=[feature_to_create_weights],
             filters=self.data_loader.train_filters,
         )
         sample_weights = self.model_wrapper.sample_weights
-        df_to_save = pd.DataFrame()
-        df_to_save[feature_to_create_weights] = feature_values
-        df_to_save["sample_weight"] = sample_weights
-        df_to_save = df_to_save.drop_duplicates()
-        df_to_save = df_to_save.sort_values(
+        feature_df["sample_weight"] = sample_weights
+        feature_df = feature_df.drop_duplicates()
+        feature_df = feature_df.sort_values(
             by=feature_to_create_weights, ascending=False
         )
         logger.info(f"Saved sample weight to {save_path}")
-        df_to_save.to_csv(save_path, index=False)
+        feature_df.to_csv(save_path, index=False)
 
     def _show_feature_importance(self):
         train_feature = self._get_dataset(self.train_dataset_name)[
