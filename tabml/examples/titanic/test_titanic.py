@@ -95,3 +95,21 @@ def test_full_pipeline_randomforest():
     config.model_analysis.show_feature_importance = False
     pipelines.run(config)
     _test_inference(pipeline_config_path)
+
+
+@change_working_dir_pytest
+def test_fill_pipeline_exp_weight_lgbm():
+    pipeline_config_path = "configs/lgbm_config.yaml"
+    config = create_test_config(pipeline_config_path)
+    config.model_analysis.show_feature_importance = False
+    config.data_loader.feature_to_create_weights = "imputed_age"
+    config.model_wrapper.cls_name = (
+        "tabml.model_wrappers.ExponentialWeightLgbmClassifierModelWrapper"
+    )
+    config.model_wrapper.weight_params = {
+        "scale": 1,
+        "decay": 20,
+        "num_same_weight_samples": 1,
+    }
+    pipelines.run(config)
+    _test_inference(pipeline_config_path)

@@ -20,6 +20,7 @@ class BaseDataLoader:
         self.feature_manager.load_dataframe()
         self.train_filters = params.train_filters
         self.validation_filters = params.validation_filters
+        self.feature_to_create_weights = params.feature_to_create_weights
 
     def _extract_data_and_label(
         self, filters: typing.List[str]

@@ -91,8 +91,26 @@ class ModelAnalysis:
     def analyze(self):
         if self.show_feature_importance:
             self._show_feature_importance()
+        if hasattr(self.model_wrapper, "sample_weights"):
+            self._save_sample_weight()
         self._analyze_metrics_one_dataset(self.train_dataset_name)
         self._analyze_metrics_one_dataset(self.val_dataset_name)
+
+    def _save_sample_weight(self):
+        save_path = Path(self.output_dir) / "sample_weight.csv"
+        feature_to_create_weights = self.data_loader.feature_to_create_weights
+        feature_df = self.data_loader.feature_manager.extract_dataframe(
+            features_to_select=[feature_to_create_weights],
+            filters=self.data_loader.train_filters,
+        )
+        sample_weights = self.model_wrapper.sample_weights
+        feature_df["sample_weight"] = sample_weights
+        feature_df = feature_df.drop_duplicates()
+        feature_df = feature_df.sort_values(
+            by=feature_to_create_weights, ascending=False
+        )
+        logger.info(f"Saved sample weight to {save_path}")
+        feature_df.to_csv(save_path, index=False)
 
     def _show_feature_importance(self):
         train_feature = self._get_dataset(self.train_dataset_name)[
