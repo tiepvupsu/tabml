@@ -15,7 +15,7 @@ setup(
     author="Tiep Vu",
     author_email="vuhuutiep@gmail.com",
     url="https://github.com/tiepvupsu/tabml",
-    download_url="https://github.com/tiepvupsu/tabml/archive/refs/tags/v0_2_9.tar.gz",
+    download_url="https://github.com/tiepvupsu/tabml/archive/refs/tags/v0.2.9.tar.gz",
     keywords=["Machine Learning", "Tabular"],
     long_description=long_description,
     long_description_content_type="text/markdown",
