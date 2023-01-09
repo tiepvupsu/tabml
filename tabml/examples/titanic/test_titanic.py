@@ -1,11 +1,12 @@
+from pathlib import Path
+from typing import Union
+
 from tabml.config_helpers import parse_pipeline_config
 from tabml.examples.titanic import feature_manager, pipelines
 from tabml.experiment_manager import ExperimentManager
 from tabml.inference import ModelInference
-from tabml.utils.utils import change_working_dir_pytest
 from tabml.schemas.pipeline_config import PipelineConfig
-from typing import Union
-from pathlib import Path
+from tabml.utils.utils import change_working_dir_pytest
 
 RAW_DATA_SAMPLES = [
     {
