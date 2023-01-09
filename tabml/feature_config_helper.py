@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Dict, List, Union
 
 from tabml.config_helpers import parse_feature_config
+from tabml.schemas.bundles import ModelBundle
 from tabml.schemas.feature_config import (
     BaseFeature,
     DType,
@@ -10,7 +11,6 @@ from tabml.schemas.feature_config import (
     PredictionFeature,
     TransformingFeature,
 )
-from tabml.schemas.bundles import ModelBundle
 from tabml.utils.utils import check_uniqueness
 
 
