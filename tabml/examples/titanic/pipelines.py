@@ -1,6 +1,7 @@
-from tabml.pipelines import BasePipeline
-from typing import Union
 from pathlib import Path
+from typing import Union
+
+from tabml.pipelines import BasePipeline
 from tabml.schemas.pipeline_config import PipelineConfig
 
 

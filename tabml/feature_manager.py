@@ -9,9 +9,8 @@ import pandas as pd
 from tabml.config_helpers import parse_feature_config, parse_pipeline_config
 from tabml.experiment_manager import ExperimentManager
 from tabml.feature_config_helper import FeatureConfigHelper
-from tabml.schemas.feature_config import DType, FeatureConfig
-
 from tabml.schemas.bundles import FeatureBundle
+from tabml.schemas.feature_config import DType, FeatureConfig
 from tabml.schemas.pipeline_config import ModelBundle
 from tabml.utils.logger import logger
 from tabml.utils.utils import (

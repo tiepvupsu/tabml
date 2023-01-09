@@ -6,8 +6,8 @@ from typing import Any, Dict, Iterable, List, Union
 
 from tabml.feature_manager import BaseFeatureManager
 from tabml.model_wrappers import initialize_model_wrapper
-from tabml.utils.utils import return_or_load, load_pickle
 from tabml.schemas.bundles import PipelineBundle
+from tabml.utils.utils import load_pickle, return_or_load
 
 
 @dataclass

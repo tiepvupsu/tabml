@@ -1,7 +1,9 @@
+from typing import Any, Dict
+
+import pydantic
+
 from tabml.schemas.feature_config import FeatureConfig
 from tabml.schemas.pipeline_config import ModelBundle
-import pydantic
-from typing import Dict, Any
 
 
 class FeatureBundle(pydantic.BaseModel):
