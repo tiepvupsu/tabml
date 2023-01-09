@@ -1,9 +1,10 @@
 from enum import Enum
-from typing import List, Union
 from pathlib import Path
-from tabml.schemas.pipeline_config import ModelBundle
+from typing import List, Union
 
 import pydantic
+
+from tabml.schemas.pipeline_config import ModelBundle
 
 
 class DType(Enum):

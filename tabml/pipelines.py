@@ -8,8 +8,8 @@ from tabml.config_helpers import parse_pipeline_config
 from tabml.data_loaders import BaseDataLoader
 from tabml.feature_manager import BaseFeatureManager
 from tabml.model_analysis import ModelAnalysis
+from tabml.schemas.bundles import ModelBundle, PipelineBundle
 from tabml.schemas.pipeline_config import PipelineConfig
-from tabml.schemas.bundles import PipelineBundle, ModelBundle
 from tabml.utils import factory
 from tabml.utils.logger import logger
 from tabml.utils.utils import load_pickle, return_or_load
@@ -29,9 +29,7 @@ class BasePipeline(ABC):
     """
 
     def __init__(
-        self,
-        config: Union[str, Path, PipelineConfig],
-        custom_run_dir: str = "",
+        self, config: Union[str, Path, PipelineConfig], custom_run_dir: str = ""
     ):
         self.config = return_or_load(config, PipelineConfig, parse_pipeline_config)
         logger.info("=" * 80)
@@ -44,7 +42,7 @@ class BasePipeline(ABC):
         self.data_loader = self._get_data_loader()
         assert self.data_loader.label_col is not None, "label_col must be specified"
         self.model_wrapper = model_wrappers.initialize_model_wrapper(
-            ModelBundle(pipeline_config=self.config, model=None),
+            ModelBundle(pipeline_config=self.config, model=None)
         )
 
         logger.add(self.exp_manager.get_log_path())
@@ -63,8 +61,7 @@ class BasePipeline(ABC):
         data = PipelineBundle(
             feature_bundle=feature_bundle,
             model_bundle=ModelBundle(
-                pipeline_config=self.config,
-                model=self.model_wrapper.model,
+                pipeline_config=self.config, model=self.model_wrapper.model
             ),
         )
         save_path = self.exp_manager.get_pipeline_bundle_path()
