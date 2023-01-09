@@ -13,3 +13,7 @@ style:
 	black .
 	flake8
 	python3 -m isort -rc tabml/
+
+# Test
+test:
+	python -m pytest -s --durations=0 --disable-warnings ./
