@@ -93,3 +93,10 @@ transforming_features:
     dependencies:
       - imputed_age
       - is_train
+
+  - name: new
+    index: 15
+    dtype: FLOAT
+    dependencies:
+      - Age
+      - coded_sex
