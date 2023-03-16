@@ -165,12 +165,14 @@ class FeatureMinMaxScaledAge(BaseTitanicTransformingFeature):
     def transform(self, df):
         return self.transformer.transform(df[["imputed_age"]]).reshape(-1)
 
+
 class FeatureNew(BaseTitanicTransformingFeature):
-    name ="new"
+    name = "new"
 
     def transform(self, df):
-        df['New']=df['Age']*df['coded_sex']
+        df['New'] = df['Age'] * df['coded_sex']
         return df["New"]
+
 
 def run():
     feature_config_path = "configs/feature_config.yaml"
