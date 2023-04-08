@@ -156,6 +156,29 @@ class TestFeatureConfigHelper:
         new_config = self.fm_helper.extract_config(selected_features=subset_features)
         assert parse_feature_config(new_config_path) == new_config
 
+    def test_without_indexes(self, tmp_path):
+        no_index_config = """
+          # invalid config with indexes are not continuous
+          raw_data_dir: "dummy"
+          dataset_name: "dummy"
+          base_features:
+            - name: "TIME"
+              dtype: "DATETIME"
+          transforming_features:
+            - name: "weekday"
+              dtype: INT32
+              dependencies:
+                - "TIME"
+            - name: "hour"
+              dtype: INT32
+              dependencies:
+                - "TIME"
+          """
+
+        config_path = tmp_path / "tmp.yaml"
+        write_str_to_file(no_index_config, config_path)
+        feature_config_helper.FeatureConfigHelper.from_config_path(config_path)
+
     def test_raise_value_error_with_invalid_feature_to_extract(self, tmp_path):
         subset_features = ["a", "y", "z"]
         with pytest.raises(ValueError) as excinfo:
