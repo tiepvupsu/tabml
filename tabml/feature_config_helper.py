@@ -17,13 +17,11 @@ from tabml.utils.utils import check_uniqueness
 class FeatureMetadata:
     def __init__(
         self,
-        index: int,
         dtype: DType,
         dependents=None,
         dependencies=None,
         model_bundle: Union[str, Path, ModelBundle] = "",
     ):
-        self.index = index
         self.dtype = dtype
         self.dependents = dependents or []
         self.dependencies = dependencies or []
@@ -32,19 +30,15 @@ class FeatureMetadata:
     @classmethod
     def from_base_feature(cls, feature: BaseFeature):
         # All base features are considered to have index 0.
-        return cls(index=0, dtype=feature.dtype)
+        return cls(dtype=feature.dtype)
 
     @classmethod
     def from_transforming_feature(cls, feature: TransformingFeature):
-        return cls(
-            index=feature.index, dtype=feature.dtype, dependencies=feature.dependencies
-        )
+        return cls(dtype=feature.dtype, dependencies=feature.dependencies)
 
     @classmethod
     def from_prediction_feature(cls, feature: PredictionFeature):
-        return cls(
-            index=feature.index, dtype=feature.dtype, model_bundle=feature.model_bundle
-        )
+        return cls(dtype=feature.dtype, model_bundle=feature.model_bundle)
 
 
 class FeatureConfigHelper:
@@ -64,7 +58,7 @@ class FeatureConfigHelper:
         all_feature_names:
             A list of all features in the config.
         feature_metadata:
-            A dict of {feature_name: (index, dtype, list of its dependents)}.
+            A dict of {feature_name: (dtype, list of its dependents)}.
             This is useful when finding all dependents of one feature.
     """
 
@@ -74,9 +68,9 @@ class FeatureConfigHelper:
         self.dataset_name = self.config.dataset_name
         self.base_features = self.config.base_features
         self.base_feature_names = _get_feature_names(self.base_features)
-        self.transforming_features = _sort_features(self.config.transforming_features)
+        self.transforming_features = self.config.transforming_features
         self.transforming_feature_names = _get_feature_names(self.transforming_features)
-        self.prediction_features = _sort_features(self.config.prediction_features)
+        self.prediction_features = self.config.prediction_features
         self.prediction_feature_names = _get_feature_names(self.prediction_features)
         self.all_feature_names = self._get_all_feature_names()
         self._validate()
@@ -96,7 +90,6 @@ class FeatureConfigHelper:
         )
 
     def _validate(self):
-        self._validate_indexes()
         self._validate_dependency()
         check_uniqueness(self.all_feature_names)
 
@@ -162,7 +155,11 @@ class FeatureConfigHelper:
         return self.feature_metadata[feature_name].dependencies
 
     def sort_features(self, feature_names: List[str]) -> List[str]:
-        return sorted(feature_names, key=lambda x: self.feature_metadata[x].index)
+        return [
+            feature_name
+            for feature_name in self.all_feature_names
+            if feature_name in feature_names
+        ]
 
     def get_dependents_recursively(self, feature_name: str) -> List[str]:
         """Finds all features that are directly/indirectly dependents of a feature.
@@ -232,12 +229,6 @@ class FeatureConfigHelper:
 
 
 def _get_feature_names(
-    features: Union[
-        List[BaseFeature], List[TransformingFeature], List[PredictionFeature]
-    ]
+    features: List[Union[BaseFeature, TransformingFeature, PredictionFeature]]
 ) -> List[str]:
     return [feature.name for feature in features]
-
-
-def _sort_features(features: Union[List[TransformingFeature], List[PredictionFeature]]):
-    return sorted(features, key=lambda x: x.index)
