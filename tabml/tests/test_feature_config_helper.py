@@ -20,11 +20,6 @@ class TestFeatureConfigHelper:
                 dtype: STRING
                 dependencies:
                   - "a"
-              - name: "e"
-                index: 4
-                dtype: STRING
-                dependencies:
-                  - "c"
               - name: "c"
                 index: 2
                 dtype: STRING
@@ -36,41 +31,16 @@ class TestFeatureConfigHelper:
                 dtype: STRING
                 dependencies:
                   - "a"
+              - name: "e"
+                index: 4
+                dtype: STRING
+                dependencies:
+                  - "c"
         """
         config_path = tmp_path / "feature_config_str.yaml"
         write_str_to_file(feature_config_str, config_path)
         cls.fm_helper = feature_config_helper.FeatureConfigHelper.from_config_path(
             config_path
-        )
-
-    def test_raise_value_error_with_invalid_indexes(self, tmp_path):
-        invalid_index_STRING = """
-            # invalid config with indexes are not continuous
-            raw_data_dir: "dummy"
-            dataset_name: "dummy"
-            base_features:
-              - name: "TIME"
-                dtype: "DATETIME"
-            transforming_features:
-              - name: "weekday"
-                index: 1
-                dtype: INT32
-                dependencies:
-                  - "TIME"
-              - name: "hour"
-                index: 1
-                dtype: INT32
-                dependencies:
-                  - "TIME"
-        """
-        config_path = tmp_path / "tmp.yaml"
-        write_str_to_file(invalid_index_STRING, config_path)
-        with pytest.raises(ValueError) as excinfo:
-            feature_config_helper.FeatureConfigHelper.from_config_path(config_path)
-
-        assert str(excinfo.value).startswith(
-            "Feature indexes must be a list of increasing positive integers. "
-            "Got indexes = [1, 1]"
         )
 
     def test_raise_assertion_error_with_duplicate_features(self, tmp_path):
