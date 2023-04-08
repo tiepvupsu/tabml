@@ -1,6 +1,6 @@
 import copy
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import Dict, List, Sequence, Union
 
 from tabml.config_helpers import parse_feature_config
 from tabml.schemas.bundles import ModelBundle
@@ -229,6 +229,6 @@ class FeatureConfigHelper:
 
 
 def _get_feature_names(
-    features: List[Union[BaseFeature, TransformingFeature, PredictionFeature]]
+    features: Sequence[Union[BaseFeature, TransformingFeature, PredictionFeature]]
 ) -> List[str]:
     return [feature.name for feature in features]
