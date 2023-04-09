@@ -5,8 +5,8 @@ from tabml.pipelines import BasePipeline
 from tabml.schemas.pipeline_config import PipelineConfig
 
 
-def run(config: Union[str, Path, PipelineConfig]):
-    pipeline = BasePipeline(config=config)
+def run(pipeline_config: Union[str, Path, PipelineConfig]):
+    pipeline = BasePipeline(pipeline_config=pipeline_config)
     pipeline.run()
 
 
