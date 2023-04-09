@@ -19,7 +19,7 @@ class BasePipeline(ABC):
     """Base class for pipeline.
 
     Attributions:
-        config:
+        pipeline_config:
             A pipeline config object or a path to config. If path, then parse the
             pipeline config.
         data_loader:
@@ -29,9 +29,13 @@ class BasePipeline(ABC):
     """
 
     def __init__(
-        self, config: Union[str, Path, PipelineConfig], custom_run_dir: str = ""
+        self,
+        pipeline_config: Union[str, Path, PipelineConfig],
+        custom_run_dir: str = "",
     ):
-        self.config = return_or_load(config, PipelineConfig, parse_pipeline_config)
+        self.config = return_or_load(
+            pipeline_config, PipelineConfig, parse_pipeline_config
+        )
         logger.info("=" * 80)
         logger.info(f"Running pipeline with config name {self.config.config_name}")
         logger.info("=" * 80)
