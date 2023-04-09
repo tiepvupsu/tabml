@@ -158,7 +158,6 @@ class TestFeatureConfigHelper:
 
     def test_without_indexes(self, tmp_path):
         no_index_config = """
-          # invalid config with indexes are not continuous
           raw_data_dir: "dummy"
           dataset_name: "dummy"
           base_features:
