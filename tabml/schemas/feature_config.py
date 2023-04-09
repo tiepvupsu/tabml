@@ -23,14 +23,14 @@ class DType(Enum):
 class BaseFeature(pydantic.BaseModel):
     name: str
     dtype: DType
-    # TODO: deprecated. Remove this field after all configs are updated.
+    # TODO: deprecate this field. Remove this field after all configs are updated.
     index: int = 0
 
 
 class TransformingFeature(pydantic.BaseModel):
     name: str
 
-    # TODO: deprecated. Remove this field after all configs are updated.
+    # TODO: deprecate this field. Remove this field after all configs are updated.
     # The index of the feature in the dataset. Indexes should be unique, positive and
     # monotonically increasing. Indexes are used to determine the feature order in the
     # whole dataset. Base features are added to the dataset first, then
