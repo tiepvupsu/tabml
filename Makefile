@@ -16,4 +16,6 @@ style:
 
 # Test
 test:
+	flake8 ./tabml
+	mypy --show-traceback ./tabml # see configs in /mypy.ini
 	python -m pytest -s --durations=0 --disable-warnings ./
