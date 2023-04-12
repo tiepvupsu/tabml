@@ -16,23 +16,19 @@ class TestFeatureConfigHelper:
                 dtype: STRING
             transforming_features:
               - name: "b"
-                index: 1
                 dtype: STRING
                 dependencies:
                   - "a"
               - name: "c"
-                index: 2
                 dtype: STRING
                 dependencies:
                   - "a"
                   - "b"
               - name: "d"
-                index: 3
                 dtype: STRING
                 dependencies:
                   - "a"
               - name: "e"
-                index: 4
                 dtype: STRING
                 dependencies:
                   - "c"
@@ -52,12 +48,10 @@ class TestFeatureConfigHelper:
                 dtype: DATETIME
             transforming_features:
               - name: "weekday"
-                index: 1
                 dtype: STRING
                 dependencies:
                 - "TIME"
               - name: "weekday"
-                index: 2
                 dtype: STRING
         """
         config_path = tmp_path / "tmp.yaml"
@@ -78,7 +72,6 @@ class TestFeatureConfigHelper:
                 dtype: DATETIME
             transforming_features:
               - name: "weekday"
-                index: 1
                 dtype: STRING
                 dependencies:
                   - "date"
@@ -115,18 +108,15 @@ class TestFeatureConfigHelper:
                 dtype: STRING
             transforming_features:
               - name: "b"
-                index: 1
                 dtype: STRING
                 dependencies:
                   - "a"
               - name: "c"
-                index: 2
                 dtype: STRING
                 dependencies:
                   - "a"
                   - "b"
               - name: "e"
-                index: 4
                 dtype: STRING
                 dependencies:
                   - "c"
@@ -146,7 +136,6 @@ class TestFeatureConfigHelper:
                 dtype: STRING
             transforming_features:
               - name: "d"
-                index: 3
                 dtype: STRING
                 dependencies:
                   - "a"
@@ -155,28 +144,6 @@ class TestFeatureConfigHelper:
         write_str_to_file(expected_STRING, new_config_path)
         new_config = self.fm_helper.extract_config(selected_features=subset_features)
         assert parse_feature_config(new_config_path) == new_config
-
-    def test_without_indexes(self, tmp_path):
-        no_index_config = """
-          raw_data_dir: "dummy"
-          dataset_name: "dummy"
-          base_features:
-            - name: "TIME"
-              dtype: "DATETIME"
-          transforming_features:
-            - name: "weekday"
-              dtype: INT32
-              dependencies:
-                - "TIME"
-            - name: "hour"
-              dtype: INT32
-              dependencies:
-                - "TIME"
-          """
-
-        config_path = tmp_path / "tmp.yaml"
-        write_str_to_file(no_index_config, config_path)
-        feature_config_helper.FeatureConfigHelper.from_config_path(config_path)
 
     def test_raise_value_error_with_invalid_feature_to_extract(self, tmp_path):
         subset_features = ["a", "y", "z"]

@@ -30,65 +30,54 @@ base_features:
 
 transforming_features:
   - name: is_train
-    index: 1
     dependencies:
-     - PassengerId
+      - PassengerId
     dtype: BOOL
 
   - name: imputed_age
-    index: 2
     dtype: FLOAT
     dependencies:
       - Age
       - is_train
 
   - name: bucketized_age
-    index: 3
     dtype: FLOAT
     dependencies:
       - imputed_age
 
   - name: survived
     dtype: FLOAT
-    index: 5
 
   - name: coded_sex
-    index: 7
     dependencies:
       - Sex
     dtype: INT32
 
   - name: coded_pclass
-    index: 9
     dtype: INT32
     dependencies:
       - Pclass
   - name: imputed_embarked
-    index: 10
     dtype: STRING
     dependencies:
       - Embarked
 
   - name: coded_embarked
-    index: 11
     dtype: INT32
     dependencies:
       - imputed_embarked
 
   - name: title
-    index: 12
     dtype: STRING
     dependencies:
       - Name
 
   - name: coded_title
-    index: 13
     dtype: INT32
     dependencies:
       - title
 
   - name: min_max_scaled_age
-    index: 14
     dtype: FLOAT
     dependencies:
       - imputed_age
