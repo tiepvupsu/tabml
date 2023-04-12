@@ -2,7 +2,7 @@ catboost==1.1 # if there is error, try `python3 -m pip install --upgrade pip`
 flake8==3.9.0
 gputil==1.4.0
 isort==4.3.21
-lightgbm==2.3.1 # brew install lightgbm for macos, ==2.3.1 won't work
+lightgbm==2.3.1 # https://lightgbm.readthedocs.io/en/latest/Installation-Guide.html#macos for macos
 loguru==0.5.1
 mypy==0.910
 numpy==1.23.0
