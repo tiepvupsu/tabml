@@ -23,19 +23,10 @@ class DType(Enum):
 class BaseFeature(pydantic.BaseModel):
     name: str
     dtype: DType
-    # TODO: deprecate this field. Remove this field after all configs are updated.
-    index: int = 0
 
 
 class TransformingFeature(pydantic.BaseModel):
     name: str
-
-    # TODO: deprecate this field. Remove this field after all configs are updated.
-    # The index of the feature in the dataset. Indexes should be unique, positive and
-    # monotonically increasing. Indexes are used to determine the feature order in the
-    # whole dataset. Base features are added to the dataset first, then
-    # transforming_features and prediction_features in the ascending order of indexes.
-    index: int = 0
 
     dtype: DType
 
@@ -47,12 +38,14 @@ class TransformingFeature(pydantic.BaseModel):
     dependencies: List[str] = []
 
 
+class GroupTransformingFeature(pydantic.BaseModel):
+    name: str
+
+
 class PredictionFeature(pydantic.BaseModel):
     # Features that are predicted by a tabml model. These features could be used in
     # stacking models.
     name: str
-    # TODO: deprecated. Remove this field after all configs are updated.
-    index: int = 0
     dtype: DType
     model_bundle: Union[str, Path, ModelBundle] = ""
 
