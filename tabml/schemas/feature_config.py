@@ -20,7 +20,7 @@ class DType(Enum):
     DATETIME = "DATETIME"
 
 
-class BaseFeature(pydantic.BaseModel):
+class Feature(pydantic.BaseModel):
     name: str
     dtype: DType
 
@@ -56,7 +56,7 @@ class FeatureConfig(pydantic.BaseModel):
 
     # Base features are features that are not dependent on any features.
     # These features are usually created right after the data cleaning step.
-    base_features: List[BaseFeature]
+    base_features: List[Feature]
 
     # Transforming features are those dependent on base features and/or other
     # transforming features. Note that the term "feature" here only apply to columns in
