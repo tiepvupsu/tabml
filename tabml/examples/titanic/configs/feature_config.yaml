@@ -29,10 +29,12 @@ base_features:
     dtype: STRING
 
 transforming_features:
-  - name: is_train
+  - transformer_name: is_train
     dependencies:
       - PassengerId
-    dtype: BOOL
+    output_features:
+      - name: is_train
+        dtype: BOOL
 
   - name: imputed_age
     dtype: FLOAT

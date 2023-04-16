@@ -363,6 +363,7 @@ class BaseTransformingFeature(ABC):
     """
 
     name = ""
+    output_features: Optional[List[str]] = None
 
     def __init__(self, dependencies: List[str], raw_data: Dict):
         self.dependencies = dependencies
@@ -370,7 +371,9 @@ class BaseTransformingFeature(ABC):
         self.transformer = None
         self.is_training = True
 
-    def _transform(self, dataframe, transformer=None, is_training=True):
+    def _transform(
+        self, dataframe, transformer=None, is_training=True
+    ) -> Union[pd.DataFrame, pd.Series]:
         # only output messages in training mode
         if is_training:
             logger.info(f"Computing feature {self.name} in pandas ...")
@@ -389,7 +392,7 @@ class BaseTransformingFeature(ABC):
         self.transformer = None
 
     @abstractmethod
-    def transform(self, df):
+    def transform(self, df) -> Union[pd.DataFrame, pd.Series]:
         pass
 
 
