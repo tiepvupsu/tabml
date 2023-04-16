@@ -38,10 +38,6 @@ class TransformingFeature(pydantic.BaseModel):
     dependencies: List[str] = []
 
 
-class GroupTransformingFeature(pydantic.BaseModel):
-    name: str
-
-
 class PredictionFeature(pydantic.BaseModel):
     # Features that are predicted by a tabml model. These features could be used in
     # stacking models.
