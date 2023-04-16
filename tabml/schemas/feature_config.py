@@ -1,10 +1,11 @@
 from enum import Enum
 from pathlib import Path
-from typing import List, Union
+from typing import List, Optional, Union
 
 import pydantic
 
 from tabml.schemas.pipeline_config import ModelBundle
+from tabml.utils.utils import check_uniqueness
 
 
 class DType(Enum):
@@ -20,26 +21,45 @@ class DType(Enum):
     DATETIME = "DATETIME"
 
 
-class BaseFeature(pydantic.BaseModel):
+class Feature(pydantic.BaseModel):
     name: str
     dtype: DType
 
 
 class TransformingFeature(pydantic.BaseModel):
+    """Class to define a feature or a group of features computed from other features."""
+
+    # Name of the transformer. If output_features is not defined, there will be only
+    # one output feature with the same name as the transformer and type = dtype.
+    # If output_features is defined, the output features will be named as
+    # names in output_features and dtype is defined correspondingly.
+    # Note: only one of dtype and output_features should be defined.
     name: str
 
-    dtype: DType
+    dtype: Optional[DType] = None
 
-    # Dependencies is a list of features that are required to compute this feature.
-    # This field will be used when users want to re-compute one feature. All features
-    # depending on this re-computed feature are also required to be updated.
+    # Dependencies is a list of features that are required to compute this feature/group
+    # of features.
     # NOTE on terminology: If feature "a" depends on feature "b" then we call "b" is
     # one of dependencies of "a", and "a" is a dependent of "b".
     dependencies: List[str] = []
 
+    output_features: Optional[List[Feature]] = None
 
-class GroupTransformingFeature(pydantic.BaseModel):
-    name: str
+    @pydantic.validator("output_features")
+    def check_output_features(cls, v, values):
+        if v is not None:
+            if values["dtype"] is not None:
+                raise pydantic.ValidationError(
+                    "Only one of dtype and output_features should be defined."
+                )
+            check_uniqueness([f.name for f in v])
+        else:
+            if values["dtype"] is None:
+                raise pydantic.ValidationError(
+                    "Only one of dtype and output_features should be defined."
+                )
+        return v
 
 
 class PredictionFeature(pydantic.BaseModel):
@@ -60,7 +80,7 @@ class FeatureConfig(pydantic.BaseModel):
 
     # Base features are features that are not dependent on any features.
     # These features are usually created right after the data cleaning step.
-    base_features: List[BaseFeature]
+    base_features: List[Feature]
 
     # Transforming features are those dependent on base features and/or other
     # transforming features. Note that the term "feature" here only apply to columns in
