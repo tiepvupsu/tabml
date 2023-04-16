@@ -73,10 +73,14 @@ class FeatureImputedAge(BaseTitanicTransformingFeature):
 
 class FeatureBucketizedAge(BaseTitanicTransformingFeature):
     name = "bucketized_age"
-    bins = [10, 18, 30, 40, 65]
+    output_features = ["bucketized_age", "bucketized_age_v2"]
 
     def transform(self, df):
-        return np.digitize(df["imputed_age"], self.bins).tolist()
+        bins = [10, 18, 30, 40, 65]
+        bins_v2 = [12, 18, 30, 40, 65]
+        df["bucketized_age"] = np.digitize(df["imputed_age"], bins).tolist()
+        df["bucketized_age_v2"] = np.digitize(df["imputed_age"], bins_v2).tolist()
+        return df[self.output_features]
 
 
 class FeatureSurvived(BaseTitanicTransformingFeature):

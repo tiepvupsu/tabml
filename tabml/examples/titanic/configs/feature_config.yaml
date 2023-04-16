@@ -41,7 +41,12 @@ transforming_features:
       - is_train
 
   - name: bucketized_age
-    dtype: FLOAT
+    # dtype: FLOAT
+    output_features:
+      - name: bucketized_age_v1
+        dtype: FLOAT
+      - name: bucketized_age_v2
+        dtype: FLOAT
     dependencies:
       - imputed_age
 
