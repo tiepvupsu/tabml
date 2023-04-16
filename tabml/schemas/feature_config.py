@@ -46,7 +46,7 @@ class PredictionFeature(pydantic.BaseModel):
     model_bundle: Union[str, Path, ModelBundle] = ""
 
 
-class FeatureConfig(pydantic.BaseModel):
+class LegacyFeatureConfig(pydantic.BaseModel):
     # Directory of raw data files.
     raw_data_dir: str
 
@@ -68,5 +68,5 @@ class FeatureConfig(pydantic.BaseModel):
     # are useful for stacking models.
     # In the first version, transforming features those are dependent on prediction
     # features are not supported.
-    # TODO: support transforming features those are dependent on prediciton features.
+    # TODO: support transforming features those are dependent on prediction features.
     prediction_features: List[PredictionFeature] = []

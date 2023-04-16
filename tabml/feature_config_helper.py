@@ -7,7 +7,7 @@ from tabml.schemas.bundles import ModelBundle
 from tabml.schemas.feature_config import (
     DType,
     Feature,
-    FeatureConfig,
+    LegacyFeatureConfig,
     PredictionFeature,
     TransformingFeature,
 )
@@ -62,7 +62,7 @@ class FeatureConfigHelper:
             This is useful when finding all dependents of one feature.
     """
 
-    def __init__(self, config: FeatureConfig):
+    def __init__(self, config: LegacyFeatureConfig):
         self.config = config
         self.raw_data_dir = self.config.raw_data_dir
         self.dataset_name = self.config.dataset_name
