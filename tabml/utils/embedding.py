@@ -23,7 +23,7 @@ class NearestNeighbor:
                 item_embeddings, axis=1, keepdims=True
             )
         elif self.measure == "l2":
-            self.squared_item_embedding = (item_embeddings ** 2).sum(axis=1)
+            self.squared_item_embedding = (item_embeddings**2).sum(axis=1)
 
     def find_nearest_neighbors(self, query_embedding, k=10):
         """Returns indices of k nearest neighbors"""
