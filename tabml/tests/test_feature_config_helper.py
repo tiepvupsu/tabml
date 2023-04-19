@@ -5,7 +5,7 @@ from tabml.config_helpers import parse_feature_config
 from tabml.utils.utils import write_str_to_file
 
 
-class TestFeatureConfigHelper:
+class TestLegacyFeatureConfigHelper:
     @pytest.fixture(autouse=True)
     def setup_class(cls, tmp_path):
         feature_config_str = """

@@ -2,12 +2,12 @@ from typing import Any, Dict
 
 import pydantic
 
-from tabml.schemas.feature_config import FeatureConfig
+from tabml.schemas.feature_config import LegacyFeatureConfig
 from tabml.schemas.pipeline_config import ModelBundle
 
 
 class FeatureBundle(pydantic.BaseModel):
-    feature_config: FeatureConfig
+    feature_config: LegacyFeatureConfig
     transformers: Dict[str, Any]
 
 

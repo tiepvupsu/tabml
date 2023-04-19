@@ -10,7 +10,7 @@ from tabml.config_helpers import parse_feature_config, parse_pipeline_config
 from tabml.experiment_manager import ExperimentManager
 from tabml.feature_config_helper import FeatureConfigHelper
 from tabml.schemas.bundles import FeatureBundle
-from tabml.schemas.feature_config import DType, FeatureConfig
+from tabml.schemas.feature_config import DType, LegacyFeatureConfig
 from tabml.schemas.pipeline_config import ModelBundle
 from tabml.utils.logger import logger
 from tabml.utils.utils import (
@@ -66,10 +66,10 @@ class BaseFeatureManager(ABC):
 
     def __init__(
         self,
-        config: Union[str, Path, FeatureConfig],
+        config: Union[str, Path, LegacyFeatureConfig],
         custom_feature_bundle_path: Union[str, None] = None,
     ):
-        _config = return_or_load(config, FeatureConfig, parse_feature_config)
+        _config = return_or_load(config, LegacyFeatureConfig, parse_feature_config)
 
         self.config_helper = FeatureConfigHelper(_config)
         self.raw_data_dir = self.config_helper.raw_data_dir
