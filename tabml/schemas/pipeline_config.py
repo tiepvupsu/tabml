@@ -2,6 +2,8 @@ from typing import Any, Dict, List, Union
 
 import pydantic
 
+from tabml.utils import utils
+
 
 class DataLoader(pydantic.BaseModel):
     cls_name: str = "tabml.data_loaders.BaseDataLoader"  # name of DataLoader class
@@ -30,6 +32,7 @@ class ModelWrapper(pydantic.BaseModel):
     model_params: Dict = {}
     fit_params: Dict = {}
     weight_params: Dict = {}
+    gpu_on: bool = utils.is_gpu_available()
 
 
 class ModelAnalysis(pydantic.BaseModel):

@@ -117,4 +117,4 @@ def _get_time_stamp() -> str:
 
     Example: 200907_123344.
     """
-    return datetime.datetime.now().strftime("%Y%m%d_%H%M%S")[2:]
+    return datetime.datetime.now().strftime("%y%m%d_%H%M%S")
