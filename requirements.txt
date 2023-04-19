@@ -8,7 +8,7 @@ mypy==0.910
 numpy==1.23.0
 pandas==1.4.3
 pandas-profiling==2.9.0
-pre-commit==2.2.0
+pre-commit==2.9.2
 protobuf==3.20.1
 pydantic==1.8.2
 pytest==5.3.5

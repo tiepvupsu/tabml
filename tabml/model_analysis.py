@@ -65,7 +65,6 @@ class ModelAnalysis:
         pred_col: str = "prediction",
         pred_proba_col: str = "prediction_probability",
     ):
-
         self.data_loader = data_loader
         self.model_wrapper = model_wrapper
         self.features_to_analyze = params.by_features
