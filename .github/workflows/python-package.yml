@@ -42,7 +42,7 @@ jobs:
     - name: Install tabml
       run: |
         python setup.py install
-    - name: Lint with flake8, tpye check with mypy
+    - name: Lint with flake8, type check with mypy
       run: |
         flake8 ./tabml
         mypy --show-traceback ./tabml # see configs in /mypy.ini
