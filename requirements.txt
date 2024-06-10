@@ -6,7 +6,7 @@ lightgbm==2.3.1 # https://lightgbm.readthedocs.io/en/latest/Installation-Guide.h
 loguru==0.5.1
 mypy==0.910
 numpy==1.23.0
-pandas==1.4.3
+pandas==2.2.2
 pre-commit==2.9.2
 protobuf==3.20.1
 pydantic==1.8.2
@@ -18,3 +18,4 @@ shap==0.45.1
 termgraph==0.4.2
 types-six==1.16.1
 xgboost==1.7.1
+ydata-profiling==4.8.3
