@@ -4,7 +4,7 @@ gputil==1.4.0
 isort==4.3.21
 lightgbm==2.3.1 # https://lightgbm.readthedocs.io/en/latest/Installation-Guide.html#macos for macos
 loguru==0.5.1
-mypy==0.981
+mypy==1.10.0
 numpy==1.25.2
 pandas==2.2.2
 pre-commit==2.9.2
