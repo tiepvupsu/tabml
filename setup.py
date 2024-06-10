@@ -26,8 +26,7 @@ setup(
         "loguru>=0.5.1",
         "numpy>=1.21,<1.23.0",
         "pandas>=1.4.3",
-        "pandas-profiling>=2.9.0",
-        "pydantic>=1.8.2",
+        "pydantic>=2",
         "pyyaml>=6.0",
         "scikit-learn>=1.1.2",
         "scipy>=1.9.3",
@@ -40,6 +39,6 @@ setup(
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Build Tools",
         "License :: OSI Approved :: Apache Software License",
-        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
 )

@@ -1,21 +1,21 @@
-catboost==1.1 # if there is error, try `python3 -m pip install --upgrade pip`
+catboost==1.2.5 # if there is error, try `python3 -m pip install --upgrade pip`
 flake8==3.9.0
 gputil==1.4.0
 isort==4.3.21
 lightgbm==2.3.1 # https://lightgbm.readthedocs.io/en/latest/Installation-Guide.html#macos for macos
 loguru==0.5.1
-mypy==0.910
-numpy==1.23.0
-pandas==1.4.3
-pandas-profiling==2.9.0
+mypy==1.10.0
+numpy==1.25.2
+pandas==2.2.2
 pre-commit==2.9.2
 protobuf==3.20.1
-pydantic==1.8.2
-pytest==5.3.5
+pydantic==2.7.3
+pytest==8.2.2
 pyyaml==6.0
 scikit-learn==1.1.2
 scipy==1.9.3
-shap==0.39.0
+shap==0.45.1
 termgraph==0.4.2
 types-six==1.16.1
 xgboost==1.7.1
+ydata-profiling==4.8.3
