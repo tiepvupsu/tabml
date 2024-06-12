@@ -20,7 +20,9 @@ def _parse_yaml_as_config(config_cls, yaml_path: Union[str, Path], yaml_str: str
 
 
 def parse_feature_config(yaml_path: Union[str, Path], yaml_str: str = ""):
-    return _parse_yaml_as_config(feature_config.FeatureConfig, yaml_path, yaml_str)
+    return _parse_yaml_as_config(
+        feature_config.LegacyFeatureConfig, yaml_path, yaml_str
+    )
 
 
 def parse_pipeline_config(yaml_path: Union[str, Path] = "", yaml_str: str = ""):
@@ -28,7 +30,9 @@ def parse_pipeline_config(yaml_path: Union[str, Path] = "", yaml_str: str = ""):
 
 
 def save_yaml_config_to_file(
-    yaml_config: Union[pipeline_config.PipelineConfig, feature_config.FeatureConfig],
+    yaml_config: Union[
+        pipeline_config.PipelineConfig, feature_config.LegacyFeatureConfig
+    ],
     yaml_path: Union[str, Path],
 ):
     with open(yaml_path, "w") as yaml_file:

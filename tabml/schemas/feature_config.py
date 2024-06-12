@@ -20,7 +20,7 @@ class DType(Enum):
     DATETIME = "DATETIME"
 
 
-class BaseFeature(pydantic.BaseModel):
+class Feature(pydantic.BaseModel):
     name: str
     dtype: DType
 
@@ -38,10 +38,6 @@ class TransformingFeature(pydantic.BaseModel):
     dependencies: List[str] = []
 
 
-class GroupTransformingFeature(pydantic.BaseModel):
-    name: str
-
-
 class PredictionFeature(pydantic.BaseModel):
     # Features that are predicted by a tabml model. These features could be used in
     # stacking models.
@@ -50,7 +46,7 @@ class PredictionFeature(pydantic.BaseModel):
     model_bundle: Union[str, Path, ModelBundle] = ""
 
 
-class FeatureConfig(pydantic.BaseModel):
+class LegacyFeatureConfig(pydantic.BaseModel):
     # Directory of raw data files.
     raw_data_dir: str
 
@@ -60,7 +56,7 @@ class FeatureConfig(pydantic.BaseModel):
 
     # Base features are features that are not dependent on any features.
     # These features are usually created right after the data cleaning step.
-    base_features: List[BaseFeature]
+    base_features: List[Feature]
 
     # Transforming features are those dependent on base features and/or other
     # transforming features. Note that the term "feature" here only apply to columns in
@@ -72,5 +68,5 @@ class FeatureConfig(pydantic.BaseModel):
     # are useful for stacking models.
     # In the first version, transforming features those are dependent on prediction
     # features are not supported.
-    # TODO: support transforming features those are dependent on prediciton features.
+    # TODO: support transforming features those are dependent on prediction features.
     prediction_features: List[PredictionFeature] = []
